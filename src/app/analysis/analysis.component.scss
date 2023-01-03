@@ -1,0 +1,66 @@
+.input {
+  text-align: center;
+}
+
+.form-control:focus {
+  border-color: #b8b8b8;
+  box-shadow: 0 0 0 0.2rem rgba(186, 186, 186, 0.25);
+}
+
+.card__analysis {
+  width: 570px;
+}
+
+.analysis {
+  max-height: 220px;
+  overflow-y: scroll;
+}
+
+.analysis::-webkit-scrollbar {
+  display: none;
+}
+
+.analysis::-webkit-scrollbar {
+  display: none;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 1rem;
+}
+
+.analysis tr {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.analysis > tbody {
+  vertical-align: none;
+}
+
+.text-muted {
+  font-size: 12px;
+}
+
+.bar__chart,
+.pie__chart {
+  width: 568px;
+  height: 310px;
+}
+
+.red {
+  font-size: 35px;
+  color: red;
+}
+
+.text__red {
+  color: red;
+}
+
+.green {
+  font-size: 35px;
+  color: rgb(0, 152, 53);
+}
+
+.text__green {
+  color: rgb(0, 152, 53);
+}

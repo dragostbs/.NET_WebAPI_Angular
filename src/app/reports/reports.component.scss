@@ -1,0 +1,52 @@
+.report tr {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+}
+
+.report {
+  max-height: 790px;
+  overflow-y: scroll;
+}
+
+.report::-webkit-scrollbar {
+  display: none;
+}
+
+.report__head {
+  position: sticky;
+  top: 0;
+}
+
+.card__analysis {
+  width: 570px;
+}
+
+.analysis {
+  max-height: 220px;
+  overflow-y: scroll;
+}
+
+.analysis::-webkit-scrollbar {
+  display: none;
+}
+
+.analysis::-webkit-scrollbar {
+  display: none;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 1rem;
+}
+
+.analysis tr {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.analysis > tbody {
+  vertical-align: none;
+}
+
+.text-muted {
+  font-size: 12px;
+}

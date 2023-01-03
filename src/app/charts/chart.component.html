@@ -1,0 +1,33 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2">
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="text-secondary">Charts</h1>
+  </div>
+  <div class="card style=height: 48rem;">
+    <div class="row d-flex justify-content-between my-4">
+      <p class="title__chart text-center">Daily Chart</p>
+      <div class="d-flex">
+        <div class="input-group input-group-sm w-100 ps-2 mx-5">
+          <input
+            type="text"
+            class="input form-control"
+            placeholder="Stock name..."
+          />
+          <button class="btn btn-outline-secondary" type="button">
+            Search
+          </button>
+        </div>
+        <div class="d-flex me-5 mx-5 pe-4">
+          <button type="button" class="btn btn-sm btn-outline-success m-1 px-3">
+            Long
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger m-1 px-3">
+            Short
+          </button>
+        </div>
+      </div>
+    </div>
+    <div echarts [options]="candlesChart" class="candles__chart"></div>
+  </div>
+</main>

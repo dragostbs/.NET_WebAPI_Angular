@@ -1,0 +1,13 @@
+.candles__chart {
+  width: 1145px;
+  height: 650px;
+}
+
+.input {
+  text-align: center;
+}
+
+.form-control:focus {
+  border-color: #b8b8b8;
+  box-shadow: 0 0 0 0.2rem rgba(186, 186, 186, 0.25);
+}
