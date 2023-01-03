@@ -1,27 +1,27 @@
-# AngularApp
+# Analysis Wep Page App 📊
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.4.
+Web Application template for data analysis
 
-## Development server
+## Built With
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+[![Angular][Angular.com]][Angular-url]
+[![TypeScript][TypeScript.com]][TypeScript-url]
+[![Html][Html.com]][Html-url]
+[![Sass][Sass.com]][Sass-url]
+[![Bootstrap][Bootstrap.com]][Bootstrap-url]
 
-## Code scaffolding
+## Demo
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+[Demo Live 📊](https://resonant-custard-567983.netlify.app/)
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+<!-- MARKDOWN LINKS & IMAGES -->
+[Angular.com]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/
+[TypeScript.com]: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
+[TypeScript-url]: https://www.typescriptlang.org/
+[Html.com]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
+[Html-url]: https://html.com/
+[Sass.com]: https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white
+[Sass-url]: https://sass-lang.com/
+[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com/
