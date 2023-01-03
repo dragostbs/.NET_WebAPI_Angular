@@ -4,7 +4,7 @@
   >
     <h1 class="text-secondary">Anaysis</h1>
   </div>
-  <div class="d-flex row">
+  <div *ngIf="!loaderComponent.loading" class="d-flex row">
     <div class="d-flex justify-content-between">
       <div class="card">
         <div class="input-group input-group-sm p-2">
@@ -172,4 +172,5 @@
       </div>
     </div>
   </div>
+  <app-loader></app-loader>
 </main>

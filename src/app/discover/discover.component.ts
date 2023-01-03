@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-discover',
@@ -7,12 +8,16 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./discover.component.scss'],
 })
 export class DiscoverComponent implements OnInit {
+  @ViewChild(LoaderComponent, { static: true })
+  loaderComponent!: LoaderComponent;
+
   pieChart: EChartsOption = {};
   lineChart: EChartsOption = {};
 
   ngOnInit(): void {
     this.displayPie();
     this.displayLine();
+    this.loaderComponent.loading = true;
   }
 
   displayPie() {

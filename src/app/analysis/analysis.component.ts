@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-analysis',
@@ -7,12 +8,16 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./analysis.component.scss'],
 })
 export class AnalysisComponent implements OnInit {
+  @ViewChild(LoaderComponent, { static: true })
+  loaderComponent!: LoaderComponent;
+
   barChart: EChartsOption = {};
   pieChart: EChartsOption = {};
 
   ngOnInit(): void {
     this.displayBar();
     this.displayPie();
+    this.loaderComponent.loading = true;
   }
 
   displayBar() {

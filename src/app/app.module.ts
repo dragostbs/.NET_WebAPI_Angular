@@ -9,6 +9,7 @@ import { DiscoverComponent } from './discover/discover.component';
 import { ReportsComponent } from './reports/reports.component';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     DiscoverComponent,
     ReportsComponent,
     AnalysisComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

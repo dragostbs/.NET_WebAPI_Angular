@@ -4,7 +4,7 @@
   >
     <h1 class="text-secondary">Discover</h1>
   </div>
-  <div class="d-flex justify-content-between">
+  <div *ngIf="!loaderComponent.loading" class="d-flex justify-content-between">
     <div>
       <div class="d-flex column me-4 mb-3">
         <ngb-carousel class="card bg-light carousel-dark slide">
@@ -371,4 +371,5 @@
       </div>
     </div>
   </div>
+  <app-loader></app-loader>
 </main>
