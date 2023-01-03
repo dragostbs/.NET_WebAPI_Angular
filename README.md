@@ -12,7 +12,7 @@ Web Application template for data analysis
 
 ## Demo
 
-[Demo Live 📊](https://ornate-cendol-100d0e.netlify.app/chart)
+[Demo Live 📊](https://ornate-cendol-100d0e.netlify.app)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [Angular.com]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
