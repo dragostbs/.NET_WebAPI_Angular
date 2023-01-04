@@ -10,6 +10,12 @@ import { ReportsComponent } from './reports/reports.component';
 import { AnalysisComponent } from './analysis/analysis.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { LoaderComponent } from './loader/loader.component';
+import { CarouselComponent } from './discover/carousel/carousel.component';
+import { GainerFallerComponent } from './discover/gainer-faller/gainer-faller.component';
+import { NewsComponent } from './discover/news/news.component';
+import { CardsComponent } from './analysis/cards/cards.component';
+import { PieBarComponent } from './analysis/pie-bar/pie-bar.component';
+import { TablesComponent } from './analysis/tables/tables.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +25,12 @@ import { LoaderComponent } from './loader/loader.component';
     ReportsComponent,
     AnalysisComponent,
     LoaderComponent,
+    CarouselComponent,
+    GainerFallerComponent,
+    NewsComponent,
+    CardsComponent,
+    PieBarComponent,
+    TablesComponent,
   ],
   imports: [
     BrowserModule,

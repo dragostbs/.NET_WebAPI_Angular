@@ -1,0 +1,33 @@
+.card__risersFallers {
+  width: 390px;
+}
+
+.risersFallers {
+  max-height: 350px;
+  overflow-y: scroll;
+}
+
+.risersFallers::-webkit-scrollbar {
+  display: none;
+}
+
+.risersFallers::-webkit-scrollbar {
+  display: none;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 1rem;
+}
+
+.table tr {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.table > tbody {
+  vertical-align: none;
+}
+
+.progress__bar {
+  width: 7rem;
+}

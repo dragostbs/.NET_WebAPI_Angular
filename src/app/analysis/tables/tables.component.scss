@@ -1,0 +1,33 @@
+.card__analysis {
+  width: 570px;
+}
+
+.analysis {
+  max-height: 240px;
+  overflow-y: scroll;
+}
+
+.analysis::-webkit-scrollbar {
+  display: none;
+}
+
+.analysis::-webkit-scrollbar {
+  display: none;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 1rem;
+}
+
+.analysis tr {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.analysis > tbody {
+  vertical-align: none;
+}
+
+.text-muted {
+  font-size: 12px;
+}

@@ -1,0 +1,14 @@
+<div class="d-flex column me-4 mb-3">
+  <ngb-carousel class="card bg-light carousel-dark slide">
+    <ng-template ngbSlide>
+      <div class="carousel card-body d-flex justify-content-center">
+        <div echarts [options]="pieChart" class="pie__chart"></div>
+      </div>
+    </ng-template>
+    <ng-template ngbSlide>
+      <div class="carousel card-body d-flex justify-content-center">
+        <div echarts [options]="lineChart" class="line__chart"></div>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>
