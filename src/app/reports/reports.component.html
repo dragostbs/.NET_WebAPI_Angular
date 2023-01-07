@@ -3,155 +3,34 @@
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Reports</h1>
+    <app-trade></app-trade>
   </div>
   <div *ngIf="!loaderComponent.loading" class="report card rounded-top">
     <table class="table mb-0">
       <thead class="report__head bg-light">
         <tr class="rounded-top">
-          <th scope="col">Date</th>
-          <th scope="col">Stock Name</th>
-          <th scope="col">Market Cap</th>
-          <th scope="col">Stock Price</th>
-          <th scope="col">% Change</th>
+          <th scope="col">Id</th>
+          <th scope="col">User</th>
+          <th scope="col">Stock</th>
           <th scope="col">Result</th>
-          <th scope="col">Volume</th>
+          <th scope="col">Price</th>
+          <th scope="col">Date</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>-1.79%</td>
-          <td>Sell</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>-1.79%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Sell</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>-1.79%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Sell</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>-1.79%</td>
-          <td>Sell</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>-1.79%</td>
-          <td>Sell</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>-1.79%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
-        </tr>
-        <tr>
-          <td>2020-12-04</td>
-          <td>FFA</td>
-          <td>2,455,555</td>
-          <td>129.98</td>
-          <td>2.67%</td>
-          <td>Buy</td>
-          <td>122,500,767</td>
+        <tr *ngFor="let transaction of transactions$ | async">
+          <td>{{ transaction.id }}</td>
+          <td>{{ userNameMap.get(transaction.userId) }}</td>
+          <td>{{ stockSymbolMap.get(transaction.stockId) }}</td>
+          <td
+            [ngStyle]="{
+              color: transaction.result === 'Buy' ? 'green' : 'red'
+            }"
+          >
+            {{ transaction.result }}
+          </td>
+          <td>{{ stockPriceMap.get(transaction.stockId) }}$</td>
+          <td>{{ transaction.date | slice : 0 : 10 }}</td>
         </tr>
       </tbody>
     </table>

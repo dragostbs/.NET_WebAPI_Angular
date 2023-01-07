@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +18,8 @@ import { NewsComponent } from './discover/news/news.component';
 import { CardsComponent } from './analysis/cards/cards.component';
 import { PieBarComponent } from './analysis/pie-bar/pie-bar.component';
 import { TablesComponent } from './analysis/tables/tables.component';
+import { CrudApiService } from './services/crud-api.service';
+import { TradeComponent } from './trade/trade.component';
 
 @NgModule({
   declarations: [
@@ -31,16 +35,20 @@ import { TablesComponent } from './analysis/tables/tables.component';
     CardsComponent,
     PieBarComponent,
     TablesComponent,
+    TradeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     }),
   ],
-  providers: [],
+  providers: [CrudApiService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

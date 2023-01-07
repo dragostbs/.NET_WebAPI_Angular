@@ -1,0 +1,149 @@
+<button
+  type="button"
+  class="btn btn-secondary"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+>
+  Trade
+</button>
+
+<div class="alert alert-success" role="alert" id="add-success-alert">
+  Transaction added successfuly !
+</div>
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Add Transaction
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            [formGroup]="transactionForm"
+            (ngSubmit)="submitTransaction()"
+            class="d-flex justify-content-center"
+          >
+            <div class="pt-2 pb-2">
+              <div formGroupName="user" class="mb-3 mt-3 row">
+                <label
+                  for="typeahead-config"
+                  class="col-xs-3 col-sm-auto col-form-label"
+                  >User:</label
+                >
+                <div class="col">
+                  <input
+                    type="text"
+                    formControlName="username"
+                    placeholder="Username"
+                    class="form-control"
+                  />
+                </div>
+                <p
+                  class="error mt-2 mb-0"
+                  *ngIf="
+                    transactionForm.get('user.username')?.hasError('maxlength')
+                  "
+                >
+                  Username is required and should be up to 10 characters long 📢
+                </p>
+              </div>
+              <div formGroupName="stock" class="mb-3 row">
+                <label
+                  for="typeahead-config"
+                  class="col-xs-3 col-sm-auto col-form-label"
+                  >Stock:</label
+                >
+                <div class="col">
+                  <input
+                    type="text"
+                    formControlName="symbol"
+                    placeholder="Stock Symbol"
+                    class="form-control"
+                    oninput="this.value = this.value.toUpperCase()"
+                  />
+                </div>
+                <p
+                  class="error mt-2 mb-0"
+                  *ngIf="
+                    transactionForm.get('stock.symbol')?.hasError('maxlength')
+                  "
+                >
+                  The stock is required and should be up to 10 characters long
+                  📢
+                </p>
+              </div>
+              <div class="mb-3 row">
+                <label
+                  for="typeahead-config"
+                  class="col-xs-3 col-sm-auto col-form-label"
+                  >Position:</label
+                >
+                <div class="col">
+                  <select class="form-control" formControlName="result">
+                    <option value="Buy">Buy</option>
+                    <option value="Sell">Sell</option>
+                  </select>
+                </div>
+                <p
+                  class="error mt-2 mb-0"
+                  *ngIf="transactionForm.get('result')?.hasError('required')"
+                >
+                  The Position is required and should be Buy or Sell 📢
+                </p>
+              </div>
+              <div formGroupName="stock" class="mb-3 row">
+                <label
+                  for="typeahead-config"
+                  class="col-xs-3 col-sm-auto col-form-label"
+                  >Price:</label
+                >
+                <div class="col">
+                  <input
+                    type="number"
+                    formControlName="price"
+                    placeholder="Trading Price"
+                    class="form-control"
+                  />
+                </div>
+                <p
+                  class="error mt-2 mb-0"
+                  *ngIf="
+                    transactionForm.get('stock.price')?.hasError('max') ||
+                    transactionForm.get('stock.price')?.hasError('min')
+                  "
+                >
+                  The Price is required and should be max 500$ and min to 0.1$
+                  📢
+                </p>
+              </div>
+              <div class="d-flex justify-content-center mb-2">
+                <button
+                  class="book btn btn-success"
+                  data-bs-dismiss="modal"
+                  [disabled]="transactionForm.invalid"
+                >
+                  Add Transaction
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
