@@ -1,6 +1,6 @@
 # Analysis Wep Page App 📊
 
-Web Application template for data analysis
+Web Application template for data analysis that gets data from .NET Web API
 
 ## Built With
 
@@ -9,10 +9,6 @@ Web Application template for data analysis
 [![Html][Html.com]][Html-url]
 [![Sass][Sass.com]][Sass-url]
 [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-
-## Demo
-
-[Demo Live 📊](https://ornate-cendol-100d0e.netlify.app)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [Angular.com]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
