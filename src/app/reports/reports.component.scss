@@ -1,6 +1,6 @@
 .report tr {
   display: grid !important;
-  grid-template-columns: repeat(6, 1fr) !important;
+  grid-template-columns: repeat(7, 1fr) !important;
 }
 
 .report {
@@ -49,4 +49,35 @@
 
 .text-muted {
   font-size: 12px;
+}
+
+#add-remove-alert {
+  display: none;
+}
+
+#add-remove-alert {
+  animation-name: fadeInOut;
+  animation-duration: 4s;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.alert {
+  position: absolute;
+  text-align: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4.2rem;
+  --bs-alert-padding-y: 1.3rem;
 }

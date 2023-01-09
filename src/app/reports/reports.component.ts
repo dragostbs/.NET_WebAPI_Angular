@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoaderComponent } from '../loader/loader.component';
 import { CrudApiService } from '../services/crud-api.service';
 
+@Injectable({
+  providedIn: 'root',
+})
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
@@ -57,5 +60,31 @@ export class ReportsComponent implements OnInit {
         this.userNameMap.set(this.userList[i].id, this.userList[i].username);
       }
     });
+  }
+
+  removeTransactions(transaction: any) {
+    this.service.deleteTransactions(transaction.id).subscribe((data) => {
+      // Show success message
+      var showRemove = document.getElementById('add-remove-alert');
+
+      if (showRemove) {
+        showRemove.style.display = 'block';
+      }
+
+      setTimeout(() => {
+        if (showRemove) {
+          showRemove.style.display = 'none';
+        }
+      }, 4000);
+
+      this.transactions$ = this.service.getTransactionsList();
+    });
+  }
+
+  // Inject this functon for trade component to show the data instantly once submitted
+  callAllDataTransactions() {
+    this.transactions$ = this.service.getTransactionsList();
+    this.StocksDataMap();
+    this.UsersDataMap();
   }
 }

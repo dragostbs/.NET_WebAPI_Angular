@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ReportsComponent } from '../reports/reports.component';
 import { CrudApiService } from '../services/crud-api.service';
 
 @Component({
@@ -10,7 +11,11 @@ import { CrudApiService } from '../services/crud-api.service';
 export class TradeComponent implements OnInit {
   transactionForm!: FormGroup;
 
-  constructor(private service: CrudApiService, private fb: FormBuilder) {}
+  constructor(
+    private service: CrudApiService,
+    private fb: FormBuilder,
+    private reportComponent: ReportsComponent
+  ) {}
 
   ngOnInit(): void {
     this.transactionForm = this.fb.group({
@@ -34,7 +39,7 @@ export class TradeComponent implements OnInit {
     this.service
       .addTransactions(this.transactionForm.value)
       .subscribe((res) => {
-        // Show success and error message
+        // Show success message
         var showSuccess = document.getElementById('add-success-alert');
 
         if (showSuccess) {
@@ -46,6 +51,9 @@ export class TradeComponent implements OnInit {
             showSuccess.style.display = 'none';
           }
         }, 4000);
+
+        // Call the function to get all the data once submitted from the form using service and inject
+        this.reportComponent.callAllDataTransactions();
       });
   }
 }

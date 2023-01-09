@@ -3,6 +3,11 @@
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Reports</h1>
+
+    <div class="alert alert-warning" role="alert" id="add-remove-alert">
+      Transaction canceled successfuly !
+    </div>
+
     <app-trade></app-trade>
   </div>
   <div *ngIf="!loaderComponent.loading" class="report card rounded-top">
@@ -15,6 +20,7 @@
           <th scope="col">Result</th>
           <th scope="col">Price</th>
           <th scope="col">Date</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +37,14 @@
           </td>
           <td>{{ stockPriceMap.get(transaction.stockId) }}$</td>
           <td>{{ transaction.date | slice : 0 : 10 }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="removeTransactions(transaction)"
+            >
+              Cancel
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
