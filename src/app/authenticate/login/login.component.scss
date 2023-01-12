@@ -1,0 +1,38 @@
+.btn {
+  width: 9rem;
+}
+
+.create__account {
+  font-size: small;
+  color: gray;
+
+  & a {
+    margin-left: 7px;
+    text-decoration: none;
+  }
+}
+
+.form-signin {
+  max-width: 330px;
+  margin: 0;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="username"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

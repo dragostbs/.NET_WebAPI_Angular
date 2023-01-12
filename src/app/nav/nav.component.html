@@ -1,0 +1,54 @@
+<nav
+  ngbNav
+  #nav="ngbNav"
+  class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar"
+  style="width: 280px; height: 100vh"
+>
+  <a href="/" class="title link-dark text-decoration-none">Financials</a>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="p-2">
+      <ng-container ngbNavItem>
+        <a ngbNavLink [routerLink]="'/chart'">
+          <i class="bi bi-bar-chart me-2"></i>
+          Charts
+        </a>
+      </ng-container>
+    </li>
+    <li class="p-2">
+      <ng-container ngbNavItem>
+        <a ngbNavLink [routerLink]="'/discover'">
+          <i class="bi bi-compass me-2"></i>
+          Discover
+        </a>
+      </ng-container>
+    </li>
+    <li class="p-2">
+      <ng-container ngbNavItem>
+        <a ngbNavLink [routerLink]="'/analysis'">
+          <i class="bi bi-pie-chart me-2"></i>
+          Analysis
+        </a>
+      </ng-container>
+    </li>
+    <li class="p-2">
+      <ng-container ngbNavItem>
+        <a ngbNavLink [routerLink]="'/reports'">
+          <i class="bi bi-file-earmark-text me-2"></i>
+          Reports
+        </a>
+      </ng-container>
+    </li>
+  </ul>
+  <hr />
+
+  <div class="text-center">
+    <button
+      type="button"
+      class="btn btn-outline-secondary m-1"
+      (click)="logOut()"
+    >
+      Disconnect
+    </button>
+  </div>
+</nav>

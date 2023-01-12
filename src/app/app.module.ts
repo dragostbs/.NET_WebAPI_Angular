@@ -20,6 +20,9 @@ import { PieBarComponent } from './analysis/pie-bar/pie-bar.component';
 import { TablesComponent } from './analysis/tables/tables.component';
 import { CrudApiService } from './services/crud-api.service';
 import { TradeComponent } from './trade/trade.component';
+import { LoginComponent } from './authenticate/login/login.component';
+import { RegisterComponent } from './authenticate/register/register.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,9 @@ import { TradeComponent } from './trade/trade.component';
     PieBarComponent,
     TablesComponent,
     TradeComponent,
+    LoginComponent,
+    RegisterComponent,
+    NavComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -10,38 +10,45 @@ export class CrudApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Users
-  getUsersList(): Observable<any[]> {
-    return this.http.get<any>(this.financialsAPIUrl + '/users');
-  }
-
-  addUsers(data: any) {
-    return this.http.post(this.financialsAPIUrl + '/users', data);
-  }
-
-  updateUsers(id: number | string, data: any) {
-    return this.http.put(this.financialsAPIUrl + `/users/${id}`, data);
-  }
-
-  deleteUsers(id: number | string) {
-    return this.http.delete(this.financialsAPIUrl + `/users/${id}`);
-  }
-
   // Transactions
   getTransactionsList(): Observable<any[]> {
-    return this.http.get<any>(this.financialsAPIUrl + '/transactions');
+    return this.http.get<any>(
+      this.financialsAPIUrl + '/transactions',
+      this.getToken()
+    );
   }
 
   addTransactions(data: any) {
-    return this.http.post(this.financialsAPIUrl + '/transactions', data);
+    return this.http.post(
+      this.financialsAPIUrl + '/transactions',
+      data,
+      this.getToken()
+    );
   }
 
   updateTransactions(id: number | string, data: any) {
-    return this.http.put(this.financialsAPIUrl + `/transactions/${id}`, data);
+    return this.http.put(
+      this.financialsAPIUrl + `/transactions/${id}`,
+      data,
+      this.getToken()
+    );
   }
 
   deleteTransactions(id: number | string) {
-    return this.http.delete(this.financialsAPIUrl + `/transactions/${id}`);
+    return this.http.delete(
+      this.financialsAPIUrl + `/transactions/${id}`,
+      this.getToken()
+    );
+  }
+
+  // Adding the token once logged in, withou it we can't use the transaction methods
+  getToken() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      }),
+    };
+    return httpOptions;
   }
 
   // Stocks

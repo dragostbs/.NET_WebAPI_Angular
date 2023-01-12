@@ -15,7 +15,6 @@
       <thead class="report__head bg-light">
         <tr class="rounded-top">
           <th scope="col">Id</th>
-          <th scope="col">User</th>
           <th scope="col">Stock</th>
           <th scope="col">Result</th>
           <th scope="col">Price</th>
@@ -26,7 +25,6 @@
       <tbody>
         <tr *ngFor="let transaction of transactions$ | async">
           <td>{{ transaction.id }}</td>
-          <td>{{ userNameMap.get(transaction.userId) }}</td>
           <td>{{ stockSymbolMap.get(transaction.stockId) }}</td>
           <td
             [ngStyle]="{
@@ -51,3 +49,4 @@
   </div>
   <app-loader></app-loader>
 </main>
+<app-nav></app-nav>

@@ -21,9 +21,6 @@ export class TradeComponent implements OnInit {
     this.transactionForm = this.fb.group({
       result: ['Buy', [Validators.required]],
       date: [new Date()],
-      user: this.fb.group({
-        username: ['', [Validators.required, Validators.maxLength(10)]],
-      }),
       stock: this.fb.group({
         symbol: ['', [Validators.required, Validators.maxLength(10)]],
         price: [
@@ -51,9 +48,12 @@ export class TradeComponent implements OnInit {
             showSuccess.style.display = 'none';
           }
         }, 4000);
-
+        console.log(res);
         // Call the function to get all the data once submitted from the form using service and inject
         this.reportComponent.callAllDataTransactions();
+        this.transactionForm.reset({
+          result: 'Buy',
+        });
       });
   }
 }
