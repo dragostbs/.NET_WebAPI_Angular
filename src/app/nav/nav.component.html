@@ -3,6 +3,7 @@
   #nav="ngbNav"
   class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar"
   style="width: 280px; height: 100vh"
+  *ngIf="auth.isLoggedIn()"
 >
   <a href="/" class="title link-dark text-decoration-none">Financials</a>
   <hr />
@@ -48,7 +49,8 @@
       class="btn btn-outline-secondary m-1"
       (click)="logOut()"
     >
-      Disconnect
+      <i class="bi bi-box-arrow-left"></i>
+      Logout
     </button>
   </div>
 </nav>

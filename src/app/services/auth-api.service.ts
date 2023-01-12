@@ -19,6 +19,15 @@ export class AuthApiService {
     );
   }
 
+  isLoggedIn(): boolean {
+    if (localStorage.getItem('token')) {
+      return true;
+    } else {
+      alert('Please log in !');
+      return false;
+    }
+  }
+
   logoutUser() {
     localStorage.removeItem('token');
   }
