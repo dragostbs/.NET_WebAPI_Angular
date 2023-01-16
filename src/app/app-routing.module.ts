@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'discover', component: DiscoverComponent },
   { path: 'reports', component: ReportsComponent },
   { path: 'analysis', component: AnalysisComponent },
-  // { path: '**', component: NotfoundComponent },
+  { path: '**', component: LoginComponent },
 ];
 
 @NgModule({

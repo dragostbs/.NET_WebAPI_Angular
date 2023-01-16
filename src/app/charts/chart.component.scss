@@ -1,6 +1,11 @@
+.card {
+  height: 49.5rem;
+}
+
 .candles__chart {
-  width: 1145px;
+  width: 1224px;
   height: 650px;
+  right: 38px;
 }
 
 .input__field {
@@ -15,4 +20,10 @@
 .form-control:focus {
   border-color: #b8b8b8;
   box-shadow: 0 0 0 0.2rem rgba(186, 186, 186, 0.25);
+}
+
+.error {
+  color: red;
+  font-size: xx-small;
+  text-align: center;
 }

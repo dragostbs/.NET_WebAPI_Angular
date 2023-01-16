@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EChartsOption } from 'echarts';
 import { LoaderComponent } from '../loader/loader.component';
+import { CandlesApiService } from '../services/candles-api.service';
 
 @Component({
   selector: 'app-chart',
@@ -11,95 +13,158 @@ export class ChartComponent implements OnInit {
   @ViewChild(LoaderComponent, { static: true })
   loaderComponent!: LoaderComponent;
 
+  searchForm!: FormGroup;
   candlesChart: EChartsOption = {};
 
+  constructor(
+    private dataCandles: CandlesApiService,
+    private fb: FormBuilder
+  ) {}
+
   ngOnInit(): void {
-    this.displayChart();
+    // this.displayChart();
     this.loaderComponent.loading = true;
+
+    this.searchForm = this.fb.group({
+      stockSymbol: [
+        '',
+        [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
+      ],
+    });
+
+    // Display chart automatically on init
+    let dates: string[] = [];
+    let ticker: any[] = [];
+
+    this.dataCandles.getCandlesDataInit().subscribe((data) => {
+      for (let [key, value] of Object.entries(data)) {
+        dates.push(key);
+        ticker.push([value.Open, value.Close, value.Low, value.High]);
+      }
+
+      this.candlesChart = {
+        xAxis: {
+          data: dates,
+          axisLine: { lineStyle: { color: '#8392A5' } },
+        },
+        yAxis: {
+          scale: true,
+          axisLine: { lineStyle: { color: '#8392A5' } },
+        },
+        series: [
+          {
+            type: 'candlestick',
+            data: ticker,
+          },
+        ],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false,
+            type: 'cross',
+            lineStyle: {
+              color: '#4d4e52',
+              width: 1,
+              opacity: 0.8,
+            },
+          },
+        },
+        dataZoom: [
+          {
+            textStyle: {
+              color: '#8392A5',
+            },
+            dataBackground: {
+              areaStyle: {
+                color: '#8392A5',
+              },
+              lineStyle: {
+                opacity: 0.8,
+                color: '#8392A5',
+              },
+            },
+            brushSelect: true,
+          },
+          {
+            type: 'inside',
+          },
+        ],
+      };
+      this.searchForm.reset({
+        stockSymbol: '',
+      });
+    });
   }
 
+  // Display chart based on search input
   displayChart() {
-    this.candlesChart = {
-      xAxis: {
-        data: [
-          '2017-10-24',
-          '2017-10-25',
-          '2017-10-26',
-          '2017-10-27',
-          '2017-10-28',
-          '2017-10-29',
-          '2017-10-30',
-          '2017-10-31',
-          '2017-11-01',
-          '2017-11-02',
-          '2017-11-03',
-          '2017-11-04',
-          '2017-11-05',
-          '2017-11-06',
-          '2017-11-07',
-          '2017-11-08',
-          '2017-11-09',
-          '2017-11-10',
-          '2017-11-11',
-          '2017-11-12',
-          '2017-11-13',
-          '2017-11-14',
-        ],
-      },
-      yAxis: {
-        scale: true,
-      },
-      series: [
-        {
-          type: 'candlestick',
-          data: [
-            [141, 148, 140, 148],
-            [148, 148, 146, 149],
-            [145, 147, 145, 148],
-            [147, 146, 145, 150],
-            [147, 142, 141, 147],
-            [142, 140, 140, 143],
-            [142, 142, 141, 143],
-            [142, 142, 140, 145],
-            [142, 144, 141, 144],
-            [149, 145, 144, 149],
-            [145, 143, 141, 146],
-            [141, 136, 136, 141],
-            [136, 134, 133, 137],
-            [135, 132, 131, 135],
-            [131, 132, 129, 133],
-            [132, 135, 132, 136],
-            [134, 132, 130, 134],
-            [130, 131, 129, 132],
-            [131, 130, 128, 131],
-            [129, 126, 125, 131],
-            [127, 129, 127, 130],
-            [128, 129, 127, 129],
-          ],
-        },
-      ],
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'line',
-        },
-      },
-      dataZoom: [
-        {
-          type: 'inside',
-          xAxisIndex: [0, 1],
-          start: 0,
-          end: 100,
-        },
-        {
-          show: true,
-          xAxisIndex: [0, 1],
-          type: 'slider',
-          bottom: 10,
-          start: 0,
-          end: 100,
-        },
-      ],
-    };
+    let dates: string[] = [];
+    let ticker: any[] = [];
+
+    if (this.searchForm.valid) {
+      this.dataCandles
+        .getCandlesData(this.searchForm.value['stockSymbol'])
+        .subscribe((data) => {
+          if (Object.entries(data).length === 0)
+            alert('🌋 The Stock could not be found !!!');
+
+          for (let [key, value] of Object.entries(data)) {
+            dates.push(key);
+            ticker.push([value.Open, value.Close, value.Low, value.High]);
+          }
+
+          this.candlesChart = {
+            xAxis: {
+              data: dates,
+              axisLine: { lineStyle: { color: '#8392A5' } },
+            },
+            yAxis: {
+              scale: true,
+              axisLine: { lineStyle: { color: '#8392A5' } },
+            },
+            series: [
+              {
+                type: 'candlestick',
+                data: ticker,
+              },
+            ],
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
+              },
+            },
+            dataZoom: [
+              {
+                textStyle: {
+                  color: '#8392A5',
+                },
+                dataBackground: {
+                  areaStyle: {
+                    color: '#8392A5',
+                  },
+                  lineStyle: {
+                    opacity: 0.8,
+                    color: '#8392A5',
+                  },
+                },
+                brushSelect: true,
+              },
+              {
+                type: 'inside',
+              },
+            ],
+          };
+          this.searchForm.reset({
+            stockSymbol: '',
+          });
+        });
+    }
   }
 }
