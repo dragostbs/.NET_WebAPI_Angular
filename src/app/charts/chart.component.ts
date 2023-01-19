@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EChartsOption } from 'echarts';
 import { LoaderComponent } from '../loader/loader.component';
+import { CalcMaService } from '../services/calc-ma.service';
 import { CandlesApiService } from '../services/candles-api.service';
 
 @Component({
@@ -18,7 +19,8 @@ export class ChartComponent implements OnInit {
 
   constructor(
     private dataCandles: CandlesApiService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private calcMA: CalcMaService
   ) {}
 
   ngOnInit(): void {
@@ -36,13 +38,32 @@ export class ChartComponent implements OnInit {
     let dates: string[] = [];
     let ticker: any[] = [];
 
+    let closePrice: any[] = [];
+    let maxData: any[] = [];
+    let minData: any[] = [];
+
     this.dataCandles.getCandlesDataInit().subscribe((data) => {
+      // Push data
       for (let [key, value] of Object.entries(data)) {
         dates.push(key);
         ticker.push([value.Open, value.Close, value.Low, value.High]);
+        closePrice.push(value.Close);
+        maxData.push([key, value.High]);
+        minData.push([key, value.Low]);
       }
 
       this.candlesChart = {
+        legend: {
+          data: ['Chart', 'MA 21', 'MA 50', 'MA 100'],
+          inactiveColor: '#777',
+        },
+        grid: [
+          {
+            left: '5%',
+            right: '2%',
+            height: '80%',
+          },
+        ],
         xAxis: {
           data: dates,
           axisLine: { lineStyle: { color: '#8392A5' } },
@@ -51,10 +72,70 @@ export class ChartComponent implements OnInit {
           scale: true,
           axisLine: { lineStyle: { color: '#8392A5' } },
         },
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
         series: [
           {
+            name: 'Chart',
             type: 'candlestick',
             data: ticker,
+            markPoint: {
+              data: [
+                {
+                  name: 'Max Mark',
+                  coord: this.calcMA.calculateMax(maxData),
+                  value: this.calcMA.calculateMax(maxData),
+                  itemStyle: {
+                    color: 'rgb(41,60,85)',
+                  },
+                },
+                {
+                  name: 'Min Mark',
+                  coord: this.calcMA.calculateMin(minData),
+                  value: this.calcMA.calculateMin(minData),
+                  itemStyle: {
+                    color: 'rgb(41,60,85)',
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: 'MA 21',
+            type: 'line',
+            data: this.calcMA.calculateMA(closePrice, 21),
+            smooth: true,
+            showSymbol: false,
+            lineStyle: {
+              width: 1,
+            },
+          },
+          {
+            name: 'MA 50',
+            type: 'line',
+            data: this.calcMA.calculateMA(closePrice, 50),
+            smooth: true,
+            showSymbol: false,
+            lineStyle: {
+              width: 1,
+            },
+          },
+          {
+            name: 'MA 100',
+            type: 'line',
+            data: this.calcMA.calculateMA(closePrice, 100),
+            smooth: true,
+            showSymbol: false,
+            lineStyle: {
+              width: 1,
+            },
           },
         ],
         tooltip: {
@@ -71,28 +152,18 @@ export class ChartComponent implements OnInit {
         },
         dataZoom: [
           {
-            textStyle: {
-              color: '#8392A5',
-            },
-            dataBackground: {
-              areaStyle: {
-                color: '#8392A5',
-              },
-              lineStyle: {
-                opacity: 0.8,
-                color: '#8392A5',
-              },
-            },
-            brushSelect: true,
+            type: 'inside',
+            start: 50,
+            end: 100,
           },
           {
-            type: 'inside',
+            show: true,
+            type: 'slider',
+            start: 50,
+            end: 100,
           },
         ],
       };
-      this.searchForm.reset({
-        stockSymbol: '',
-      });
     });
   }
 
@@ -101,6 +172,10 @@ export class ChartComponent implements OnInit {
     let dates: string[] = [];
     let ticker: any[] = [];
 
+    let closePrice: any[] = [];
+    let maxData: any[] = [];
+    let minData: any[] = [];
+
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -108,12 +183,27 @@ export class ChartComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
+          // Push data
           for (let [key, value] of Object.entries(data)) {
             dates.push(key);
             ticker.push([value.Open, value.Close, value.Low, value.High]);
+            closePrice.push(value.Close);
+            maxData.push([key, value.High]);
+            minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
+            legend: {
+              data: ['Chart', 'MA 21', 'MA 50', 'MA 100'],
+              inactiveColor: '#777',
+            },
+            grid: [
+              {
+                left: '5%',
+                right: '2%',
+                height: '80%',
+              },
+            ],
             xAxis: {
               data: dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
@@ -122,10 +212,70 @@ export class ChartComponent implements OnInit {
               scale: true,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
+            toolbox: {
+              show: true,
+              feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true },
+              },
+            },
             series: [
               {
+                name: 'Chart',
                 type: 'candlestick',
                 data: ticker,
+                markPoint: {
+                  data: [
+                    {
+                      name: 'Max Mark',
+                      coord: this.calcMA.calculateMax(maxData),
+                      value: this.calcMA.calculateMax(maxData),
+                      itemStyle: {
+                        color: 'rgb(41,60,85)',
+                      },
+                    },
+                    {
+                      name: 'Min Mark',
+                      coord: this.calcMA.calculateMin(minData),
+                      value: this.calcMA.calculateMin(minData),
+                      itemStyle: {
+                        color: 'rgb(41,60,85)',
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: 'MA 21',
+                type: 'line',
+                data: this.calcMA.calculateMA(closePrice, 21),
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                  width: 1,
+                },
+              },
+              {
+                name: 'MA 50',
+                type: 'line',
+                data: this.calcMA.calculateMA(closePrice, 50),
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                  width: 1,
+                },
+              },
+              {
+                name: 'MA 100',
+                type: 'line',
+                data: this.calcMA.calculateMA(closePrice, 100),
+                smooth: true,
+                showSymbol: false,
+                lineStyle: {
+                  width: 1,
+                },
               },
             ],
             tooltip: {
@@ -142,22 +292,15 @@ export class ChartComponent implements OnInit {
             },
             dataZoom: [
               {
-                textStyle: {
-                  color: '#8392A5',
-                },
-                dataBackground: {
-                  areaStyle: {
-                    color: '#8392A5',
-                  },
-                  lineStyle: {
-                    opacity: 0.8,
-                    color: '#8392A5',
-                  },
-                },
-                brushSelect: true,
+                type: 'inside',
+                start: 50,
+                end: 100,
               },
               {
-                type: 'inside',
+                show: true,
+                type: 'slider',
+                start: 50,
+                end: 100,
               },
             ],
           };
