@@ -48,7 +48,7 @@ export class ReportsComponent implements OnInit {
   removeTransactions(transaction: any) {
     this.service.deleteTransactions(transaction.id).subscribe((data) => {
       // Show success message
-      var showRemove = document.getElementById('add-remove-alert');
+      const showRemove = document.getElementById('add-remove-alert');
 
       if (showRemove) {
         showRemove.style.display = 'block';

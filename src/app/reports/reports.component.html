@@ -3,11 +3,9 @@
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Reports</h1>
-
     <div class="alert alert-warning" role="alert" id="add-remove-alert">
       Transaction canceled successfuly !
     </div>
-
     <app-trade></app-trade>
   </div>
   <div *ngIf="!loaderComponent.loading" class="report card rounded-top">

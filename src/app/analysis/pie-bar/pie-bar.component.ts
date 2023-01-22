@@ -17,6 +17,13 @@ export class PieBarComponent implements OnInit {
 
   displayBar() {
     this.barChart = {
+      title: [
+        {
+          text: 'Evaporation',
+          left: '50%',
+          textAlign: 'center',
+        },
+      ],
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -113,6 +120,13 @@ export class PieBarComponent implements OnInit {
 
   displayPie() {
     this.pieChart = {
+      title: [
+        {
+          text: 'Evaporation',
+          left: '50%',
+          textAlign: 'center',
+        },
+      ],
       legend: {
         top: 'bottom',
       },

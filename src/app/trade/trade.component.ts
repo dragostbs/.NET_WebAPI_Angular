@@ -37,7 +37,7 @@ export class TradeComponent implements OnInit {
       .addTransactions(this.transactionForm.value)
       .subscribe((res) => {
         // Show success message
-        var showSuccess = document.getElementById('add-success-alert');
+        const showSuccess = document.getElementById('add-success-alert');
 
         if (showSuccess) {
           showSuccess.style.display = 'block';
@@ -48,7 +48,7 @@ export class TradeComponent implements OnInit {
             showSuccess.style.display = 'none';
           }
         }, 4000);
-        console.log(res);
+
         // Call the function to get all the data once submitted from the form using service and inject
         this.reportComponent.callAllDataTransactions();
         this.transactionForm.reset({

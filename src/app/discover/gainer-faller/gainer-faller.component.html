@@ -11,90 +11,20 @@
     </div>
     <div class="risersFallers">
       <table class="table mb-0">
-        <tbody>
+        <tbody *ngFor="let gain of listGainers[5]">
           <tr>
-            <td class="text-start ps-4">Symbol</td>
+            <td class="text-start ps-4">{{ gain.symbol }}</td>
             <td>
               <ngb-progressbar
                 type="success"
-                [value]="25"
+                [value]="gain.regularMarketChangePercent"
                 class="progress__bar mt-1"
               >
               </ngb-progressbar>
             </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="success"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
+            <td class="text-end pe-4">
+              {{ gain.regularMarketChangePercent | number : "1.0-2" }}%
             </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="success"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="success"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="success"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="success"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="success"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
           </tr>
         </tbody>
       </table>
@@ -113,90 +43,20 @@
     </div>
     <div class="risersFallers">
       <table class="table mb-0">
-        <tbody>
+        <tbody *ngFor="let fall of listFallers[5]">
           <tr>
-            <td class="text-start ps-4">Symbol</td>
+            <td class="text-start ps-4">{{ fall.symbol }}</td>
             <td>
               <ngb-progressbar
                 type="danger"
-                [value]="25"
+                [value]="myMath.abs(fall.regularMarketChangePercent)"
                 class="progress__bar mt-1"
               >
               </ngb-progressbar>
             </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="danger"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
+            <td class="text-end pe-4">
+              {{ fall.regularMarketChangePercent | number : "1.0-2" }}%
             </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="danger"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="danger"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="danger"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="danger"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
-          </tr>
-          <tr>
-            <td class="text-start ps-4">Symbol</td>
-            <td>
-              <ngb-progressbar
-                type="danger"
-                [value]="45"
-                class="progress__bar mt-1"
-              >
-              </ngb-progressbar>
-            </td>
-            <td class="text-end pe-4">45.78%</td>
           </tr>
         </tbody>
       </table>

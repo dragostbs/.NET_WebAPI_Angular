@@ -24,7 +24,6 @@ export class ChartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.displayChart();
     this.loaderComponent.loading = true;
 
     this.searchForm = this.fb.group({
