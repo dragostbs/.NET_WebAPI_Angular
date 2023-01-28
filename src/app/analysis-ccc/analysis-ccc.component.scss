@@ -1,0 +1,65 @@
+// Cards
+.input {
+  text-align: center;
+}
+
+.form-control:focus {
+  border-color: #b8b8b8;
+  box-shadow: 0 0 0 0.2rem rgba(186, 186, 186, 0.25);
+}
+
+.search__content {
+  width: 17rem !important;
+}
+
+.card__content {
+  width: 75% !important;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.table-bordered {
+  border: transparent !important;
+}
+
+.table-bordered .bg-light {
+  border-bottom: 1px #ebeaea !important;
+}
+
+// Charts
+.bar__chart,
+.pie__chart {
+  width: 568px;
+  height: 310px;
+}
+
+// Tables
+.card__analysis {
+  width: 100%;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1.15rem 1rem !important;
+}
+
+.analysis tr {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.analysis > tbody {
+  vertical-align: none;
+}
+
+.error {
+  color: red;
+  font-size: xx-small;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.ccc {
+  background-color: salmon;
+  margin-left: 139px;
+  margin-right: 139px;
+}

@@ -1,0 +1,128 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2">
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="text-secondary">Analysis - Cash Conversion Cycle</h1>
+    <app-trade></app-trade>
+  </div>
+  <div *ngIf="!loaderComponent.loading" class="d-flex row">
+    <div class="d-flex">
+      <div class="card me-3 search__content">
+        <form
+          class="input-group input-group-sm p-2"
+          [formGroup]="searchForm"
+          (ngSubmit)="displayData()"
+        >
+          <input
+            type="text"
+            class="input form-control"
+            placeholder="Stock name..."
+            formControlName="stockSymbol"
+            oninput="this.value = this.value.toUpperCase()"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="displayData()"
+            [disabled]="searchForm.invalid"
+          >
+            Search
+          </button>
+        </form>
+        <p
+          class="error"
+          *ngIf="searchForm.get('stockSymbol')?.hasError('maxlength')"
+        >
+          Stock Symbol should have min 1 to 4 characters 📢
+        </p>
+        <h1 class="text-center p-2">{{ symbol }}</h1>
+      </div>
+
+      <div class="card card__content">
+        <table class="table table-bordered text-start text-center mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th scope="col">Inventory</th>
+              <th scope="col">Cost of Goods Sold</th>
+              <th scope="col">Revenue</th>
+              <th scope="col">Receivables</th>
+              <th scope="col">Accounts Payable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ inventory | number : "1.0-2" }}</td>
+              <td>{{ cogs | number : "1.0-2" }}</td>
+              <td>{{ revenue | number : "1.0-2" }}</td>
+              <td>
+                {{ receivables | number : "1.0-2" }}
+              </td>
+              <td>
+                {{ accountsPayable | number : "1.0-2" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="d-flex mt-3">
+      <div class="card me-3">
+        <div echarts [options]="barChart" class="bar__chart"></div>
+      </div>
+      <div class="card">
+        <div echarts [options]="pieChart" class="pie__chart"></div>
+      </div>
+    </div>
+
+    <div class="d-flex mt-3">
+      <div class="card__analysis card flex-column text-start text-center">
+        <div class="bg-light px-4 mb-0 border-bottom rounded-top">
+          <p class="pt-2 fs-4 fw-bold mb-2">Results</p>
+        </div>
+        <div class="analysis">
+          <table class="table table-bordered mb-0">
+            <tbody>
+              <tr>
+                <td>Days Inventory Outstanding (DIO)</td>
+                <td>(Inventory / Cost of Goods Sold) * 365</td>
+                <td>
+                  {{ DIO | number : "1.0-0" }}
+                  days
+                </td>
+              </tr>
+              <tr>
+                <td>Days Sales Outstanding (DSO)</td>
+                <td>(Rceivables / Revenue) * 365</td>
+                <td>
+                  {{ DSO | number : "1.0-0" }}
+                  days
+                </td>
+              </tr>
+              <tr>
+                <td>Days Payable Outstanding (DPO)</td>
+                <td>(Accounts Payable / Cost of Goods Sold) * 365</td>
+                <td>
+                  {{ DPO | number : "1.0-0" }}
+                  days
+                </td>
+              </tr>
+              <tr>
+                <td>Cash Conversion Cycle (CCC)</td>
+                <td>DIO + DSO - DPO</td>
+                <td>
+                  <p class="ccc">
+                    {{ CCC | number : "1.0-0" }}
+                    days
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-loader></app-loader>
+</main>
+<app-nav></app-nav>

@@ -9,20 +9,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartComponent } from './charts/chart.component';
 import { DiscoverComponent } from './discover/discover.component';
 import { ReportsComponent } from './reports/reports.component';
-import { AnalysisComponent } from './analysis/analysis.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { LoaderComponent } from './loader/loader.component';
 import { CarouselComponent } from './discover/carousel/carousel.component';
 import { GainerFallerComponent } from './discover/gainer-faller/gainer-faller.component';
 import { NewsComponent } from './discover/news/news.component';
-import { CardsComponent } from './analysis/cards/cards.component';
-import { PieBarComponent } from './analysis/pie-bar/pie-bar.component';
-import { TablesComponent } from './analysis/tables/tables.component';
 import { CrudApiService } from './services/crud-api.service';
 import { TradeComponent } from './trade/trade.component';
 import { LoginComponent } from './authenticate/login/login.component';
 import { RegisterComponent } from './authenticate/register/register.component';
 import { NavComponent } from './nav/nav.component';
+import { AnalysisCCCComponent } from './analysis-ccc/analysis-ccc.component';
 
 @NgModule({
   declarations: [
@@ -30,18 +27,15 @@ import { NavComponent } from './nav/nav.component';
     ChartComponent,
     DiscoverComponent,
     ReportsComponent,
-    AnalysisComponent,
     LoaderComponent,
     CarouselComponent,
     GainerFallerComponent,
     NewsComponent,
-    CardsComponent,
-    PieBarComponent,
-    TablesComponent,
     TradeComponent,
     LoginComponent,
     RegisterComponent,
     NavComponent,
+    AnalysisCCCComponent,
   ],
   imports: [
     BrowserModule,

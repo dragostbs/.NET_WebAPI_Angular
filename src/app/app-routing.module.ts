@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AnalysisComponent } from './analysis/analysis.component';
+import { AnalysisCCCComponent } from './analysis-ccc/analysis-ccc.component';
 import { LoginComponent } from './authenticate/login/login.component';
 import { RegisterComponent } from './authenticate/register/register.component';
 import { ChartComponent } from './charts/chart.component';
@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'chart', component: ChartComponent },
   { path: 'discover', component: DiscoverComponent },
   { path: 'reports', component: ReportsComponent },
-  { path: 'analysis', component: AnalysisComponent },
+  { path: 'analysisCash', component: AnalysisCCCComponent },
   { path: '**', component: LoginComponent },
 ];
 
