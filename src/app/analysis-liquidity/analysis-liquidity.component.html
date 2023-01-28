@@ -2,7 +2,7 @@
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
-    <h1 class="text-secondary">Analysis - Cash Conversion Cycle</h1>
+    <h1 class="text-secondary">Analysis - Liquidity</h1>
     <app-trade></app-trade>
   </div>
   <div *ngIf="!loaderComponent.loading" class="d-flex row">
@@ -43,23 +43,21 @@
           <thead class="bg-light">
             <tr class="text_size">
               <th scope="col">Inventory</th>
-              <th scope="col">Cost of Goods Sold</th>
-              <th scope="col">Revenue</th>
               <th scope="col">Receivables</th>
-              <th scope="col">Accounts Payable</th>
+              <th scope="col">Pre-Paid Expenses</th>
+              <th scope="col">Cash On Hand</th>
+              <th scope="col">Current Assets</th>
+              <th scope="col">Current Liabilities</th>
             </tr>
           </thead>
           <tbody class="text_size">
             <tr>
               <td>{{ inventory | number : "1.0-2" }}</td>
-              <td>{{ cogs | number : "1.0-2" }}</td>
-              <td>{{ revenue | number : "1.0-2" }}</td>
-              <td>
-                {{ receivables | number : "1.0-2" }}
-              </td>
-              <td>
-                {{ accountsPayable | number : "1.0-2" }}
-              </td>
+              <td>{{ receivables | number : "1.0-2" }}</td>
+              <td>{{ prePaidExpenses | number : "1.0-2" }}</td>
+              <td>{{ cashOnHand | number : "1.0-2" }}</td>
+              <td>{{ assets | number : "1.0-2" }}</td>
+              <td>{{ liabilities | number : "1.0-2" }}</td>
             </tr>
           </tbody>
         </table>
@@ -68,10 +66,10 @@
 
     <div class="d-flex mt-3">
       <div class="card me-3">
-        <div echarts [options]="barChart" class="bar__chart"></div>
+        <div echarts [options]="pieChart" class="pie__chart"></div>
       </div>
       <div class="card">
-        <div echarts [options]="pieChart" class="pie__chart"></div>
+        <div echarts [options]="radialChart" class="radial__chart"></div>
       </div>
     </div>
 
@@ -84,37 +82,27 @@
           <table class="table table-bordered mb-0">
             <tbody class="text_size">
               <tr>
-                <td>Days Inventory Outstanding (DIO)</td>
-                <td>(Inventory / Cost of Goods Sold) * 365</td>
-                <td>
-                  {{ DIO | number : "1.0-0" }}
-                  days
-                </td>
+                <td>Current ratio (RLC)</td>
+                <td>(Current Assets / Current Liabilities) * 100</td>
+                <td>{{ RLC / 100 | percent : "1.0-2" }}</td>
               </tr>
               <tr>
-                <td>Days Sales Outstanding (DSO)</td>
-                <td>(Rceivables / Revenue) * 365</td>
+                <td>Quick Ratio (RLI)</td>
                 <td>
-                  {{ DSO | number : "1.0-0" }}
-                  days
+                  (Current Assets - Inventory) / Current Liabilities * 100
                 </td>
+                <td>{{ RLI / 100 | percent : "1.0-2" }}</td>
               </tr>
               <tr>
-                <td>Days Payable Outstanding (DPO)</td>
-                <td>(Accounts Payable / Cost of Goods Sold) * 365</td>
-                <td>
-                  {{ DPO | number : "1.0-0" }}
-                  days
-                </td>
+                <td>Treasury (TR)</td>
+                <td>Pre-paid Expenses + Cash On Hand</td>
+                <td>{{ TR | number : "1.0-2" }}</td>
               </tr>
               <tr>
-                <td>Cash Conversion Cycle (CCC)</td>
-                <td>DIO + DSO - DPO</td>
+                <td>Cash Ratio (RLE)</td>
+                <td>(Treasury / Current Liabilities) * 100</td>
                 <td>
-                  <p class="ccc">
-                    {{ CCC | number : "1.0-0" }}
-                    days
-                  </p>
+                  <p class="ccc">{{ RLE / 100 | percent : "1.0-2" }}</p>
                 </td>
               </tr>
             </tbody>
@@ -123,6 +111,6 @@
       </div>
     </div>
   </div>
-  <app-loader></app-loader>
 </main>
+<app-loader></app-loader>
 <app-nav></app-nav>

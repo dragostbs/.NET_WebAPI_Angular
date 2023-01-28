@@ -20,6 +20,10 @@ import { LoginComponent } from './authenticate/login/login.component';
 import { RegisterComponent } from './authenticate/register/register.component';
 import { NavComponent } from './nav/nav.component';
 import { AnalysisCCCComponent } from './analysis-ccc/analysis-ccc.component';
+import { AnalysisLiquidityComponent } from './analysis-liquidity/analysis-liquidity.component';
+import { AnalysisSolvencyComponent } from './analysis-solvency/analysis-solvency.component';
+import { AnalysisPerformanceComponent } from './analysis-performance/analysis-performance.component';
+import { AnalysisPositionComponent } from './analysis-position/analysis-position.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,10 @@ import { AnalysisCCCComponent } from './analysis-ccc/analysis-ccc.component';
     RegisterComponent,
     NavComponent,
     AnalysisCCCComponent,
+    AnalysisLiquidityComponent,
+    AnalysisSolvencyComponent,
+    AnalysisPerformanceComponent,
+    AnalysisPositionComponent,
   ],
   imports: [
     BrowserModule,
