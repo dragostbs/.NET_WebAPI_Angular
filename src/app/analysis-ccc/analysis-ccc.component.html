@@ -68,7 +68,7 @@
 
     <div class="d-flex mt-3">
       <div class="card me-3">
-        <div echarts [options]="barChart" class="bar__chart"></div>
+        <div echarts [options]="radarChart" class="radar__chart"></div>
       </div>
       <div class="card">
         <div echarts [options]="pieChart" class="pie__chart"></div>
@@ -84,7 +84,15 @@
           <table class="table table-bordered mb-0">
             <tbody class="text_size">
               <tr>
-                <td>Days Inventory Outstanding (DIO)</td>
+                <td class="indicators">
+                  <i
+                    class="bi bi-info-square"
+                    placement="top"
+                    ngbTooltip="Termenul mediu de stocare"
+                  >
+                  </i>
+                  Days Inventory Outstanding (DIO)
+                </td>
                 <td>(Inventory / Cost of Goods Sold) * 365</td>
                 <td>
                   {{ DIO | number : "1.0-0" }}
@@ -92,7 +100,15 @@
                 </td>
               </tr>
               <tr>
-                <td>Days Sales Outstanding (DSO)</td>
+                <td class="indicators">
+                  <i
+                    class="bi bi-info-square"
+                    placement="top"
+                    ngbTooltip="Termenul mediu de incasare a creantelor"
+                  >
+                  </i>
+                  Days Sales Outstanding (DSO)
+                </td>
                 <td>(Rceivables / Revenue) * 365</td>
                 <td>
                   {{ DSO | number : "1.0-0" }}
@@ -100,7 +116,15 @@
                 </td>
               </tr>
               <tr>
-                <td>Days Payable Outstanding (DPO)</td>
+                <td class="indicators">
+                  <i
+                    class="bi bi-info-square"
+                    placement="top"
+                    ngbTooltip="Termenul mediu de plata a datoriilor comerciale"
+                  >
+                  </i>
+                  Days Payable Outstanding (DPO)
+                </td>
                 <td>(Accounts Payable / Cost of Goods Sold) * 365</td>
                 <td>
                   {{ DPO | number : "1.0-0" }}
@@ -108,10 +132,18 @@
                 </td>
               </tr>
               <tr>
-                <td>Cash Conversion Cycle (CCC)</td>
+                <td class="indicators">
+                  <i
+                    class="bi bi-info-square"
+                    placement="top"
+                    ngbTooltip="Cate zile pe an se invartsesc banii in companie"
+                  >
+                  </i>
+                  Cash Conversion Cycle (CCC)
+                </td>
                 <td>DIO + DSO - DPO</td>
                 <td>
-                  <p class="ccc">
+                  <p class="imortant_indicator">
                     {{ CCC | number : "1.0-0" }}
                     days
                   </p>

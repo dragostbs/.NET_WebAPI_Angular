@@ -27,7 +27,7 @@
 }
 
 // Charts
-.bar__chart,
+.radar__chart,
 .pie__chart {
   width: 568px;
   height: 310px;
@@ -58,7 +58,7 @@
   margin-bottom: 0;
 }
 
-.ccc {
+.imortant_indicator {
   background-color: salmon;
   margin-left: 139px;
   margin-right: 139px;
@@ -66,4 +66,15 @@
 
 .text_size {
   font-size: 0.8rem !important;
+}
+
+i {
+  cursor: pointer !important;
+  color: cornflowerblue !important;
+  margin-right: 10px !important;
+}
+
+.indicators {
+  text-align: left !important;
+  margin-left: 4rem !important;
 }

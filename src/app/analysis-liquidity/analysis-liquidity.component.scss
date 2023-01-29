@@ -39,7 +39,7 @@
 }
 
 .table > :not(caption) > * > * {
-  padding: 1.25rem 1rem !important;
+  padding: 1.65rem 1rem !important;
 }
 
 .analysis tr {
@@ -58,7 +58,7 @@
   margin-bottom: 0;
 }
 
-.ccc {
+.imortant_indicator {
   background-color: salmon;
   margin-left: 139px;
   margin-right: 139px;
@@ -66,4 +66,15 @@
 
 .text_size {
   font-size: 0.8rem !important;
+}
+
+i {
+  cursor: pointer !important;
+  color: cornflowerblue !important;
+  margin-right: 10px !important;
+}
+
+.indicators {
+  text-align: left !important;
+  margin-left: 4rem !important;
 }

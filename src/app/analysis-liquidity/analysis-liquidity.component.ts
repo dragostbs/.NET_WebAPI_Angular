@@ -87,8 +87,7 @@ export class AnalysisLiquidityComponent implements OnInit {
             title: [
               {
                 text: 'Analysis RLC, RLI, RLE',
-                left: '50%',
-                textAlign: 'center',
+                textAlign: 'left',
               },
             ],
             tooltip: {
@@ -109,7 +108,7 @@ export class AnalysisLiquidityComponent implements OnInit {
             series: [
               {
                 type: 'pie',
-                radius: [50, 100],
+                radius: [70, 115],
                 center: ['50%', '50%'],
                 avoidLabelOverlap: false,
                 itemStyle: {
@@ -144,8 +143,7 @@ export class AnalysisLiquidityComponent implements OnInit {
             title: [
               {
                 text: 'Assets vs Liabilities',
-                left: '50%',
-                textAlign: 'center',
+                textAlign: 'left',
               },
             ],
             angleAxis: {
@@ -162,7 +160,7 @@ export class AnalysisLiquidityComponent implements OnInit {
               },
             },
             polar: {
-              radius: [30, '65%'],
+              radius: [10, '75%'],
             },
             tooltip: {},
             toolbox: {

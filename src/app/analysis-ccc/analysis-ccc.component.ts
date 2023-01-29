@@ -14,7 +14,7 @@ export class AnalysisCCCComponent implements OnInit {
   loaderComponent!: LoaderComponent;
 
   searchForm!: FormGroup;
-  barChart: EChartsOption = {};
+  radarChart: EChartsOption = {};
   pieChart: EChartsOption = {};
 
   symbol: string = '';
@@ -98,12 +98,11 @@ export class AnalysisCCCComponent implements OnInit {
               incomeStatementHistory[1].costOfRevenue.raw) *
               365;
 
-          this.barChart = {
+          this.radarChart = {
             title: [
               {
                 text: 'Data Visualisation',
-                left: '50%',
-                textAlign: 'center',
+                textAlign: 'left',
               },
             ],
             tooltip: {},
@@ -116,56 +115,33 @@ export class AnalysisCCCComponent implements OnInit {
             },
             legend: {
               top: 'bottom',
-              data: [
-                'Inventory',
-                'Cogs',
-                'Revenue',
-                'Receivables',
-                'Accounts Payable',
+              data: ['Values'],
+            },
+            radar: {
+              indicator: [
+                { name: 'Inventory' },
+                { name: 'Receivables' },
+                { name: 'Cost of Goods Sold' },
+                { name: 'Revenue' },
+                { name: 'Accounts Payable' },
               ],
             },
-            xAxis: [
-              {
-                type: 'category',
-                data: ['Value'],
-                axisPointer: {
-                  type: 'shadow',
-                },
-              },
-            ],
-            yAxis: [
-              {
-                type: 'value',
-                min: 0,
-                max: 60000000000,
-                interval: 50,
-              },
-            ],
             series: [
               {
-                name: 'Inventory',
-                type: 'bar',
-                data: [this.inventory],
-              },
-              {
-                name: 'Cogs',
-                type: 'bar',
-                data: [this.cogs],
-              },
-              {
-                name: 'Revenue',
-                type: 'bar',
-                data: [this.revenue],
-              },
-              {
-                name: 'Receivables',
-                type: 'bar',
-                data: [this.receivables],
-              },
-              {
-                name: 'Accounts Payable',
-                type: 'bar',
-                data: [this.accountsPayable],
+                name: 'Budget vs spending',
+                type: 'radar',
+                data: [
+                  {
+                    value: [
+                      this.inventory,
+                      this.receivables,
+                      this.cogs,
+                      this.revenue,
+                      this.accountsPayable,
+                    ],
+                    name: 'Values',
+                  },
+                ],
               },
             ],
           };
@@ -174,8 +150,7 @@ export class AnalysisCCCComponent implements OnInit {
             title: [
               {
                 text: 'Analysis DIO, DSO, DPO',
-                left: '50%',
-                textAlign: 'center',
+                textAlign: 'left',
               },
             ],
             tooltip: {
@@ -196,7 +171,7 @@ export class AnalysisCCCComponent implements OnInit {
             series: [
               {
                 type: 'pie',
-                radius: [50, 100],
+                radius: [70, 115],
                 center: ['50%', '50%'],
                 avoidLabelOverlap: false,
                 itemStyle: {
