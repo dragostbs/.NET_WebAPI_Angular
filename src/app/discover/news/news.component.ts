@@ -12,10 +12,10 @@ export class NewsComponent implements OnInit {
   constructor(private service: DiscoverApiService) {}
 
   ngOnInit(): void {
-    // this.service.getNews().subscribe((data) => {
-    //   for (let [key, value] of Object.entries(data)) {
-    //     this.listNews = value[3].stories;
-    //   }
-    // });s
+    this.service.getNews().subscribe((data) => {
+      for (let [key, value] of Object.entries(data)) {
+        this.listNews = value[3].stories;
+      }
+    });
   }
 }

@@ -39,7 +39,7 @@
 }
 
 .table > :not(caption) > * > * {
-  padding: 1rem 1rem !important;
+  padding: 1.1rem 1rem !important;
 }
 
 .analysis tr {
@@ -62,6 +62,11 @@
   background-color: salmon;
   margin-left: 139px;
   margin-right: 139px;
+}
+
+p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .text_size {

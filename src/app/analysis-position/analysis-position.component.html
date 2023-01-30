@@ -8,7 +8,11 @@
   <div *ngIf="!loaderComponent.loading" class="d-flex row">
     <div class="d-flex">
       <div class="card me-3 search__content">
-        <form class="input-group input-group-sm p-2" [formGroup]="searchForm">
+        <form
+          class="input-group input-group-sm p-2"
+          [formGroup]="searchForm"
+          (ngSubmit)="displayData()"
+        >
           <input
             type="text"
             class="input form-control"
@@ -19,6 +23,7 @@
           <button
             class="btn btn-outline-secondary"
             type="button"
+            (click)="displayData()"
             [disabled]="searchForm.invalid"
           >
             Search
@@ -30,7 +35,7 @@
         >
           Stock Symbol should have min 1 to 4 characters 📢
         </p>
-        <h1 class="text-center p-2">TSLA</h1>
+        <h1 class="text-center p-2">{{ symbol || "TICKER" }}</h1>
       </div>
 
       <div class="card card__content">
@@ -45,10 +50,10 @@
           </thead>
           <tbody class="text_size">
             <tr>
-              <td>100</td>
-              <td>100</td>
-              <td>100</td>
-              <td>100</td>
+              <td>{{ totalAssets | number : "1.0-2" }}</td>
+              <td>{{ revenue | number : "1.0-2" }}</td>
+              <td>{{ netCashFlow | number : "1.0-2" }}</td>
+              <td>{{ shareHolderEquity | number : "1.0-2" }}</td>
             </tr>
           </tbody>
         </table>
@@ -83,7 +88,7 @@
                   Cashflow Return On Assets (CFROA)
                 </td>
                 <td>(Net Cash Flow / Total Assets) * 100</td>
-                <td>100</td>
+                <td>{{ CFROA / 100 | percent : "1.0-2" }}</td>
               </tr>
               <tr>
                 <td class="indicators">
@@ -96,7 +101,7 @@
                   Cashflow Return On Equity (CFROE)
                 </td>
                 <td>(Net Cash Flow / Share Holder Equity) * 100</td>
-                <td>100</td>
+                <td>{{ CFROE / 100 | percent : "1.0-2" }}</td>
               </tr>
               <tr>
                 <td class="indicators">
@@ -110,7 +115,9 @@
                 </td>
                 <td>(Net Cash Flow / Revenue) * 100</td>
                 <td>
-                  <p class="imortant_indicator">100</p>
+                  <p class="imortant_indicator">
+                    {{ CFROS / 100 | percent : "1.0-2" }}
+                  </p>
                 </td>
               </tr>
             </tbody>

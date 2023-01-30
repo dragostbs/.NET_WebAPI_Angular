@@ -35,7 +35,7 @@
         >
           Stock Symbol should have min 1 to 4 characters 📢
         </p>
-        <h1 class="text-center p-2">{{ symbol }}</h1>
+        <h1 class="text-center p-2">{{ symbol || "TICKER" }}</h1>
       </div>
 
       <div class="card card__content">
@@ -141,7 +141,11 @@
                   Equity Multiplier (AER)
                 </td>
                 <td>Total Assets / Share Holder Equity</td>
-                <td>{{ AER | number : "1.0-2" }}</td>
+                <td>
+                  <p class="imortant_indicator">
+                    {{ AER | number : "1.0-2" }}
+                  </p>
+                </td>
               </tr>
             </tbody>
           </table>

@@ -15,16 +15,17 @@ export class GainerFallerComponent implements OnInit {
 
   ngOnInit(): void {
     // Get Gainers
-    // this.service.getGainers().subscribe((data) => {
-    //   for (let [key, value] of Object.entries(data)) {
-    //     this.listGainers.push(value);
-    //   }
-    // });
+    this.service.getGainers().subscribe((data) => {
+      for (let [key, value] of Object.entries(data)) {
+        this.listGainers.push(value);
+      }
+    });
+
     // Get Fallers
-    // this.service.getFallers().subscribe((data) => {
-    //   for (let [key, value] of Object.entries(data)) {
-    //     this.listFallers.push(value);
-    //   }
-    // });
+    this.service.getFallers().subscribe((data) => {
+      for (let [key, value] of Object.entries(data)) {
+        this.listFallers.push(value);
+      }
+    });
   }
 }

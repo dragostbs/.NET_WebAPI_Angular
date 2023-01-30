@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EChartsOption } from 'echarts';
 import { LoaderComponent } from '../loader/loader.component';
 import { AnalysisApiService } from '../services/analysis-api.service';
+import { ChartsService } from '../services/charts.service';
 
 @Component({
   selector: 'app-analysis-solvency',
@@ -28,7 +29,11 @@ export class AnalysisSolvencyComponent implements OnInit {
   DER: number = 0;
   EAR: number = 0;
 
-  constructor(private service: AnalysisApiService, private fb: FormBuilder) {}
+  constructor(
+    private service: AnalysisApiService,
+    private fb: FormBuilder,
+    private charts: ChartsService
+  ) {}
 
   ngOnInit(): void {
     this.loaderComponent.loading = true;
@@ -39,6 +44,9 @@ export class AnalysisSolvencyComponent implements OnInit {
         [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
       ],
     });
+
+    this.radialChart = this.charts.radialChart2();
+    this.pieChart = this.charts.pieChart();
   }
 
   displayData() {

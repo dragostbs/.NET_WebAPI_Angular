@@ -3,6 +3,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { EChartsOption } from 'echarts';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChartsService } from '../services/charts.service';
 
 @Component({
   selector: 'app-analysis-ccc',
@@ -28,7 +29,11 @@ export class AnalysisCCCComponent implements OnInit {
   DPO: number = 0;
   CCC: number = 0;
 
-  constructor(private service: AnalysisApiService, private fb: FormBuilder) {}
+  constructor(
+    private service: AnalysisApiService,
+    private fb: FormBuilder,
+    private charts: ChartsService
+  ) {}
 
   ngOnInit(): void {
     this.loaderComponent.loading = true;
@@ -39,6 +44,9 @@ export class AnalysisCCCComponent implements OnInit {
         [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
       ],
     });
+
+    this.pieChart = this.charts.pieChart();
+    this.radarChart = this.charts.radarChart();
   }
 
   displayData() {
