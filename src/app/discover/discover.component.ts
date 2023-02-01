@@ -11,6 +11,6 @@ export class DiscoverComponent implements OnInit {
   loaderComponent!: LoaderComponent;
 
   ngOnInit(): void {
-    this.loaderComponent.loading = true;
+    this.loaderComponent.start();
   }
 }

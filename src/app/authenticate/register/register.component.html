@@ -1,91 +1,98 @@
-<main class="form-signin w-100 m-auto">
-  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-    <h1 class="h3 mb-3 fw-normal text-center">Create Account</h1>
-    <div class="form-floating mb-2">
-      <input
-        class="form-control"
-        id="floatingInput"
-        placeholder="First Name"
-        formControlName="firstName"
-      />
-      <label for="floatingInput">First Name</label>
-      <p
-        class="error mt-2 mb-2"
-        *ngIf="registerForm.get('firstName')?.hasError('maxlength')"
+<div class="card">
+  <img
+    src="https://images.unsplash.com/photo-1649003515353-c58a239cf662?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+    alt="img"
+    class="image-background card-img-top"
+  />
+  <div class="form-signin w-100 m-auto">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <h1 class="h3 mb-3 fw-normal text-center">Create Account</h1>
+      <div class="form-floating mb-2">
+        <input
+          class="form-control"
+          id="floatingInput"
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+        <label for="floatingInput">First Name</label>
+        <p
+          class="error mt-2 mb-2"
+          *ngIf="registerForm.get('firstName')?.hasError('maxlength')"
+        >
+          First Name is required and should be up to 10 characters long 📢
+        </p>
+      </div>
+      <div class="form-floating">
+        <input
+          class="form-control mb-2"
+          id="floatingInput"
+          placeholder="Last Name"
+          formControlName="lastName"
+        />
+        <label for="floatingInput">Last Name</label>
+        <p
+          class="error mt-2 mb-2"
+          *ngIf="registerForm.get('lastName')?.hasError('maxlength')"
+        >
+          Last Name is required and should be up to 10 characters long 📢
+        </p>
+      </div>
+      <div class="form-floating">
+        <input
+          class="form-control mb-2"
+          id="floatingInput"
+          placeholder="Email"
+          formControlName="email"
+        />
+        <label for="floatingInput">Email</label>
+        <p
+          class="error mt-2 mb-2"
+          *ngIf="registerForm.get('email')?.hasError('email')"
+        >
+          Email is required and should be valid 📢
+        </p>
+      </div>
+      <div class="form-floating">
+        <input
+          class="form-control mb-2"
+          id="floatingInput"
+          placeholder="Username"
+          formControlName="username"
+        />
+        <label for="floatingInput">Username</label>
+        <p
+          class="error mt-2 mb-2"
+          *ngIf="registerForm.get('username')?.hasError('maxlength')"
+        >
+          Username is required and should be up to 10 characters long 📢
+        </p>
+      </div>
+      <div class="form-floating">
+        <input
+          class="form-control mb-2"
+          id="floatingInput"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <label for="floatingInput">Password</label>
+        <p
+          class="error mt-2 mb-2"
+          *ngIf="registerForm.get('password')?.hasError('maxlength')"
+        >
+          Password is required and should be up to 20 characters long 📢
+        </p>
+      </div>
+      <button
+        class="w-100 btn btn-lg btn-secondary"
+        type="submit"
+        [disabled]="registerForm.invalid"
       >
-        First Name is required and should be up to 10 characters long 📢
-      </p>
-    </div>
-    <div class="form-floating">
-      <input
-        class="form-control mb-2"
-        id="floatingInput"
-        placeholder="Last Name"
-        formControlName="lastName"
-      />
-      <label for="floatingInput">Last Name</label>
-      <p
-        class="error mt-2 mb-2"
-        *ngIf="registerForm.get('lastName')?.hasError('maxlength')"
-      >
-        Last Name is required and should be up to 10 characters long 📢
-      </p>
-    </div>
-    <div class="form-floating">
-      <input
-        class="form-control mb-2"
-        id="floatingInput"
-        placeholder="Email"
-        formControlName="email"
-      />
-      <label for="floatingInput">Email</label>
-      <p
-        class="error mt-2 mb-2"
-        *ngIf="registerForm.get('email')?.hasError('email')"
-      >
-        Email is required and should be valid 📢
-      </p>
-    </div>
-    <div class="form-floating">
-      <input
-        class="form-control mb-2"
-        id="floatingInput"
-        placeholder="Username"
-        formControlName="username"
-      />
-      <label for="floatingInput">Username</label>
-      <p
-        class="error mt-2 mb-2"
-        *ngIf="registerForm.get('username')?.hasError('maxlength')"
-      >
-        Username is required and should be up to 10 characters long 📢
-      </p>
-    </div>
-    <div class="form-floating">
-      <input
-        class="form-control mb-2"
-        id="floatingInput"
-        placeholder="Password"
-        formControlName="password"
-      />
-      <label for="floatingInput">Password</label>
-      <p
-        class="error mt-2 mb-2"
-        *ngIf="registerForm.get('password')?.hasError('maxlength')"
-      >
-        Password is required and should be up to 20 characters long 📢
-      </p>
-    </div>
-    <button
-      class="w-100 btn btn-lg btn-secondary"
-      type="submit"
-      [disabled]="registerForm.invalid"
-    >
-      Create Account
-    </button>
-    <div class="d-flex justify-content-center mt-2 create__account">
-      <p>Already have an Account?</p>
-      <a [routerLink]="'/login'">Login</a>
-    </div>
-  </form>
-</main>
+        Create Account
+      </button>
+      <div class="d-flex justify-content-center mt-2 create__account">
+        <p>Already have an Account?</p>
+        <a [routerLink]="'/login'">Login</a>
+      </div>
+    </form>
+  </div>
+</div>

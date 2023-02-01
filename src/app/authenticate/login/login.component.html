@@ -1,36 +1,43 @@
-<main class="form-signin w-100 m-auto">
-  <form [formGroup]="loginForm" (ngSubmit)="onLogIn()">
-    <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
-    <div class="form-floating">
-      <input
-        class="form-control"
-        type="username"
-        id="floatingInput"
-        placeholder="Username"
-        formControlName="username"
-      />
-      <label for="floatingInput">Username</label>
-    </div>
-    <div class="form-floating">
-      <input
-        type="password"
-        class="form-control"
-        id="floatingPassword"
-        placeholder="Password"
-        formControlName="password"
-      />
-      <label for="floatingPassword">Password</label>
-    </div>
-    <button
-      class="w-100 btn btn-lg btn-secondary"
-      type="submit"
-      [disabled]="loginForm.invalid"
-    >
-      Sign in
-    </button>
-    <div class="d-flex justify-content-center mt-2 create__account">
-      <p>New Account?</p>
-      <a [routerLink]="'register'">Create Account</a>
-    </div>
-  </form>
-</main>
+<div class="card">
+  <img
+    src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
+    alt="img"
+    class="image-background card-img-top"
+  />
+  <div class="form-signin w-100 m-auto">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogIn()">
+      <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
+      <div class="form-floating">
+        <input
+          class="form-control"
+          type="username"
+          id="floatingInput"
+          placeholder="Username"
+          formControlName="username"
+        />
+        <label for="floatingInput">Username</label>
+      </div>
+      <div class="form-floating">
+        <input
+          type="password"
+          class="form-control"
+          id="floatingPassword"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <label for="floatingPassword">Password</label>
+      </div>
+      <button
+        class="w-100 btn btn-lg btn-secondary"
+        type="submit"
+        [disabled]="loginForm.invalid"
+      >
+        Sign in
+      </button>
+      <div class="d-flex justify-content-center mt-2 create__account">
+        <p>New Account?</p>
+        <a [routerLink]="'register'">Create Account</a>
+      </div>
+    </form>
+  </div>
+</div>

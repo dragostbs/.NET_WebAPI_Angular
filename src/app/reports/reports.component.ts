@@ -27,13 +27,13 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
     this.transactions$ = this.service.getTransactionsList();
     this.StocksDataMap();
-
-    this.loaderComponent.loading = true;
   }
 
   // GET data from API
   StocksDataMap() {
+    this.loaderComponent.start();
     this.service.getStocksList().subscribe((data) => {
+      this.loaderComponent.finish();
       // assign the data to stockList variable
       this.stockList = data;
 

@@ -36,14 +36,14 @@ export class AnalysisPerformanceComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loaderComponent.loading = true;
-
     this.searchForm = this.fb.group({
       stockSymbol: [
         '',
         [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
       ],
     });
+
+    this.loaderComponent.start();
 
     this.radialChart = this.charts.radialChart1();
     this.barChart = this.charts.barChart();

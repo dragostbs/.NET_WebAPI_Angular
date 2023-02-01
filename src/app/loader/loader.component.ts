@@ -6,11 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./loader.component.scss'],
 })
 export class LoaderComponent implements OnInit {
-  loading: boolean = true;
+  private timeout: any;
+  loading: boolean = false;
 
-  ngOnInit(): void {
-    setTimeout(() => {
+  ngOnInit(): void {}
+
+  start() {
+    this.timeout = setTimeout(() => {
+      this.loading = true;
+    }, 2000);
+  }
+
+  finish() {
+    this.timeout = setTimeout(() => {
       this.loading = false;
-    }, 4000);
+      clearTimeout(this.timeout);
+    });
   }
 }
