@@ -60,7 +60,7 @@
   color: red;
   font-size: xx-small;
   text-align: center;
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .imortant_indicator {
@@ -89,17 +89,12 @@ p:last-child {
   margin-bottom: 0rem !important;
 }
 
-.results__analysis p {
-  margin-top: 0rem !important;
-  margin-bottom: 0rem !important;
-}
-
 .ticker__element {
   padding-top: 1.3rem !important;
 }
 
 .cap__element {
-  padding-top: 1.8rem !important;
+  padding-top: 1rem !important;
   text-decoration: underline;
   text-underline-offset: 12px;
   text-decoration-color: salmon;

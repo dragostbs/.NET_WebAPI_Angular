@@ -38,9 +38,15 @@ export class ChartsService {
         type: 'category',
         boundaryGap: true,
         data: ['Point1', 'Point2', 'Point3', 'Point4'],
+        axisLabel: {
+          fontSize: 5,
+        },
       },
       yAxis: {
         type: 'value',
+        axisLabel: {
+          fontSize: 5,
+        },
       },
       series: [
         {
@@ -206,6 +212,9 @@ export class ChartsService {
           axisPointer: {
             type: 'shadow',
           },
+          axisLabel: {
+            fontSize: 5,
+          },
         },
       ],
       yAxis: [
@@ -213,6 +222,9 @@ export class ChartsService {
           type: 'value',
           min: 0,
           interval: 50,
+          axisLabel: {
+            fontSize: 5,
+          },
         },
       ],
       series: [
@@ -251,9 +263,10 @@ export class ChartsService {
       },
       radiusAxis: {
         type: 'category',
-        data: ['Value'],
+        data: ['Value1', 'Value2'],
         axisLabel: {
           rotate: 75,
+          fontSize: 5,
         },
       },
       polar: {
@@ -272,13 +285,13 @@ export class ChartsService {
       series: [
         {
           type: 'bar',
-          data: [100],
+          data: [100, 120],
           coordinateSystem: 'polar',
           name: 'Value 1',
         },
         {
           type: 'bar',
-          data: [135],
+          data: [131, 110],
           coordinateSystem: 'polar',
           name: 'Value 2',
         },

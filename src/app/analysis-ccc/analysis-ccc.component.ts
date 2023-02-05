@@ -59,6 +59,7 @@ export class AnalysisCCCComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
+          // Destruct Data
           let { symbol }: any = data;
 
           let {
@@ -121,25 +122,17 @@ export class AnalysisCCCComponent implements OnInit {
 
           //Results
           this.DIO.length = 0;
-          for (let i = 0; i < this.inventory.length && this.cogs.length; i++) {
+          for (let i = 0; i < this.inventory.length; i++) {
             this.DIO.push((this.inventory[i] / this.cogs[i]) * 365);
           }
 
           this.DSO.length = 0;
-          for (
-            let i = 0;
-            i < this.receivables.length && this.revenue.length;
-            i++
-          ) {
+          for (let i = 0; i < this.receivables.length; i++) {
             this.DSO.push((this.receivables[i] / this.revenue[i]) * 365);
           }
 
           this.DPO.length = 0;
-          for (
-            let i = 0;
-            i < this.accountsPayable.length && this.cogs.length;
-            i++
-          ) {
+          for (let i = 0; i < this.accountsPayable.length; i++) {
             this.DPO.push((this.accountsPayable[i] / this.cogs[i]) * 365);
           }
 

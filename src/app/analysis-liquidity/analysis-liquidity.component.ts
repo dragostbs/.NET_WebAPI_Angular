@@ -16,19 +16,21 @@ export class AnalysisLiquidityComponent implements OnInit {
 
   searchForm!: FormGroup;
   radialChart: EChartsOption = {};
-  pieChart: EChartsOption = {};
+  lineChart: EChartsOption = {};
 
   symbol: string = '';
-  inventory: number = 0;
-  receivables: number = 0;
-  prePaidExpenses: number = 0;
-  cashOnHand: number = 0;
-  assets: number = 0;
-  liabilities: number = 0;
-  RLC: number = 0;
-  RLI: number = 0;
-  TR: number = 0;
-  RLE: number = 0;
+  capitalization: number = 0;
+  date: string[] = ['2022', '2021', '2020', '2019'];
+  inventory: number[] = [0, 0, 0, 0];
+  receivables: number[] = [0, 0, 0, 0];
+  prePaidExpenses: number[] = [0, 0, 0, 0];
+  cashOnHand: number[] = [0, 0, 0, 0];
+  assets: number[] = [0, 0, 0, 0];
+  liabillities: number[] = [0, 0, 0, 0];
+  RLC: number[] = [0, 0, 0, 0];
+  RLI: number[] = [0, 0, 0, 0];
+  TR: number[] = [0, 0, 0, 0];
+  RLE: number[] = [0, 0, 0, 0];
 
   constructor(
     private service: AnalysisApiService,
@@ -47,7 +49,7 @@ export class AnalysisLiquidityComponent implements OnInit {
     this.loaderComponent.start();
 
     this.radialChart = this.charts.radialChart1();
-    this.pieChart = this.charts.pieChart();
+    this.lineChart = this.charts.lineChart();
   }
 
   displayData() {
@@ -58,7 +60,12 @@ export class AnalysisLiquidityComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
+          // Destruct Data
           let { symbol }: any = data;
+
+          let {
+            summaryDetail: { marketCap },
+          }: any = data;
 
           let {
             timeSeries: { annualInventory },
@@ -76,73 +83,133 @@ export class AnalysisLiquidityComponent implements OnInit {
             timeSeries: { annualCurrentLiabilities },
           }: any = data;
 
+          // Reversing values
+          annualInventory.reverse();
+          annualCurrentAssets.reverse();
+          annualCurrentLiabilities.reverse();
+
+          // Push values
           this.symbol = symbol;
-          this.inventory = annualInventory[2].reportedValue.raw;
-          this.receivables = balanceSheetStatements[1].netReceivables.raw;
-          this.prePaidExpenses =
-            balanceSheetStatements[1].deferredLongTermAssetCharges.raw;
-          this.cashOnHand = balanceSheetStatements[1].cash.raw;
-          this.assets = annualCurrentAssets[2].reportedValue.raw;
-          this.liabilities = annualCurrentLiabilities[2].reportedValue.raw;
+          this.capitalization = marketCap.fmt;
+
+          this.date.length = 0;
+          for (let value of annualInventory) {
+            this.date.push(value.asOfDate);
+          }
+
+          this.inventory.length = 0;
+          for (let value of annualInventory) {
+            this.inventory.push(value.reportedValue.raw);
+          }
+
+          this.receivables.length = 0;
+          for (let value of balanceSheetStatements) {
+            this.receivables.push(value.netReceivables.raw);
+          }
+
+          this.prePaidExpenses.length = 0;
+          for (let value of balanceSheetStatements) {
+            this.prePaidExpenses.push(value.deferredLongTermAssetCharges.raw);
+          }
+
+          this.cashOnHand.length = 0;
+          for (let value of balanceSheetStatements) {
+            this.cashOnHand.push(value.cash.raw);
+          }
+
+          this.assets.length = 0;
+          for (let value of annualCurrentAssets) {
+            this.assets.push(value.reportedValue.raw);
+          }
+
+          this.liabillities.length = 0;
+          for (let value of annualCurrentLiabilities) {
+            this.liabillities.push(value.reportedValue.raw);
+          }
 
           // Results
-          this.RLC = (this.assets / this.liabilities) * 100;
-          this.RLI = ((this.assets - this.inventory) / this.liabilities) * 100;
-          this.TR = this.prePaidExpenses + this.cashOnHand;
-          this.RLE = (this.TR / this.liabilities) * 100;
+          this.RLC.length = 0;
+          for (let i = 0; i < this.assets.length; i++) {
+            this.RLC.push((this.assets[i] / this.liabillities[i]) * 100);
+          }
 
-          this.pieChart = {
-            title: [
-              {
-                text: 'Analysis RLC, RLI, RLE',
-                textAlign: 'left',
-              },
-            ],
+          this.RLI.length = 0;
+          for (let i = 0; i < this.assets.length; i++) {
+            this.RLI.push(
+              ((this.assets[i] - this.inventory[i]) / this.liabillities[i]) *
+                100
+            );
+          }
+
+          this.TR.length = 0;
+          for (let i = 0; i < this.prePaidExpenses.length; i++) {
+            this.TR.push(this.prePaidExpenses[i] + this.cashOnHand[i]);
+          }
+
+          this.RLE.length = 0;
+          for (let i = 0; i < this.liabillities.length; i++) {
+            this.RLE.push((this.TR[i] / this.liabillities[i]) * 100);
+          }
+
+          this.lineChart = {
+            title: {
+              text: 'RLC vs RLI vs RLE',
+              textAlign: 'left',
+            },
             tooltip: {
-              trigger: 'item',
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
+              },
             },
             legend: {
+              data: ['RLC', 'RLI', 'RLE'],
               top: 'bottom',
             },
             toolbox: {
-              show: true,
               feature: {
-                mark: { show: true },
                 dataView: { show: true, readOnly: false },
                 restore: { show: true },
                 saveAsImage: { show: true },
               },
             },
+            xAxis: {
+              type: 'category',
+              boundaryGap: true,
+              data: ['2019', '2020', '2021', '2022'],
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
+            yAxis: {
+              type: 'value',
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
             series: [
               {
-                type: 'pie',
-                radius: [70, 115],
-                center: ['50%', '50%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                  borderRadius: 8,
-                  borderColor: '#fff',
-                  borderWidth: 2,
-                },
-                label: {
-                  show: false,
-                  position: 'center',
-                },
-                emphasis: {
-                  label: {
-                    show: true,
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                  },
-                },
-                labelLine: {
-                  show: false,
-                },
-                data: [
-                  { value: this.RLC, name: 'RLC' },
-                  { value: this.RLI, name: 'RLI' },
-                  { value: this.RLE, name: 'RLE' },
-                ],
+                name: 'RLC',
+                type: 'line',
+                stack: 'Total',
+                data: [...this.RLC].reverse(),
+              },
+              {
+                name: 'RLI',
+                type: 'line',
+                stack: 'Total',
+                data: [...this.RLI].reverse(),
+              },
+              {
+                name: 'RLE',
+                type: 'line',
+                stack: 'Total',
+                data: [...this.RLE].reverse(),
               },
             ],
           };
@@ -162,9 +229,10 @@ export class AnalysisLiquidityComponent implements OnInit {
             },
             radiusAxis: {
               type: 'category',
-              data: ['Value'],
+              data: [2019, 2020, 2021, 2022],
               axisLabel: {
                 rotate: 75,
+                fontSize: 5,
               },
             },
             polar: {
@@ -183,13 +251,13 @@ export class AnalysisLiquidityComponent implements OnInit {
             series: [
               {
                 type: 'bar',
-                data: [this.assets],
+                data: [...this.assets].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Assets',
               },
               {
                 type: 'bar',
-                data: [this.liabilities],
+                data: [...this.liabillities].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Liabilities',
               },
