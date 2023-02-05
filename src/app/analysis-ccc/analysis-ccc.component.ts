@@ -15,19 +15,21 @@ export class AnalysisCCCComponent implements OnInit {
   loaderComponent!: LoaderComponent;
 
   searchForm!: FormGroup;
-  radarChart: EChartsOption = {};
-  pieChart: EChartsOption = {};
+  barChart: EChartsOption = {};
+  lineChart: EChartsOption = {};
 
   symbol: string = '';
-  inventory: number = 0;
-  cogs: number = 0;
-  revenue: number = 0;
-  receivables: number = 0;
-  accountsPayable: number = 0;
-  DIO: number = 0;
-  DSO: number = 0;
-  DPO: number = 0;
-  CCC: number = 0;
+  capitalization: number = 0;
+  date: string[] = ['2022', '2021', '2020', '2019'];
+  inventory: number[] = [0, 0, 0, 0];
+  cogs: number[] = [0, 0, 0, 0];
+  revenue: number[] = [0, 0, 0, 0];
+  receivables: number[] = [0, 0, 0, 0];
+  accountsPayable: number[] = [0, 0, 0, 0];
+  DIO: number[] = [0, 0, 0, 0];
+  DSO: number[] = [0, 0, 0, 0];
+  DPO: number[] = [0, 0, 0, 0];
+  CCC: number[] = [0, 0, 0, 0];
 
   constructor(
     private service: AnalysisApiService,
@@ -45,8 +47,8 @@ export class AnalysisCCCComponent implements OnInit {
 
     this.loaderComponent.start();
 
-    this.pieChart = this.charts.pieChart();
-    this.radarChart = this.charts.radarChart();
+    this.lineChart = this.charts.lineChart();
+    this.barChart = this.charts.barChart();
   }
 
   displayData() {
@@ -58,6 +60,10 @@ export class AnalysisCCCComponent implements OnInit {
             alert('🌋 The Stock could not be found !!!');
 
           let { symbol }: any = data;
+
+          let {
+            summaryDetail: { marketCap },
+          }: any = data;
 
           let {
             timeSeries: { annualInventory },
@@ -75,137 +81,217 @@ export class AnalysisCCCComponent implements OnInit {
             timeSeries: { annualAccountsPayable },
           }: any = data;
 
+          // Reversing values
+          annualInventory.reverse();
+          annualAccountsPayable.reverse();
+
+          // Push values
           this.symbol = symbol;
-          this.inventory = annualInventory[2].reportedValue.raw;
-          this.cogs = incomeStatementHistory[1].costOfRevenue.raw;
-          this.revenue = incomeStatementHistory[1].totalRevenue.raw;
-          this.receivables = balanceSheetStatements[1].netReceivables.raw;
-          this.accountsPayable = annualAccountsPayable[2].reportedValue.raw;
+          this.capitalization = marketCap.fmt;
 
-          // Results
-          this.DIO =
-            (annualInventory[2].reportedValue.raw /
-              incomeStatementHistory[1].costOfRevenue.raw) *
-            365;
-          this.DSO =
-            (balanceSheetStatements[1].netReceivables.raw /
-              incomeStatementHistory[1].totalRevenue.raw) *
-            365;
-          this.DPO =
-            (annualAccountsPayable[2].reportedValue.raw /
-              incomeStatementHistory[1].costOfRevenue.raw) *
-            365;
-          this.CCC =
-            (annualInventory[2].reportedValue.raw /
-              incomeStatementHistory[1].costOfRevenue.raw) *
-              365 +
-            (balanceSheetStatements[1].netReceivables.raw /
-              incomeStatementHistory[1].totalRevenue.raw) *
-              365 -
-            (annualAccountsPayable[2].reportedValue.raw /
-              incomeStatementHistory[1].costOfRevenue.raw) *
-              365;
+          this.date.length = 0;
+          for (let value of annualInventory) {
+            this.date.push(value.asOfDate);
+          }
 
-          this.radarChart = {
+          this.inventory.length = 0;
+          for (let value of annualInventory) {
+            this.inventory.push(value.reportedValue.raw);
+          }
+
+          this.cogs.length = 0;
+          for (let value of incomeStatementHistory) {
+            this.cogs.push(value.costOfRevenue.raw);
+          }
+
+          this.revenue.length = 0;
+          for (let value of incomeStatementHistory) {
+            this.revenue.push(value.totalRevenue.raw);
+          }
+
+          this.receivables.length = 0;
+          for (let value of balanceSheetStatements) {
+            this.receivables.push(value.netReceivables.raw);
+          }
+
+          this.accountsPayable.length = 0;
+          for (let value of annualAccountsPayable) {
+            this.accountsPayable.push(value.reportedValue.raw);
+          }
+
+          //Results
+          this.DIO.length = 0;
+          for (let i = 0; i < this.inventory.length && this.cogs.length; i++) {
+            this.DIO.push((this.inventory[i] / this.cogs[i]) * 365);
+          }
+
+          this.DSO.length = 0;
+          for (
+            let i = 0;
+            i < this.receivables.length && this.revenue.length;
+            i++
+          ) {
+            this.DSO.push((this.receivables[i] / this.revenue[i]) * 365);
+          }
+
+          this.DPO.length = 0;
+          for (
+            let i = 0;
+            i < this.accountsPayable.length && this.cogs.length;
+            i++
+          ) {
+            this.DPO.push((this.accountsPayable[i] / this.cogs[i]) * 365);
+          }
+
+          this.CCC.length = 0;
+          for (let i = 0; i < this.DIO.length; i++) {
+            this.CCC.push(this.DIO[i] + this.DSO[i] - this.DPO[i]);
+          }
+
+          this.barChart = {
             title: [
               {
-                text: 'Data Visualisation',
-                textAlign: 'left',
-              },
-            ],
-            tooltip: {},
-            toolbox: {
-              feature: {
-                dataView: { show: true, readOnly: false },
-                restore: { show: true },
-                saveAsImage: { show: true },
-              },
-            },
-            legend: {
-              top: 'bottom',
-              data: ['Values'],
-            },
-            radar: {
-              indicator: [
-                { name: 'Inventory' },
-                { name: 'Receivables' },
-                { name: 'Cost of Goods Sold' },
-                { name: 'Revenue' },
-                { name: 'Accounts Payable' },
-              ],
-            },
-            series: [
-              {
-                name: 'Budget vs spending',
-                type: 'radar',
-                data: [
-                  {
-                    value: [
-                      this.inventory,
-                      this.receivables,
-                      this.cogs,
-                      this.revenue,
-                      this.accountsPayable,
-                    ],
-                    name: 'Values',
-                  },
-                ],
-              },
-            ],
-          };
-
-          this.pieChart = {
-            title: [
-              {
-                text: 'Analysis DIO, DSO, DPO',
+                text: 'Evolution Stats',
                 textAlign: 'left',
               },
             ],
             tooltip: {
-              trigger: 'item',
-            },
-            legend: {
-              top: 'bottom',
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
+              },
             },
             toolbox: {
-              show: true,
               feature: {
-                mark: { show: true },
                 dataView: { show: true, readOnly: false },
                 restore: { show: true },
                 saveAsImage: { show: true },
               },
             },
+            legend: {
+              top: 'bottom',
+              data: [
+                'Inventory',
+                'Receivables',
+                'Cogs',
+                'Revenue',
+                'Accounts Payable',
+              ],
+            },
+            calculable: true,
+            xAxis: [
+              {
+                type: 'category',
+                data: ['2019', '2020', '2021', '2022'],
+                axisPointer: {
+                  type: 'shadow',
+                },
+                axisLabel: {
+                  fontSize: 5,
+                },
+              },
+            ],
+            yAxis: [
+              {
+                type: 'value',
+                axisLabel: {
+                  fontSize: 5,
+                },
+              },
+            ],
             series: [
               {
-                type: 'pie',
-                radius: [70, 115],
-                center: ['50%', '50%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                  borderRadius: 8,
-                  borderColor: '#fff',
-                  borderWidth: 2,
+                name: 'Inventory',
+                type: 'bar',
+                data: [...this.inventory].reverse(),
+              },
+              {
+                name: 'Receivables',
+                type: 'bar',
+                data: [...this.receivables].reverse(),
+              },
+              {
+                name: 'Cogs',
+                type: 'bar',
+                data: [...this.cogs].reverse(),
+              },
+              {
+                name: 'Revenue',
+                type: 'bar',
+                data: [...this.revenue].reverse(),
+              },
+              {
+                name: 'Accounts Payable',
+                type: 'bar',
+                data: [...this.accountsPayable].reverse(),
+              },
+            ],
+          };
+
+          this.lineChart = {
+            title: {
+              text: 'DIO vs DSO vs DPO',
+              textAlign: 'left',
+            },
+            tooltip: {
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
                 },
-                label: {
-                  show: false,
-                  position: 'center',
-                },
-                emphasis: {
-                  label: {
-                    show: true,
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                  },
-                },
-                labelLine: {
-                  show: false,
-                },
-                data: [
-                  { value: this.DIO, name: 'DIO' },
-                  { value: this.DSO, name: 'DSO' },
-                  { value: this.DPO, name: 'DPO' },
-                ],
+              },
+            },
+            legend: {
+              data: ['DIO', 'DSO', 'DPO'],
+              top: 'bottom',
+            },
+            toolbox: {
+              feature: {
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true },
+              },
+            },
+            xAxis: {
+              type: 'category',
+              boundaryGap: true,
+              data: ['2019', '2020', '2021', '2022'],
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
+            yAxis: {
+              type: 'value',
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
+            series: [
+              {
+                name: 'DIO',
+                type: 'line',
+                stack: 'Total',
+                data: [...this.DIO].reverse(),
+              },
+              {
+                name: 'DSO',
+                type: 'line',
+                stack: 'Total',
+                data: [...this.DSO].reverse(),
+              },
+              {
+                name: 'DPO',
+                type: 'line',
+                stack: 'Total',
+                data: [...this.DPO].reverse(),
               },
             ],
           };

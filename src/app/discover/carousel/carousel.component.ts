@@ -21,8 +21,9 @@ export class CarouselComponent implements OnInit {
 
   ngOnInit(): void {
     let stockName: any[] = [];
-    let volume: any[] = [];
-    let shares: any[] = [];
+    let regularVolume: any[] = [];
+    let volume3Months: any[] = [];
+    let volume10Days: any[] = [];
     let marketVolume: any[] = [];
     let marketPrice: any[] = [];
 
@@ -32,8 +33,9 @@ export class CarouselComponent implements OnInit {
       let { quotes }: any = data;
       for (let value of quotes) {
         stockName.push(value.shortName);
-        volume.push(value.regularMarketVolume);
-        shares.push(value.sharesOutstanding);
+        regularVolume.push(value.regularMarketVolume);
+        volume3Months.push(value.averageDailyVolume3Month);
+        volume10Days.push(value.averageDailyVolume10Day);
         marketVolume.push({
           value: value.regularMarketVolume,
           name: value.shortName,
@@ -131,14 +133,14 @@ export class CarouselComponent implements OnInit {
       this.barChart = {
         title: [
           {
-            text: 'Most Active Stocks by Volume and Shares',
+            text: 'Most Active Stocks by Traded Volume',
             left: '50%',
             textAlign: 'center',
           },
         ],
         legend: {
           top: 'bottom',
-          data: ['Volume', 'Shares'],
+          data: ['Regular Volume', '3 Months Volume', '10 Days Volume'],
           textStyle: {
             fontSize: '7',
           },
@@ -183,14 +185,19 @@ export class CarouselComponent implements OnInit {
         ],
         series: [
           {
-            name: 'Volume',
-            type: 'line',
-            data: volume,
+            name: 'Regular Volume',
+            type: 'bar',
+            data: regularVolume,
           },
           {
-            name: 'Shares',
-            type: 'line',
-            data: shares,
+            name: '3 Months Volume',
+            type: 'bar',
+            data: volume3Months,
+          },
+          {
+            name: '10 Days Volume',
+            type: 'bar',
+            data: volume10Days,
           },
         ],
       };

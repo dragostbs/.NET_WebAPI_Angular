@@ -20,15 +20,20 @@
 
 .table-bordered {
   border: transparent !important;
+  overflow: hidden !important;
 }
 
 .table-bordered .bg-light {
   border-bottom: 1px #ebeaea !important;
 }
 
+.ticker__element {
+  padding-top: 2.5rem !important;
+}
+
 // Charts
-.radial__chart,
-.pie__chart {
+.radar__chart,
+.bar__chart {
   width: 568px;
   height: 310px;
 }
@@ -39,7 +44,7 @@
 }
 
 .table > :not(caption) > * > * {
-  padding: 1.65rem 1rem !important;
+  padding: 1.3rem 1rem !important;
 }
 
 .analysis tr {
@@ -77,4 +82,9 @@ i {
 .indicators {
   text-align: left !important;
   margin-left: 4rem !important;
+}
+
+p {
+  margin-top: 0 !important;
+  margin-bottom: 0rem !important;
 }

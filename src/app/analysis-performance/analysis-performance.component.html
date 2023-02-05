@@ -35,13 +35,16 @@
         >
           Stock Symbol should have min 1 to 4 characters 📢
         </p>
-        <h1 class="text-center p-2">{{ symbol || "TICKER" }}</h1>
+        <h1 class="ticker__element text-center p-2">
+          {{ symbol || "TICKER" }}
+        </h1>
       </div>
 
       <div class="card card__content">
         <table class="table table-bordered text-start text-center mb-0">
           <thead class="bg-light">
             <tr class="text_size">
+              <th scope="col">Year</th>
               <th scope="col">Total Assets</th>
               <th scope="col">Net Income</th>
               <th scope="col">Revenue</th>
@@ -50,6 +53,14 @@
           </thead>
           <tbody class="text_size">
             <tr>
+              <td>2022</td>
+              <td>{{ totalAssets | number : "1.0-2" }}</td>
+              <td>{{ netIncome | number : "1.0-2" }}</td>
+              <td>{{ revenue | number : "1.0-2" }}</td>
+              <td>{{ shareHolderEquity | number : "1.0-2" }}</td>
+            </tr>
+            <tr>
+              <td>2021</td>
               <td>{{ totalAssets | number : "1.0-2" }}</td>
               <td>{{ netIncome | number : "1.0-2" }}</td>
               <td>{{ revenue | number : "1.0-2" }}</td>
@@ -71,11 +82,20 @@
 
     <div class="d-flex mt-3">
       <div class="card__analysis card flex-column text-start text-center">
-        <div class="bg-light px-4 mb-0 border-bottom rounded-top">
-          <p class="pt-2 fs-4 fw-bold mb-2">Results</p>
-        </div>
         <div class="analysis">
-          <table class="table table-bordered mb-0">
+          <table class="table table-bordered mb-0 rounded-top">
+            <thead class="bg-light">
+              <tr class="text_size">
+                <th scope="col">Indicator</th>
+                <th scope="col">Formula</th>
+                <th scope="col">
+                  <div class="d-flex justify-content-around">
+                    <p>2021</p>
+                    <p>2022</p>
+                  </div>
+                </th>
+              </tr>
+            </thead>
             <tbody class="text_size">
               <tr>
                 <td class="indicators">
@@ -88,7 +108,12 @@
                   Return On Assets (ROA)
                 </td>
                 <td>(Net Income / Total Assets) * 100</td>
-                <td>{{ ROA / 100 | percent : "1.0-2" }}</td>
+                <td>
+                  <div class="d-flex justify-content-around">
+                    <p>{{ ROA / 100 | percent : "1.0-2" }}</p>
+                    <p>{{ ROA / 100 | percent : "1.0-2" }}</p>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td class="indicators">
@@ -101,7 +126,12 @@
                   Return On Equity (ROE)
                 </td>
                 <td>(Net Income / Share Holder Equity) * 100</td>
-                <td>{{ ROE / 100 | percent : "1.0-2" }}</td>
+                <td>
+                  <div class="d-flex justify-content-around">
+                    <p>{{ ROE / 100 | percent : "1.0-2" }}</p>
+                    <p>{{ ROE / 100 | percent : "1.0-2" }}</p>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td class="indicators">
@@ -114,7 +144,12 @@
                   Return On Sales (ROS)
                 </td>
                 <td>(Net Income / Revenue) * 100</td>
-                <td>{{ ROS / 100 | percent : "1.0-2" }}</td>
+                <td>
+                  <div class="d-flex justify-content-around">
+                    <p>{{ ROS / 100 | percent : "1.0-2" }}</p>
+                    <p>{{ ROS / 100 | percent : "1.0-2" }}</p>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td class="indicators">
@@ -128,7 +163,12 @@
                   Current Assets Turnover Ratio
                 </td>
                 <td>Revenue / Total Assets</td>
-                <td>{{ VRA | number : "1.0-2" }}</td>
+                <td>
+                  <div class="d-flex justify-content-around">
+                    <p>{{ VRA / 100 | percent : "1.0-2" }}</p>
+                    <p>{{ VRA / 100 | percent : "1.0-2" }}</p>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td class="indicators">
@@ -142,9 +182,10 @@
                 </td>
                 <td>Total Assets / Share Holder Equity</td>
                 <td>
-                  <p class="imortant_indicator">
-                    {{ AER | number : "1.0-2" }}
-                  </p>
+                  <div class="d-flex justify-content-around">
+                    <p>{{ AER / 100 | percent : "1.0-2" }}</p>
+                    <p>{{ AER / 100 | percent : "1.0-2" }}</p>
+                  </div>
                 </td>
               </tr>
             </tbody>

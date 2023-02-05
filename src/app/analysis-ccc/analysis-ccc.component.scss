@@ -18,18 +18,14 @@
   overflow: hidden;
 }
 
-.table-bordered {
-  border: transparent !important;
-}
-
 .table-bordered .bg-light {
   border-bottom: 1px #ebeaea !important;
 }
 
 // Charts
-.radar__chart,
-.pie__chart {
-  width: 568px;
+.bar__chart,
+.line__chart {
+  width: 560px;
   height: 310px;
 }
 
@@ -39,12 +35,21 @@
 }
 
 .table > :not(caption) > * > * {
-  padding: 1.25rem 1rem !important;
+  padding: 1rem 1rem !important;
+}
+
+.table__results > :not(caption) > * > * {
+  padding: 1rem 0rem !important;
+}
+
+.indicators {
+  text-align: start;
+  margin-left: 1rem !important;
 }
 
 .analysis tr {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-columns: repeat(6, 1fr) !important;
 }
 
 .analysis > tbody {
@@ -65,7 +70,7 @@
 }
 
 .text_size {
-  font-size: 0.8rem !important;
+  font-size: 0.6rem !important;
 }
 
 i {
@@ -74,7 +79,33 @@ i {
   margin-right: 10px !important;
 }
 
-.indicators {
-  text-align: left !important;
-  margin-left: 4rem !important;
+p {
+  margin-top: 0rem !important;
+  margin-bottom: 2.5rem !important;
+}
+
+p:last-child {
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
+}
+
+.results__analysis p {
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
+}
+
+.ticker__element {
+  padding-top: 1.3rem !important;
+}
+
+.cap__element {
+  padding-top: 1.8rem !important;
+  text-decoration: underline;
+  text-underline-offset: 12px;
+  text-decoration-color: salmon;
+}
+
+.table-bordered {
+  border: transparent !important;
+  overflow: hidden !important;
 }

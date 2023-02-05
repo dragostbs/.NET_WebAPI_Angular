@@ -35,13 +35,22 @@
         >
           Stock Symbol should have min 1 to 4 characters 📢
         </p>
-        <h1 class="text-center p-2">{{ symbol || "TICKER" }}</h1>
+        <div>
+          <h1 class="ticker__element text-center fw-normal fs-2 p-2">
+            {{ symbol || "TICKER" }}
+          </h1>
+          <hr />
+          <h1 class="cap__element text-center fw-normal fs-2">
+            {{ capitalization }} cap
+          </h1>
+        </div>
       </div>
 
       <div class="card card__content">
         <table class="table table-bordered text-start text-center mb-0">
           <thead class="bg-light">
             <tr class="text_size">
+              <th scope="col">Year</th>
               <th scope="col">Inventory</th>
               <th scope="col">Cost of Goods Sold</th>
               <th scope="col">Revenue</th>
@@ -51,14 +60,33 @@
           </thead>
           <tbody class="text_size">
             <tr>
-              <td>{{ inventory | number : "1.0-2" }}</td>
-              <td>{{ cogs | number : "1.0-2" }}</td>
-              <td>{{ revenue | number : "1.0-2" }}</td>
-              <td>
-                {{ receivables | number : "1.0-2" }}
+              <td class="text-center">
+                <p *ngFor="let data of date">
+                  {{ data | slice : 0 : 4 }}
+                </p>
               </td>
-              <td>
-                {{ accountsPayable | number : "1.0-2" }}
+              <td class="text-center">
+                <p *ngFor="let data of inventory">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of cogs">{{ data | number : "1.0-2" }}</p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of revenue">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of receivables">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of accountsPayable">
+                  {{ data | number : "1.0-2" }}
+                </p>
               </td>
             </tr>
           </tbody>
@@ -68,20 +96,26 @@
 
     <div class="d-flex mt-3">
       <div class="card me-3">
-        <div echarts [options]="radarChart" class="radar__chart"></div>
+        <div echarts [options]="barChart" class="bar__chart"></div>
       </div>
       <div class="card">
-        <div echarts [options]="pieChart" class="pie__chart"></div>
+        <div echarts [options]="lineChart" class="line__chart"></div>
       </div>
     </div>
 
-    <div class="d-flex mt-3">
+    <div class="d-flex mt-3 mb-3">
       <div class="card__analysis card flex-column text-start text-center">
-        <div class="bg-light px-4 mb-0 border-bottom rounded-top">
-          <p class="pt-2 fs-4 fw-bold mb-2">Results</p>
-        </div>
         <div class="analysis">
-          <table class="table table-bordered mb-0">
+          <table class="table__results table table-bordered mb-0 rounded-top">
+            <thead class="bg-light">
+              <tr class="text_size">
+                <th scope="col">Indicator</th>
+                <th scope="col">Formula</th>
+                <th *ngFor="let data of date.reverse()" scope="col">
+                  {{ data | slice : 0 : 4 }}
+                </th>
+              </tr>
+            </thead>
             <tbody class="text_size">
               <tr>
                 <td class="indicators">
@@ -93,10 +127,9 @@
                   </i>
                   Days Inventory Outstanding (DIO)
                 </td>
-                <td>(Inventory / Cost of Goods Sold) * 365</td>
-                <td>
-                  {{ DIO | number : "1.0-0" }}
-                  days
+                <td>(Inventory / Cogs) * 365</td>
+                <td *ngFor="let data of DIO.reverse()">
+                  {{ data | number : "1.0-0" }} days
                 </td>
               </tr>
               <tr>
@@ -110,9 +143,8 @@
                   Days Sales Outstanding (DSO)
                 </td>
                 <td>(Rceivables / Revenue) * 365</td>
-                <td>
-                  {{ DSO | number : "1.0-0" }}
-                  days
+                <td *ngFor="let data of DSO.reverse()">
+                  {{ data | number : "1.0-0" }} days
                 </td>
               </tr>
               <tr>
@@ -125,10 +157,9 @@
                   </i>
                   Days Payable Outstanding (DPO)
                 </td>
-                <td>(Accounts Payable / Cost of Goods Sold) * 365</td>
-                <td>
-                  {{ DPO | number : "1.0-0" }}
-                  days
+                <td>(Accounts Payable / Cogs) * 365</td>
+                <td *ngFor="let data of DPO.reverse()">
+                  {{ data | number : "1.0-0" }} days
                 </td>
               </tr>
               <tr>
@@ -142,11 +173,8 @@
                   Cash Conversion Cycle (CCC)
                 </td>
                 <td>DIO + DSO - DPO</td>
-                <td>
-                  <p class="imortant_indicator">
-                    {{ CCC | number : "1.0-0" }}
-                    days
-                  </p>
+                <td *ngFor="let data of CCC.reverse()">
+                  {{ data | number : "1.0-0" }} days
                 </td>
               </tr>
             </tbody>

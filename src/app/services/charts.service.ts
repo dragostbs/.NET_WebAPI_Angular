@@ -8,16 +8,68 @@ export class ChartsService {
   radar: EChartsOption = {};
   pie: EChartsOption = {};
   bar: EChartsOption = {};
+  line: EChartsOption = {};
   radial1: EChartsOption = {};
   radial2: EChartsOption = {};
 
   constructor() {}
 
+  lineChart(): any {
+    return (this.line = {
+      title: {
+        text: 'Analysis',
+        textAlign: 'left',
+      },
+      tooltip: {
+        trigger: 'axis',
+      },
+      legend: {
+        data: ['Value 1', 'Value 2', 'Value 3'],
+        top: 'bottom',
+      },
+      toolbox: {
+        feature: {
+          dataView: { show: true, readOnly: false },
+          restore: { show: true },
+          saveAsImage: { show: true },
+        },
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: true,
+        data: ['Point1', 'Point2', 'Point3', 'Point4'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          name: 'Value 1',
+          type: 'line',
+          stack: 'Total',
+          data: [110, 132, 101, 134],
+        },
+        {
+          name: 'Value 2',
+          type: 'line',
+          stack: 'Total',
+          data: [220, 182, 191, 234],
+        },
+        {
+          name: 'Value 3',
+          type: 'line',
+          stack: 'Total',
+          data: [190, 180, 189, 254],
+        },
+      ],
+    });
+  }
+
   radarChart(): any {
     return (this.radar = {
       title: [
         {
-          text: 'Analysis',
+          text: 'Data Visualisation',
           textAlign: 'left',
         },
       ],
@@ -31,25 +83,37 @@ export class ChartsService {
       },
       legend: {
         top: 'bottom',
-        data: ['Values'],
+        data: ['Value1', 'Value2', 'Value3', 'Value4'],
       },
       radar: {
         indicator: [
-          { name: 'Value 1' },
-          { name: 'Value 2' },
-          { name: 'Value 3' },
-          { name: 'Value 4' },
-          { name: 'Value 5' },
+          { name: 'Point1' },
+          { name: 'Point2' },
+          { name: 'Point3' },
+          { name: 'Point4' },
+          { name: 'Point5' },
         ],
       },
       series: [
         {
-          name: 'Title',
+          name: 'Budget vs spending',
           type: 'radar',
           data: [
             {
-              value: [120, 140, 110, 90, 130],
-              name: 'Values',
+              value: [1, 5, 6, 7, 8],
+              name: 'Value1',
+            },
+            {
+              value: [2, 3, 5, 9, 1],
+              name: 'Value2',
+            },
+            {
+              value: [4, 1, 2, 5, 4],
+              name: 'Value3',
+            },
+            {
+              value: [1, 3, 9, 6, 5],
+              name: 'Value4',
             },
           ],
         },

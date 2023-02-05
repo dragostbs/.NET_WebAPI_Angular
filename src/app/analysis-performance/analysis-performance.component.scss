@@ -18,12 +18,12 @@
   overflow: hidden;
 }
 
-.table-bordered {
-  border: transparent !important;
-}
-
 .table-bordered .bg-light {
   border-bottom: 1px #ebeaea !important;
+}
+
+.ticker__element {
+  padding-top: 1.2rem !important;
 }
 
 // Charts
@@ -39,7 +39,12 @@
 }
 
 .table > :not(caption) > * > * {
-  padding: 1.1rem 1rem !important;
+  padding: 0.88rem 1rem !important;
+}
+
+.table-bordered {
+  border: transparent !important;
+  overflow: hidden !important;
 }
 
 .analysis tr {

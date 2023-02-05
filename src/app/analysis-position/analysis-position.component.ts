@@ -15,17 +15,20 @@ export class AnalysisPositionComponent implements OnInit {
   loaderComponent!: LoaderComponent;
 
   searchForm!: FormGroup;
-  radialChart: EChartsOption = {};
-  pieChart: EChartsOption = {};
+  barChart: EChartsOption = {};
+  radarChart: EChartsOption = {};
 
   symbol: string = '';
-  totalAssets: number = 0;
-  netCashFlow: number = 0;
-  revenue: number = 0;
-  shareHolderEquity: number = 0;
-  CFROA: number = 0;
-  CFROE: number = 0;
-  CFROS: number = 0;
+  totalAssets: number[] = [];
+  netCashFlow: number[] = [];
+  revenue: number[] = [];
+  shareHolderEquity: number[] = [];
+  CFROA2022: number = 0;
+  CFROE2022: number = 0;
+  CFROS2022: number = 0;
+  CFROA2021: number = 0;
+  CFROE2021: number = 0;
+  CFROS2021: number = 0;
 
   constructor(
     private service: AnalysisApiService,
@@ -43,8 +46,8 @@ export class AnalysisPositionComponent implements OnInit {
 
     this.loaderComponent.start();
 
-    this.radialChart = this.charts.radialChart1();
-    this.pieChart = this.charts.pieChart();
+    this.barChart = this.charts.barChart();
+    this.radarChart = this.charts.radarChart();
   }
 
   displayData() {
@@ -73,126 +76,119 @@ export class AnalysisPositionComponent implements OnInit {
             timeSeries: { annualStockholdersEquity },
           }: any = data;
 
+          for (let value of annualTotalAssets) {
+            this.totalAssets.push(value.reportedValue.raw);
+          }
+
+          for (let value of cashflowStatements) {
+            this.netCashFlow.push(value.changeInCash.raw);
+          }
+
+          for (let value of incomeStatementHistory) {
+            this.revenue.push(value.totalRevenue.raw);
+          }
+
+          for (let value of annualStockholdersEquity) {
+            this.shareHolderEquity.push(value.reportedValue.raw);
+          }
+
           this.symbol = symbol;
-          this.totalAssets = annualTotalAssets[2].reportedValue.raw;
-          this.netCashFlow = cashflowStatements[1].changeInCash.raw;
-          this.revenue = incomeStatementHistory[1].totalRevenue.raw;
-          this.shareHolderEquity =
-            annualStockholdersEquity[2].reportedValue.raw;
 
           // Results
-          this.CFROA = (this.netCashFlow / this.totalAssets) * 100;
-          this.CFROE = (this.netCashFlow / this.shareHolderEquity) * 100;
-          this.CFROS = (this.netCashFlow / this.revenue) * 100;
+          this.CFROA2022 = (this.netCashFlow[0] / this.totalAssets[3]) * 100;
+          this.CFROA2021 = (this.netCashFlow[1] / this.totalAssets[2]) * 100;
+          this.CFROE2022 =
+            (this.netCashFlow[0] / this.shareHolderEquity[3]) * 100;
+          this.CFROE2021 =
+            (this.netCashFlow[1] / this.shareHolderEquity[2]) * 100;
+          this.CFROS2022 = (this.netCashFlow[0] / this.revenue[3]) * 100;
+          this.CFROS2021 = (this.netCashFlow[1] / this.revenue[2]) * 100;
 
-          this.pieChart = {
+          this.radarChart = {
             title: [
               {
-                text: 'Analysis CFROA, CFROE, CFROS',
+                text: 'Results 2022 vs 2021',
                 textAlign: 'left',
               },
             ],
-            tooltip: {
-              trigger: 'item',
-            },
-            legend: {
-              top: 'bottom',
-            },
+            tooltip: {},
             toolbox: {
-              show: true,
               feature: {
-                mark: { show: true },
                 dataView: { show: true, readOnly: false },
                 restore: { show: true },
                 saveAsImage: { show: true },
               },
             },
+            legend: {
+              top: 'bottom',
+              data: ['2022', '2021'],
+            },
+            radar: {
+              center: ['50%', '60%'],
+              indicator: [
+                { name: 'CFROA' },
+                { name: 'CFROE' },
+                { name: 'CFROS' },
+              ],
+            },
             series: [
               {
-                type: 'pie',
-                radius: [70, 115],
-                center: ['50%', '50%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                  borderRadius: 8,
-                  borderColor: '#fff',
-                  borderWidth: 2,
-                },
-                label: {
-                  show: false,
-                  position: 'center',
-                },
-                emphasis: {
-                  label: {
-                    show: true,
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                  },
-                },
-                labelLine: {
-                  show: false,
-                },
+                name: 'Title',
+                type: 'radar',
                 data: [
-                  { value: Math.abs(this.CFROA), name: 'CFROA' },
-                  { value: Math.abs(this.CFROE), name: 'CFROE' },
-                  { value: Math.abs(this.CFROS), name: 'CFROS' },
+                  {
+                    value: [this.CFROA2022, this.CFROE2022, this.CFROS2022],
+                    name: '2022',
+                  },
+                  {
+                    value: [this.CFROA2021, this.CFROE2021, this.CFROS2021],
+                    name: '2021',
+                  },
                 ],
               },
             ],
           };
 
-          this.radialChart = {
+          this.barChart = {
             title: [
               {
-                text: 'Revenue vs Net Capital',
+                text: 'Total Assets vs Revenue',
                 textAlign: 'left',
               },
             ],
-            angleAxis: {
-              startAngle: 75,
-              axisLabel: {
-                fontSize: 7,
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow',
               },
             },
-            radiusAxis: {
-              type: 'category',
-              data: ['Value'],
-              axisLabel: {
-                rotate: 75,
-              },
-            },
-            polar: {
-              radius: [10, '75%'],
-            },
-            tooltip: {},
             toolbox: {
-              show: true,
               feature: {
-                mark: { show: true },
                 dataView: { show: true, readOnly: false },
                 restore: { show: true },
                 saveAsImage: { show: true },
               },
             },
-            series: [
-              {
-                type: 'bar',
-                data: [this.revenue],
-                coordinateSystem: 'polar',
-                name: 'Revenue',
-              },
-              {
-                type: 'bar',
-                data: [this.netCashFlow],
-                coordinateSystem: 'polar',
-                name: 'Net Capital',
-              },
-            ],
             legend: {
-              show: true,
               top: 'bottom',
-              data: ['Revenue', 'Net Capital'],
+              data: ['2022', '2021'],
             },
+            dataset: {
+              source: [
+                ['Data', '2022', '2021'],
+                ['Revenue', this.revenue[3], this.revenue[2]],
+                ['Total Assets', this.totalAssets[3], this.totalAssets[2]],
+              ],
+            },
+            xAxis: {
+              type: 'category',
+            },
+            yAxis: {
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
+            series: [{ type: 'bar' }, { type: 'bar' }],
           };
         });
     }
