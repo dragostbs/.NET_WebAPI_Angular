@@ -16,18 +16,20 @@ export class AnalysisPerformanceComponent implements OnInit {
 
   searchForm!: FormGroup;
   radialChart: EChartsOption = {};
-  barChart: EChartsOption = {};
+  lineChart: EChartsOption = {};
 
   symbol: string = '';
-  totalAssets: number = 0;
-  netIncome: number = 0;
-  revenue: number = 0;
-  shareHolderEquity: number = 0;
-  ROA: number = 0;
-  ROE: number = 0;
-  ROS: number = 0;
-  VRA: number = 0;
-  AER: number = 0;
+  capitalization: number = 0;
+  date: string[] = ['2022', '2021', '2020', '2019'];
+  totalAssets: number[] = [0, 0, 0, 0];
+  netIncome: number[] = [0, 0, 0, 0];
+  revenue: number[] = [0, 0, 0, 0];
+  shareHolderEquity: number[] = [0, 0, 0, 0];
+  ROA: number[] = [0, 0, 0, 0];
+  ROE: number[] = [0, 0, 0, 0];
+  ROS: number[] = [0, 0, 0, 0];
+  VRA: number[] = [0, 0, 0, 0];
+  AER: number[] = [0, 0, 0, 0];
 
   constructor(
     private service: AnalysisApiService,
@@ -46,7 +48,7 @@ export class AnalysisPerformanceComponent implements OnInit {
     this.loaderComponent.start();
 
     this.radialChart = this.charts.radialChart1();
-    this.barChart = this.charts.barChart();
+    this.lineChart = this.charts.lineChart();
   }
 
   displayData() {
@@ -57,7 +59,12 @@ export class AnalysisPerformanceComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
+          // Destruct Data
           let { symbol }: any = data;
+
+          let {
+            summaryDetail: { marketCap },
+          }: any = data;
 
           let {
             timeSeries: { annualTotalAssets },
@@ -71,28 +78,87 @@ export class AnalysisPerformanceComponent implements OnInit {
             timeSeries: { annualStockholdersEquity },
           }: any = data;
 
+          // Reversing values
+          annualTotalAssets.reverse();
+          annualStockholdersEquity.reverse();
+
+          // Push values
           this.symbol = symbol;
-          this.totalAssets = annualTotalAssets[2].reportedValue.raw;
-          this.netIncome = incomeStatementHistory[1].netIncome.raw;
-          this.revenue = incomeStatementHistory[1].totalRevenue.raw;
-          this.shareHolderEquity =
-            annualStockholdersEquity[2].reportedValue.raw;
+          this.capitalization = marketCap.fmt;
+
+          this.date.length = 0;
+          for (let value of annualTotalAssets) {
+            this.date.push(value.asOfDate);
+          }
+
+          this.totalAssets.length = 0;
+          for (let value of annualTotalAssets) {
+            this.totalAssets.push(value.reportedValue.raw);
+          }
+
+          this.netIncome.length = 0;
+          for (let value of incomeStatementHistory) {
+            this.netIncome.push(value.netIncome.raw);
+          }
+
+          this.revenue.length = 0;
+          for (let value of incomeStatementHistory) {
+            this.revenue.push(value.totalRevenue.raw);
+          }
+
+          this.shareHolderEquity.length = 0;
+          for (let value of annualStockholdersEquity) {
+            this.shareHolderEquity.push(value.reportedValue.raw);
+          }
 
           // Results
-          this.ROA = (this.netIncome / this.totalAssets) * 100;
-          this.ROE = (this.netIncome / this.shareHolderEquity) * 100;
-          this.ROS = (this.netIncome / this.revenue) * 100;
-          this.VRA = this.revenue / this.totalAssets;
-          this.AER = this.totalAssets / this.shareHolderEquity;
+          this.ROA.length = 0;
+          for (let i = 0; i < this.netIncome.length; i++) {
+            this.ROA.push((this.netIncome[i] / this.totalAssets[i]) * 100);
+          }
 
-          this.barChart = {
-            title: [
-              {
-                text: 'Analyisis ROA, ROE, ROS',
-                textAlign: 'left',
+          this.ROE.length = 0;
+          for (let i = 0; i < this.netIncome.length; i++) {
+            this.ROE.push(
+              (this.netIncome[i] / this.shareHolderEquity[i]) * 100
+            );
+          }
+
+          this.ROS.length = 0;
+          for (let i = 0; i < this.netIncome.length; i++) {
+            this.ROS.push((this.netIncome[i] / this.revenue[i]) * 100);
+          }
+
+          this.VRA.length = 0;
+          for (let i = 0; i < this.revenue.length; i++) {
+            this.VRA.push(this.revenue[i] / this.totalAssets[i]);
+          }
+
+          this.AER.length = 0;
+          for (let i = 0; i < this.totalAssets.length; i++) {
+            this.AER.push(this.totalAssets[i] / this.shareHolderEquity[i]);
+          }
+
+          this.lineChart = {
+            title: {
+              text: 'ROA vs ROE vs ROS',
+              textAlign: 'left',
+            },
+            tooltip: {
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
               },
-            ],
-            tooltip: {},
+            },
+            legend: {
+              data: ['ROA', 'ROE', 'ROS'],
+              top: 'bottom',
+            },
             toolbox: {
               feature: {
                 dataView: { show: true, readOnly: false },
@@ -100,41 +166,35 @@ export class AnalysisPerformanceComponent implements OnInit {
                 saveAsImage: { show: true },
               },
             },
-            legend: {
-              top: 'bottom',
-              data: ['ROA', 'ROE', 'ROS'],
+            xAxis: {
+              type: 'category',
+              boundaryGap: true,
+              data: ['2019', '2020', '2021', '2022'],
+              axisLabel: {
+                fontSize: 5,
+              },
             },
-            xAxis: [
-              {
-                type: 'category',
-                data: ['Value'],
-                axisPointer: {
-                  type: 'shadow',
-                },
+            yAxis: {
+              type: 'value',
+              axisLabel: {
+                fontSize: 5,
               },
-            ],
-            yAxis: [
-              {
-                type: 'value',
-                min: 0,
-                interval: 50,
-              },
-            ],
+            },
             series: [
               {
                 name: 'ROA',
-                type: 'bar',
-                data: [this.ROA],
+                type: 'line',
+                data: [...this.ROA].reverse(),
               },
               {
                 name: 'ROE',
-                type: 'bar',
-                data: [this.ROE],
+                type: 'line',
+                data: [...this.ROE].reverse(),
               },
               {
                 name: 'ROS',
-                type: 'bar',
-                data: [this.ROS],
+                type: 'line',
+                data: [...this.ROS].reverse(),
               },
             ],
           };
@@ -142,7 +202,7 @@ export class AnalysisPerformanceComponent implements OnInit {
           this.radialChart = {
             title: [
               {
-                text: 'Assets Turnover vs Equity Multiplier',
+                text: 'Assets Turnover vs Equity Multiplie',
                 textAlign: 'left',
               },
             ],
@@ -154,9 +214,10 @@ export class AnalysisPerformanceComponent implements OnInit {
             },
             radiusAxis: {
               type: 'category',
-              data: ['Value'],
+              data: [2019, 2020, 2021, 2022],
               axisLabel: {
                 rotate: 75,
+                fontSize: 5,
               },
             },
             polar: {
@@ -175,13 +236,13 @@ export class AnalysisPerformanceComponent implements OnInit {
             series: [
               {
                 type: 'bar',
-                data: [this.VRA],
+                data: [...this.VRA].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Assets Turnover',
               },
               {
                 type: 'bar',
-                data: [this.AER],
+                data: [...this.AER].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Equity Multiplier',
               },

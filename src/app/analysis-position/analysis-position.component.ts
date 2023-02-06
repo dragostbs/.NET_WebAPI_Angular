@@ -15,20 +15,19 @@ export class AnalysisPositionComponent implements OnInit {
   loaderComponent!: LoaderComponent;
 
   searchForm!: FormGroup;
+  lineChart: EChartsOption = {};
   barChart: EChartsOption = {};
-  radarChart: EChartsOption = {};
 
   symbol: string = '';
-  totalAssets: number[] = [];
-  netCashFlow: number[] = [];
-  revenue: number[] = [];
-  shareHolderEquity: number[] = [];
-  CFROA2022: number = 0;
-  CFROE2022: number = 0;
-  CFROS2022: number = 0;
-  CFROA2021: number = 0;
-  CFROE2021: number = 0;
-  CFROS2021: number = 0;
+  capitalization: number = 0;
+  date: string[] = ['2022', '2021', '2020', '2019'];
+  totalAssets: number[] = [0, 0, 0, 0];
+  netCashFlow: number[] = [0, 0, 0, 0];
+  revenue: number[] = [0, 0, 0, 0];
+  shareHolderEquity: number[] = [0, 0, 0, 0];
+  CFROA: number[] = [0, 0, 0, 0];
+  CFROE: number[] = [0, 0, 0, 0];
+  CFROS: number[] = [0, 0, 0, 0];
 
   constructor(
     private service: AnalysisApiService,
@@ -46,8 +45,8 @@ export class AnalysisPositionComponent implements OnInit {
 
     this.loaderComponent.start();
 
+    this.lineChart = this.charts.lineChart();
     this.barChart = this.charts.barChart();
-    this.radarChart = this.charts.radarChart();
   }
 
   displayData() {
@@ -58,7 +57,12 @@ export class AnalysisPositionComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
+          // Destruct Data
           let { symbol }: any = data;
+
+          let {
+            summaryDetail: { marketCap },
+          }: any = data;
 
           let {
             timeSeries: { annualTotalAssets },
@@ -76,90 +80,73 @@ export class AnalysisPositionComponent implements OnInit {
             timeSeries: { annualStockholdersEquity },
           }: any = data;
 
+          // Reversing values
+          annualTotalAssets.reverse();
+          annualStockholdersEquity.reverse();
+
+          // Push values
+          this.symbol = symbol;
+          this.capitalization = marketCap.fmt;
+
+          this.date.length = 0;
+          for (let value of annualTotalAssets) {
+            this.date.push(value.asOfDate);
+          }
+
+          this.totalAssets.length = 0;
           for (let value of annualTotalAssets) {
             this.totalAssets.push(value.reportedValue.raw);
           }
 
+          this.netCashFlow.length = 0;
           for (let value of cashflowStatements) {
             this.netCashFlow.push(value.changeInCash.raw);
           }
 
+          this.revenue.length = 0;
           for (let value of incomeStatementHistory) {
             this.revenue.push(value.totalRevenue.raw);
           }
 
+          this.shareHolderEquity.length = 0;
           for (let value of annualStockholdersEquity) {
             this.shareHolderEquity.push(value.reportedValue.raw);
           }
 
-          this.symbol = symbol;
-
           // Results
-          this.CFROA2022 = (this.netCashFlow[0] / this.totalAssets[3]) * 100;
-          this.CFROA2021 = (this.netCashFlow[1] / this.totalAssets[2]) * 100;
-          this.CFROE2022 =
-            (this.netCashFlow[0] / this.shareHolderEquity[3]) * 100;
-          this.CFROE2021 =
-            (this.netCashFlow[1] / this.shareHolderEquity[2]) * 100;
-          this.CFROS2022 = (this.netCashFlow[0] / this.revenue[3]) * 100;
-          this.CFROS2021 = (this.netCashFlow[1] / this.revenue[2]) * 100;
+          this.CFROA.length = 0;
+          for (let i = 0; i < this.netCashFlow.length; i++) {
+            this.CFROA.push((this.netCashFlow[i] / this.totalAssets[i]) * 100);
+          }
 
-          this.radarChart = {
-            title: [
-              {
-                text: 'Results 2022 vs 2021',
-                textAlign: 'left',
-              },
-            ],
-            tooltip: {},
-            toolbox: {
-              feature: {
-                dataView: { show: true, readOnly: false },
-                restore: { show: true },
-                saveAsImage: { show: true },
-              },
-            },
-            legend: {
-              top: 'bottom',
-              data: ['2022', '2021'],
-            },
-            radar: {
-              center: ['50%', '60%'],
-              indicator: [
-                { name: 'CFROA' },
-                { name: 'CFROE' },
-                { name: 'CFROS' },
-              ],
-            },
-            series: [
-              {
-                name: 'Title',
-                type: 'radar',
-                data: [
-                  {
-                    value: [this.CFROA2022, this.CFROE2022, this.CFROS2022],
-                    name: '2022',
-                  },
-                  {
-                    value: [this.CFROA2021, this.CFROE2021, this.CFROS2021],
-                    name: '2021',
-                  },
-                ],
-              },
-            ],
-          };
+          this.CFROE.length = 0;
+          for (let i = 0; i < this.netCashFlow.length; i++) {
+            this.CFROE.push(
+              (this.netCashFlow[i] / this.shareHolderEquity[i]) * 100
+            );
+          }
+
+          this.CFROS.length = 0;
+          for (let i = 0; i < this.netCashFlow.length; i++) {
+            this.CFROS.push((this.netCashFlow[i] / this.revenue[i]) * 100);
+          }
 
           this.barChart = {
             title: [
               {
-                text: 'Total Assets vs Revenue',
+                text: 'Evolution Stats',
                 textAlign: 'left',
               },
             ],
             tooltip: {
-              trigger: 'axis',
               axisPointer: {
-                type: 'shadow',
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
               },
             },
             toolbox: {
@@ -171,24 +158,116 @@ export class AnalysisPositionComponent implements OnInit {
             },
             legend: {
               top: 'bottom',
-              data: ['2022', '2021'],
-            },
-            dataset: {
-              source: [
-                ['Data', '2022', '2021'],
-                ['Revenue', this.revenue[3], this.revenue[2]],
-                ['Total Assets', this.totalAssets[3], this.totalAssets[2]],
+              data: [
+                'Total Assets',
+                'Revenue',
+                'Net Cash Flow',
+                'Share Holder Equity',
               ],
+            },
+            calculable: true,
+            xAxis: [
+              {
+                type: 'category',
+                data: ['2019', '2020', '2021', '2022'],
+                axisPointer: {
+                  type: 'shadow',
+                },
+                axisLabel: {
+                  fontSize: 5,
+                },
+              },
+            ],
+            yAxis: [
+              {
+                type: 'value',
+                axisLabel: {
+                  fontSize: 5,
+                },
+              },
+            ],
+            series: [
+              {
+                name: 'Total Assets',
+                type: 'bar',
+                data: [...this.totalAssets].reverse(),
+              },
+              {
+                name: 'Revenue',
+                type: 'bar',
+                data: [...this.revenue].reverse(),
+              },
+              {
+                name: 'Net Cash Flow',
+                type: 'bar',
+                data: [...this.netCashFlow].reverse(),
+              },
+              {
+                name: 'Share Holder Equity',
+                type: 'bar',
+                data: [...this.shareHolderEquity].reverse(),
+              },
+            ],
+          };
+
+          this.lineChart = {
+            title: {
+              text: 'CFROA vs CFROE vs CFROS',
+              textAlign: 'left',
+            },
+            tooltip: {
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
+              },
+            },
+            legend: {
+              data: ['CFROA', 'CFROE', 'CFROS'],
+              top: 'bottom',
+            },
+            toolbox: {
+              feature: {
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true },
+              },
             },
             xAxis: {
               type: 'category',
-            },
-            yAxis: {
+              boundaryGap: true,
+              data: ['2019', '2020', '2021', '2022'],
               axisLabel: {
                 fontSize: 5,
               },
             },
-            series: [{ type: 'bar' }, { type: 'bar' }],
+            yAxis: {
+              type: 'value',
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
+            series: [
+              {
+                name: 'CFROA',
+                type: 'line',
+                data: [...this.CFROA].reverse(),
+              },
+              {
+                name: 'CFROE',
+                type: 'line',
+                data: [...this.CFROE].reverse(),
+              },
+              {
+                name: 'CFROS',
+                type: 'line',
+                data: [...this.CFROS].reverse(),
+              },
+            ],
           };
         });
     }

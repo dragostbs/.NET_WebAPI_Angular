@@ -15,19 +15,21 @@ export class AnalysisSolvencyComponent implements OnInit {
   loaderComponent!: LoaderComponent;
 
   searchForm!: FormGroup;
-  radialChart: EChartsOption = {};
-  pieChart: EChartsOption = {};
+  barChart: EChartsOption = {};
+  lineChart: EChartsOption = {};
 
   symbol: string = '';
-  shareHolderEquity: number = 0;
-  totalAssets: number = 0;
-  totalLiabilities: number = 0;
-  totalCurrLiabilities: number = 0;
-  totalLongLiabilities: number = 0;
-  RS: number = 0;
-  DAR: number = 0;
-  DER: number = 0;
-  EAR: number = 0;
+  capitalization: number = 0;
+  date: string[] = ['2022', '2021', '2020', '2019'];
+  shareHolderEquity: number[] = [0, 0, 0, 0];
+  totalAssets: number[] = [0, 0, 0, 0];
+  totalLiabilities: number[] = [0, 0, 0, 0];
+  totalCurrLiabilities: number[] = [0, 0, 0, 0];
+  totalLongLiabilities: number[] = [0, 0, 0, 0];
+  RS: number[] = [0, 0, 0, 0];
+  DAR: number[] = [0, 0, 0, 0];
+  DER: number[] = [0, 0, 0, 0];
+  EAR: number[] = [0, 0, 0, 0];
 
   constructor(
     private service: AnalysisApiService,
@@ -45,8 +47,8 @@ export class AnalysisSolvencyComponent implements OnInit {
 
     this.loaderComponent.start();
 
-    this.radialChart = this.charts.radialChart2();
-    this.pieChart = this.charts.pieChart();
+    this.barChart = this.charts.barChart();
+    this.lineChart = this.charts.lineChart();
   }
 
   displayData() {
@@ -57,7 +59,12 @@ export class AnalysisSolvencyComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
+          // Destruct Data
           let { symbol }: any = data;
+
+          let {
+            summaryDetail: { marketCap },
+          }: any = data;
 
           let {
             timeSeries: { annualStockholdersEquity },
@@ -79,146 +86,214 @@ export class AnalysisSolvencyComponent implements OnInit {
             timeSeries: { annualTotalNonCurrentLiabilitiesNetMinorityInterest },
           }: any = data;
 
+          // Reversing values
+          annualStockholdersEquity.reverse();
+          annualTotalAssets.reverse();
+          annualTotalLiabilitiesNetMinorityInterest.reverse();
+          annualCurrentLiabilities.reverse();
+          annualTotalNonCurrentLiabilitiesNetMinorityInterest.reverse();
+
+          // Push values
           this.symbol = symbol;
-          this.shareHolderEquity =
-            annualStockholdersEquity[2].reportedValue.raw;
-          this.totalAssets = annualTotalAssets[2].reportedValue.raw;
-          this.totalLiabilities =
-            annualTotalLiabilitiesNetMinorityInterest[2].reportedValue.raw;
-          this.totalCurrLiabilities =
-            annualCurrentLiabilities[2].reportedValue.raw;
-          this.totalLongLiabilities =
-            annualTotalNonCurrentLiabilitiesNetMinorityInterest[2].reportedValue.raw;
+          this.capitalization = marketCap.fmt;
+
+          this.date.length = 0;
+          for (let value of annualStockholdersEquity) {
+            this.date.push(value.asOfDate);
+          }
+
+          this.shareHolderEquity.length = 0;
+          for (let value of annualStockholdersEquity) {
+            this.shareHolderEquity.push(value.reportedValue.raw);
+          }
+
+          this.totalAssets.length = 0;
+          for (let value of annualTotalAssets) {
+            this.totalAssets.push(value.reportedValue.raw);
+          }
+
+          this.totalLiabilities.length = 0;
+          for (let value of annualTotalLiabilitiesNetMinorityInterest) {
+            this.totalLiabilities.push(value.reportedValue.raw);
+          }
+
+          this.totalCurrLiabilities.length = 0;
+          for (let value of annualCurrentLiabilities) {
+            this.totalCurrLiabilities.push(value.reportedValue.raw);
+          }
+
+          this.totalLongLiabilities.length = 0;
+          for (let value of annualTotalNonCurrentLiabilitiesNetMinorityInterest) {
+            this.totalLongLiabilities.push(value.reportedValue.raw);
+          }
 
           // Results
-          this.RS =
-            ((this.totalAssets - this.totalCurrLiabilities) /
-              this.totalLongLiabilities) *
-            100;
-          this.DAR = (this.totalLiabilities / this.totalAssets) * 100;
-          this.DER = (this.totalLiabilities / this.shareHolderEquity) * 100;
-          this.EAR = (this.shareHolderEquity / this.totalAssets) * 100;
+          this.RS.length = 0;
+          for (let i = 0; i < this.totalAssets.length; i++) {
+            this.RS.push(
+              ((this.totalAssets[i] - this.totalCurrLiabilities[i]) /
+                this.totalLongLiabilities[i]) *
+                100
+            );
+          }
 
-          this.pieChart = {
-            title: [
-              {
-                text: 'Analysis RS, DAR, DER, EAR',
-                textAlign: 'left',
-              },
-            ],
+          this.DAR.length = 0;
+          for (let i = 0; i < this.totalLiabilities.length; i++) {
+            this.DAR.push(
+              (this.totalLiabilities[i] / this.totalAssets[i]) * 100
+            );
+          }
+
+          this.DER.length = 0;
+          for (let i = 0; i < this.totalLiabilities.length; i++) {
+            this.DER.push(
+              (this.totalLiabilities[i] / this.shareHolderEquity[i]) * 100
+            );
+          }
+
+          this.EAR.length = 0;
+          for (let i = 0; i < this.shareHolderEquity.length; i++) {
+            this.EAR.push(
+              (this.shareHolderEquity[i] / this.totalAssets[i]) * 100
+            );
+          }
+
+          this.lineChart = {
+            title: {
+              text: 'RS vs DAR vs DER vs EAR',
+              textAlign: 'left',
+            },
             tooltip: {
-              trigger: 'item',
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
+              },
             },
             legend: {
+              data: ['RS', 'DAR', 'DER', 'EAR'],
               top: 'bottom',
             },
             toolbox: {
-              show: true,
               feature: {
-                mark: { show: true },
                 dataView: { show: true, readOnly: false },
                 restore: { show: true },
                 saveAsImage: { show: true },
               },
             },
+            xAxis: {
+              type: 'category',
+              boundaryGap: true,
+              data: ['2019', '2020', '2021', '2022'],
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
+            yAxis: {
+              type: 'value',
+              axisLabel: {
+                fontSize: 5,
+              },
+            },
             series: [
               {
-                type: 'pie',
-                radius: [70, 115],
-                center: ['50%', '50%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                  borderRadius: 8,
-                  borderColor: '#fff',
-                  borderWidth: 2,
-                },
-                label: {
-                  show: false,
-                  position: 'center',
-                },
-                emphasis: {
-                  label: {
-                    show: true,
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                  },
-                },
-                labelLine: {
-                  show: false,
-                },
-                data: [
-                  { value: this.RS, name: 'RS' },
-                  { value: this.DAR, name: 'DAR' },
-                  { value: this.DER, name: 'DER' },
-                  { value: this.EAR, name: 'EAR' },
-                ],
+                name: 'RS',
+                type: 'line',
+                data: [...this.RS].reverse(),
+              },
+              {
+                name: 'DAR',
+                type: 'line',
+                data: [...this.DAR].reverse(),
+              },
+              {
+                name: 'DER',
+                type: 'line',
+                data: [...this.DER].reverse(),
+              },
+              {
+                name: 'EAR',
+                type: 'line',
+                data: [...this.EAR].reverse(),
               },
             ],
           };
 
-          this.radialChart = {
+          this.barChart = {
             title: [
               {
-                text: 'Liabilities Visualization',
+                text: 'Liabilities Stats',
                 textAlign: 'left',
               },
             ],
-            polar: {
-              radius: [10, '75%'],
-            },
-            radiusAxis: {
-              axisLabel: {
-                fontSize: 0,
+            tooltip: {
+              axisPointer: {
+                animation: false,
+                type: 'cross',
+                lineStyle: {
+                  color: '#4d4e52',
+                  width: 1,
+                  opacity: 0.8,
+                },
               },
             },
-            angleAxis: {
-              type: 'category',
-              data: ['value'],
-              startAngle: 75,
-              axisLabel: {
-                fontSize: 7,
-              },
-            },
-            tooltip: {},
             toolbox: {
-              show: true,
               feature: {
-                mark: { show: true },
                 dataView: { show: true, readOnly: false },
                 restore: { show: true },
                 saveAsImage: { show: true },
               },
             },
-            series: [
-              {
-                type: 'bar',
-                data: [this.totalLiabilities],
-                coordinateSystem: 'polar',
-                name: 'Total Liabilities',
-              },
-              {
-                type: 'bar',
-                data: [this.totalCurrLiabilities],
-                coordinateSystem: 'polar',
-                name: 'Current Liabilities',
-              },
-              {
-                type: 'bar',
-                data: [this.totalLongLiabilities],
-                coordinateSystem: 'polar',
-                name: 'Long Term Liabilities',
-              },
-            ],
             legend: {
-              show: true,
               top: 'bottom',
               data: [
                 'Total Liabilities',
-                'Current Liabilities',
-                'Long Term Liabilities',
+                'Total Current Liabilities',
+                'Total Long Term Liabilities',
               ],
             },
-            animation: true,
+            calculable: true,
+            xAxis: [
+              {
+                type: 'category',
+                data: ['2019', '2020', '2021', '2022'],
+                axisPointer: {
+                  type: 'shadow',
+                },
+                axisLabel: {
+                  fontSize: 5,
+                },
+              },
+            ],
+            yAxis: [
+              {
+                type: 'value',
+                axisLabel: {
+                  fontSize: 5,
+                },
+              },
+            ],
+            series: [
+              {
+                name: 'Total Liabilities',
+                type: 'bar',
+                data: [...this.totalLiabilities].reverse(),
+              },
+              {
+                name: 'Total Current Liabilities',
+                type: 'bar',
+                data: [...this.totalCurrLiabilities].reverse(),
+              },
+              {
+                name: 'Total Long Term Liabilities',
+                type: 'bar',
+                data: [...this.totalLongLiabilities].reverse(),
+              },
+            ],
           };
         });
     }

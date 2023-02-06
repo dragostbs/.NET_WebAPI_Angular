@@ -194,22 +194,19 @@ export class AnalysisLiquidityComponent implements OnInit {
             },
             series: [
               {
-                name: 'RLC',
+                name: 'RLE',
                 type: 'line',
-                stack: 'Total',
-                data: [...this.RLC].reverse(),
+                data: [...this.RLE].reverse(),
               },
               {
                 name: 'RLI',
                 type: 'line',
-                stack: 'Total',
                 data: [...this.RLI].reverse(),
               },
               {
-                name: 'RLE',
+                name: 'RLC',
                 type: 'line',
-                stack: 'Total',
-                data: [...this.RLE].reverse(),
+                data: [...this.RLC].reverse(),
               },
             ],
           };

@@ -35,8 +35,12 @@
         >
           Stock Symbol should have min 1 to 4 characters 📢
         </p>
-        <h1 class="ticker__element text-center p-2">
+        <h1 class="ticker__element text-center fw-normal fs-2 p-2">
           {{ symbol || "TICKER" }}
+        </h1>
+        <hr />
+        <h1 class="cap__element text-center fw-normal fs-2">
+          {{ capitalization }} cap
         </h1>
       </div>
 
@@ -53,18 +57,31 @@
           </thead>
           <tbody class="text_size">
             <tr>
-              <td>2022</td>
-              <td>{{ totalAssets | number : "1.0-2" }}</td>
-              <td>{{ netIncome | number : "1.0-2" }}</td>
-              <td>{{ revenue | number : "1.0-2" }}</td>
-              <td>{{ shareHolderEquity | number : "1.0-2" }}</td>
-            </tr>
-            <tr>
-              <td>2021</td>
-              <td>{{ totalAssets | number : "1.0-2" }}</td>
-              <td>{{ netIncome | number : "1.0-2" }}</td>
-              <td>{{ revenue | number : "1.0-2" }}</td>
-              <td>{{ shareHolderEquity | number : "1.0-2" }}</td>
+              <td class="text-center">
+                <p *ngFor="let data of date">
+                  {{ data | slice : 0 : 4 }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of totalAssets">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of netIncome">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of revenue">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
+              <td class="text-center">
+                <p *ngFor="let data of shareHolderEquity">
+                  {{ data | number : "1.0-2" }}
+                </p>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -73,26 +90,23 @@
 
     <div class="d-flex mt-3">
       <div class="card me-3">
-        <div echarts [options]="radialChart" class="radial__chart"></div>
+        <div echarts [options]="lineChart" class="line__chart"></div>
       </div>
       <div class="card">
-        <div echarts [options]="barChart" class="bar__chart"></div>
+        <div echarts [options]="radialChart" class="radial__chart"></div>
       </div>
     </div>
 
-    <div class="d-flex mt-3">
+    <div class="d-flex mt-3 mb-3">
       <div class="card__analysis card flex-column text-start text-center">
         <div class="analysis">
-          <table class="table table-bordered mb-0 rounded-top">
+          <table class="table__results table table-bordered mb-0 rounded-top">
             <thead class="bg-light">
               <tr class="text_size">
                 <th scope="col">Indicator</th>
                 <th scope="col">Formula</th>
-                <th scope="col">
-                  <div class="d-flex justify-content-around">
-                    <p>2021</p>
-                    <p>2022</p>
-                  </div>
+                <th *ngFor="let data of date.reverse()" scope="col">
+                  {{ data | slice : 0 : 4 }}
                 </th>
               </tr>
             </thead>
@@ -108,11 +122,8 @@
                   Return On Assets (ROA)
                 </td>
                 <td>(Net Income / Total Assets) * 100</td>
-                <td>
-                  <div class="d-flex justify-content-around">
-                    <p>{{ ROA / 100 | percent : "1.0-2" }}</p>
-                    <p>{{ ROA / 100 | percent : "1.0-2" }}</p>
-                  </div>
+                <td *ngFor="let data of ROA.reverse()">
+                  {{ data / 100 | percent : "1.0-2" }}
                 </td>
               </tr>
               <tr>
@@ -126,11 +137,8 @@
                   Return On Equity (ROE)
                 </td>
                 <td>(Net Income / Share Holder Equity) * 100</td>
-                <td>
-                  <div class="d-flex justify-content-around">
-                    <p>{{ ROE / 100 | percent : "1.0-2" }}</p>
-                    <p>{{ ROE / 100 | percent : "1.0-2" }}</p>
-                  </div>
+                <td *ngFor="let data of ROE.reverse()">
+                  {{ data / 100 | percent : "1.0-2" }}
                 </td>
               </tr>
               <tr>
@@ -144,11 +152,8 @@
                   Return On Sales (ROS)
                 </td>
                 <td>(Net Income / Revenue) * 100</td>
-                <td>
-                  <div class="d-flex justify-content-around">
-                    <p>{{ ROS / 100 | percent : "1.0-2" }}</p>
-                    <p>{{ ROS / 100 | percent : "1.0-2" }}</p>
-                  </div>
+                <td *ngFor="let data of ROS.reverse()">
+                  {{ data / 100 | percent : "1.0-2" }}
                 </td>
               </tr>
               <tr>
@@ -160,14 +165,11 @@
                     De cate ori activele sunt transformate in vanzari intr-o anumita perioada de timp"
                   >
                   </i>
-                  Current Assets Turnover Ratio
+                  Assets Turnover Ratio
                 </td>
                 <td>Revenue / Total Assets</td>
-                <td>
-                  <div class="d-flex justify-content-around">
-                    <p>{{ VRA / 100 | percent : "1.0-2" }}</p>
-                    <p>{{ VRA / 100 | percent : "1.0-2" }}</p>
-                  </div>
+                <td *ngFor="let data of VRA.reverse()">
+                  {{ data | number : "1.0-2" }}
                 </td>
               </tr>
               <tr>
@@ -181,11 +183,8 @@
                   Equity Multiplier (AER)
                 </td>
                 <td>Total Assets / Share Holder Equity</td>
-                <td>
-                  <div class="d-flex justify-content-around">
-                    <p>{{ AER / 100 | percent : "1.0-2" }}</p>
-                    <p>{{ AER / 100 | percent : "1.0-2" }}</p>
-                  </div>
+                <td *ngFor="let data of AER.reverse()">
+                  {{ data | number : "1.0-2" }}
                 </td>
               </tr>
             </tbody>

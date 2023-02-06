@@ -271,19 +271,16 @@ export class AnalysisCCCComponent implements OnInit {
               {
                 name: 'DIO',
                 type: 'line',
-                stack: 'Total',
                 data: [...this.DIO].reverse(),
               },
               {
                 name: 'DSO',
                 type: 'line',
-                stack: 'Total',
                 data: [...this.DSO].reverse(),
               },
               {
                 name: 'DPO',
                 type: 'line',
-                stack: 'Total',
                 data: [...this.DPO].reverse(),
               },
             ],
