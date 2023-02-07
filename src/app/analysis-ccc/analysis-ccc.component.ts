@@ -4,6 +4,7 @@ import { EChartsOption } from 'echarts';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChartsService } from '../services/charts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-analysis-ccc',
@@ -34,7 +35,8 @@ export class AnalysisCCCComponent implements OnInit {
   constructor(
     private service: AnalysisApiService,
     private fb: FormBuilder,
-    private charts: ChartsService
+    private charts: ChartsService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +87,21 @@ export class AnalysisCCCComponent implements OnInit {
           // Reversing values
           annualInventory.reverse();
           annualAccountsPayable.reverse();
+
+          // Check if there is enough data to analyze
+          if (
+            annualInventory.length < 4 ||
+            this.inventory.length > 0 ||
+            this.receivables.length > 0 ||
+            this.date.length > 0 ||
+            this.cogs.length > 0 ||
+            this.revenue.length > 0 ||
+            this.accountsPayable.length > 0
+          ) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisCash']);
+            location.reload();
+          }
 
           // Push values
           this.symbol = symbol;

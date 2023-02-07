@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { LoaderComponent } from '../loader/loader.component';
 import { AnalysisApiService } from '../services/analysis-api.service';
@@ -32,7 +33,8 @@ export class AnalysisPositionComponent implements OnInit {
   constructor(
     private service: AnalysisApiService,
     private fb: FormBuilder,
-    private charts: ChartsService
+    private charts: ChartsService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +85,20 @@ export class AnalysisPositionComponent implements OnInit {
           // Reversing values
           annualTotalAssets.reverse();
           annualStockholdersEquity.reverse();
+
+          // Check if there is enough data to analyze
+          if (
+            annualTotalAssets.length < 4 ||
+            this.date.length > 0 ||
+            this.revenue.length > 0 ||
+            this.totalAssets.length > 0 ||
+            this.shareHolderEquity.length > 0 ||
+            this.netCashFlow.length > 0
+          ) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisPosition']);
+            location.reload();
+          }
 
           // Push values
           this.symbol = symbol;

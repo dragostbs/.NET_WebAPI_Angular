@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { LoaderComponent } from '../loader/loader.component';
 import { AnalysisApiService } from '../services/analysis-api.service';
@@ -34,7 +35,8 @@ export class AnalysisSolvencyComponent implements OnInit {
   constructor(
     private service: AnalysisApiService,
     private fb: FormBuilder,
-    private charts: ChartsService
+    private charts: ChartsService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +94,21 @@ export class AnalysisSolvencyComponent implements OnInit {
           annualTotalLiabilitiesNetMinorityInterest.reverse();
           annualCurrentLiabilities.reverse();
           annualTotalNonCurrentLiabilitiesNetMinorityInterest.reverse();
+
+          // Check if there is enough data to analyze
+          if (
+            annualTotalAssets.length < 4 ||
+            this.date.length > 0 ||
+            this.totalAssets.length > 0 ||
+            this.shareHolderEquity.length > 0 ||
+            this.totalLiabilities.length > 0 ||
+            this.totalCurrLiabilities.length > 0 ||
+            this.totalLongLiabilities.length > 0
+          ) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisSolvency']);
+            location.reload();
+          }
 
           // Push values
           this.symbol = symbol;
