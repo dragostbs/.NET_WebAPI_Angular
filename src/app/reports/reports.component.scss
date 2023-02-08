@@ -83,32 +83,13 @@
   --bs-alert-padding-y: 1.3rem;
 }
 
-// @media screen and (max-width: 1450px) {
-//   .px-md-5 {
-//     padding-left: 4rem !important;
-//   }
-// }
-
-// @media screen and (max-width: 1350px) {
-//   .px-md-5 {
-//     padding-left: 5rem !important;
-//   }
-// }
-
-// @media screen and (max-width: 1250px) {
-//   .px-md-5 {
-//     padding-left: 6rem !important;
-//   }
-// }
-
-// @media screen and (max-width: 1150px) {
-//   .px-md-5 {
-//     padding-left: 7rem !important;
-//   }
-// }
-
-// @media screen and (max-width: 1050px) {
-//   .px-md-5 {
-//     padding-left: 8rem !important;
-//   }
-// }
+.loader {
+  width: 100%;
+  height: auto;
+  position: fixed;
+  margin: 0;
+  top: 50%;
+  left: 57%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}

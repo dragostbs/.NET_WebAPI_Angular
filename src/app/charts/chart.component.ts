@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EChartsOption } from 'echarts';
-import { LoaderComponent } from '../loader/loader.component';
+import { EChartsOption, number } from 'echarts';
+import { LoadService } from '../loading/load.service';
 import { CalcMaService } from '../services/calc-ma.service';
 import { CandlesApiService } from '../services/candles-api.service';
+import { ChartsService } from '../services/charts.service';
 
 @Component({
   selector: 'app-chart',
@@ -11,27 +12,29 @@ import { CandlesApiService } from '../services/candles-api.service';
   styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit {
-  @ViewChild(LoaderComponent, { static: true })
-  loaderComponent!: LoaderComponent;
-
   searchForm!: FormGroup;
   candlesChart: EChartsOption = {};
+  loadingElement: EChartsOption = {};
 
   constructor(
     private dataCandles: CandlesApiService,
     private fb: FormBuilder,
-    private calcMA: CalcMaService
+    private calcMA: CalcMaService,
+    public loadingService: LoadService,
+    private charts: ChartsService
   ) {}
 
   ngOnInit(): void {
-    this.loaderComponent.start();
-
     this.searchForm = this.fb.group({
       stockSymbol: [
         '',
         [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
       ],
     });
+
+    this.loadingElement = this.charts.loadingElement();
+
+    this.loadingEffect();
 
     // Display chart automatically on init
     let dates: string[] = [];
@@ -175,6 +178,8 @@ export class ChartComponent implements OnInit {
     let maxData: any[] = [];
     let minData: any[] = [];
 
+    this.loadingEffect();
+
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -308,5 +313,17 @@ export class ChartComponent implements OnInit {
           });
         });
     }
+  }
+  loadingEffect() {
+    const main = document.getElementById('main');
+    if (main) {
+      main.style.display = 'none';
+    }
+    setTimeout(() => {
+      this.loadingService.isLoading.next(false);
+      if (main) {
+        main.style.display = 'block';
+      }
+    }, 2000);
   }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { LoaderComponent } from '../loader/loader.component';
+import { BehaviorSubject } from 'rxjs';
+import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { ChartsService } from '../services/charts.service';
 
@@ -12,12 +13,10 @@ import { ChartsService } from '../services/charts.service';
   styleUrls: ['./analysis-liquidity.component.scss'],
 })
 export class AnalysisLiquidityComponent implements OnInit {
-  @ViewChild(LoaderComponent, { static: true })
-  loaderComponent!: LoaderComponent;
-
   searchForm!: FormGroup;
   radialChart: EChartsOption = {};
   lineChart: EChartsOption = {};
+  loadingElement: EChartsOption = {};
 
   symbol: string = '';
   capitalization: number = 0;
@@ -37,7 +36,8 @@ export class AnalysisLiquidityComponent implements OnInit {
     private service: AnalysisApiService,
     private fb: FormBuilder,
     private charts: ChartsService,
-    private router: Router
+    private router: Router,
+    public loadingService: LoadService
   ) {}
 
   ngOnInit(): void {
@@ -48,13 +48,15 @@ export class AnalysisLiquidityComponent implements OnInit {
       ],
     });
 
-    this.loaderComponent.start();
-
     this.radialChart = this.charts.radialChart1();
     this.lineChart = this.charts.lineChart();
+    this.loadingElement = this.charts.loadingElement();
+
+    this.loadingEffect();
   }
 
   displayData() {
+    this.loadingEffect();
     if (this.searchForm.valid) {
       this.service
         .getAnalysis(this.searchForm.value['stockSymbol'])
@@ -96,14 +98,14 @@ export class AnalysisLiquidityComponent implements OnInit {
 
           // Check if there is enough data to analyze
           if (
-            annualInventory.length < 4 ||
-            this.prePaidExpenses.length > 0 ||
-            this.inventory.length > 0 ||
-            this.receivables.length > 0 ||
-            this.cashOnHand.length > 0 ||
-            this.assets.length > 0 ||
-            this.liabillities.length > 0 ||
-            this.date.length > 0
+            annualInventory.length < 4
+            // this.prePaidExpenses.length > 0 ||
+            // this.inventory.length > 0 ||
+            // this.receivables.length > 0 ||
+            // this.cashOnHand.length > 0 ||
+            // this.assets.length > 0 ||
+            // this.liabillities.length > 0 ||
+            // this.date.length > 0
           ) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisLiquidity']);
@@ -285,5 +287,18 @@ export class AnalysisLiquidityComponent implements OnInit {
           };
         });
     }
+  }
+  loadingEffect() {
+    this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
+    const main = document.getElementById('main');
+    if (main) {
+      main.style.display = 'none';
+    }
+    setTimeout(() => {
+      this.loadingService.isLoading.next(false);
+      if (main) {
+        main.style.display = 'block';
+      }
+    }, 2000);
   }
 }

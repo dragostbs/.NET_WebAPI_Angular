@@ -11,8 +11,53 @@ export class ChartsService {
   line: EChartsOption = {};
   radial1: EChartsOption = {};
   radial2: EChartsOption = {};
+  loading: EChartsOption = {};
 
   constructor() {}
+
+  loadingElement(): any {
+    return (this.loading = {
+      graphic: {
+        elements: [
+          {
+            type: 'group',
+            left: 'center',
+            top: 'center',
+            children: new Array(7).fill(0).map((val, i) => ({
+              type: 'rect',
+              x: i * 15,
+              shape: {
+                x: 0,
+                y: -20,
+                width: 5,
+                height: 40,
+              },
+              style: {
+                fill: '#53575aec',
+              },
+              keyframeAnimation: {
+                duration: 800,
+                delay: i * 200,
+                loop: true,
+                keyframes: [
+                  {
+                    percent: 0.5,
+                    scaleY: 0.3,
+                    easing: 'cubicIn',
+                  },
+                  {
+                    percent: 1,
+                    scaleY: 1,
+                    easing: 'cubicOut',
+                  },
+                ],
+              },
+            })),
+          },
+        ],
+      },
+    });
+  }
 
   lineChart(): any {
     return (this.line = {

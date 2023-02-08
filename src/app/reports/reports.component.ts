@@ -1,6 +1,8 @@
-import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
+import { EChartsOption } from 'echarts/types/dist/echarts';
 import { Observable } from 'rxjs';
-import { LoaderComponent } from '../loader/loader.component';
+import { LoadService } from '../loading/load.service';
+import { ChartsService } from '../services/charts.service';
 import { CrudApiService } from '../services/crud-api.service';
 
 @Injectable({
@@ -12,28 +14,32 @@ import { CrudApiService } from '../services/crud-api.service';
   styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
-  @ViewChild(LoaderComponent, { static: true })
-  loaderComponent!: LoaderComponent;
-
   transactions$!: Observable<any[]>;
+  loadingElement: EChartsOption = {};
 
   // Map to acces key data such as price, symbol... for transactions
   stockList: any = [];
   stockSymbolMap: Map<number, string> = new Map();
   stockPriceMap: Map<number, string> = new Map();
 
-  constructor(private service: CrudApiService) {}
+  constructor(
+    private service: CrudApiService,
+    public loadingService: LoadService,
+    private charts: ChartsService
+  ) {}
 
   ngOnInit(): void {
     this.transactions$ = this.service.getTransactionsList();
     this.StocksDataMap();
+
+    this.loadingElement = this.charts.loadingElement();
+    this.loadingEffect();
   }
 
   // GET data from API
   StocksDataMap() {
-    this.loaderComponent.start();
+    this.loadingEffect();
     this.service.getStocksList().subscribe((data) => {
-      this.loaderComponent.finish();
       // assign the data to stockList variable
       this.stockList = data;
 
@@ -46,6 +52,7 @@ export class ReportsComponent implements OnInit {
   }
 
   removeTransactions(transaction: any) {
+    this.loadingEffect();
     this.service.deleteTransactions(transaction.id).subscribe((data) => {
       // Show success message
       const showRemove = document.getElementById('add-remove-alert');
@@ -58,15 +65,27 @@ export class ReportsComponent implements OnInit {
         if (showRemove) {
           showRemove.style.display = 'none';
         }
-      }, 4000);
+      }, 6000);
 
       this.transactions$ = this.service.getTransactionsList();
     });
   }
 
-  // Inject this functon for trade component to show the data instantly once submitted
+  // Inject this function for trade component to show the data instantly once submitted
   callAllDataTransactions() {
     this.transactions$ = this.service.getTransactionsList();
     this.StocksDataMap();
+  }
+
+  loadingEffect() {
+    const main = document.getElementById('main');
+    if (main) {
+      main.style.display = 'none';
+    }
+    setTimeout(() => {
+      if (main) {
+        main.style.display = 'block';
+      }
+    }, 2000);
   }
 }

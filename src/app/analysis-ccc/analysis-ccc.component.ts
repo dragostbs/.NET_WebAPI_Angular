@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../loader/loader.component';
+import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChartsService } from '../services/charts.service';
 import { Router } from '@angular/router';
+import { LoadService } from '../loading/load.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-analysis-ccc',
@@ -12,12 +13,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./analysis-ccc.component.scss'],
 })
 export class AnalysisCCCComponent implements OnInit {
-  @ViewChild(LoaderComponent, { static: true })
-  loaderComponent!: LoaderComponent;
-
   searchForm!: FormGroup;
   barChart: EChartsOption = {};
   lineChart: EChartsOption = {};
+  loadingElement: EChartsOption = {};
 
   symbol: string = '';
   capitalization: number = 0;
@@ -36,7 +35,8 @@ export class AnalysisCCCComponent implements OnInit {
     private service: AnalysisApiService,
     private fb: FormBuilder,
     private charts: ChartsService,
-    private router: Router
+    private router: Router,
+    public loadingService: LoadService
   ) {}
 
   ngOnInit(): void {
@@ -47,13 +47,15 @@ export class AnalysisCCCComponent implements OnInit {
       ],
     });
 
-    this.loaderComponent.start();
-
     this.lineChart = this.charts.lineChart();
     this.barChart = this.charts.barChart();
+    this.loadingElement = this.charts.loadingElement();
+
+    this.loadingEffect();
   }
 
   displayData() {
+    this.loadingEffect();
     if (this.searchForm.valid) {
       this.service
         .getAnalysis(this.searchForm.value['stockSymbol'])
@@ -90,13 +92,13 @@ export class AnalysisCCCComponent implements OnInit {
 
           // Check if there is enough data to analyze
           if (
-            annualInventory.length < 4 ||
-            this.inventory.length > 0 ||
-            this.receivables.length > 0 ||
-            this.date.length > 0 ||
-            this.cogs.length > 0 ||
-            this.revenue.length > 0 ||
-            this.accountsPayable.length > 0
+            annualInventory.length < 4
+            // this.inventory.length > 0 ||
+            // this.receivables.length > 0 ||
+            // this.date.length > 0 ||
+            // this.cogs.length > 0 ||
+            // this.revenue.length > 0 ||
+            // this.accountsPayable.length > 0
           ) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisCash']);
@@ -304,5 +306,18 @@ export class AnalysisCCCComponent implements OnInit {
           };
         });
     }
+  }
+  loadingEffect() {
+    this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
+    const main = document.getElementById('main');
+    if (main) {
+      main.style.display = 'none';
+    }
+    setTimeout(() => {
+      this.loadingService.isLoading.next(false);
+      if (main) {
+        main.style.display = 'block';
+      }
+    }, 2000);
   }
 }

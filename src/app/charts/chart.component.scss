@@ -1,5 +1,5 @@
 .card {
-  height: 49.5rem;
+  height: 49.2rem;
 }
 
 .candles__chart {
@@ -25,4 +25,15 @@
   color: red;
   font-size: xx-small;
   text-align: center;
+}
+
+.loader {
+  width: 100%;
+  height: auto;
+  position: fixed;
+  margin: 0;
+  top: 50%;
+  left: 57%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
 }

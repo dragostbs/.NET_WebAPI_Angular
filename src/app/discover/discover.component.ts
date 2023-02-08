@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { LoaderComponent } from '../loader/loader.component';
+import { Component, OnInit } from '@angular/core';
+import { EChartsOption } from 'echarts';
+import { LoadService } from '../loading/load.service';
+import { ChartsService } from '../services/charts.service';
 
 @Component({
   selector: 'app-discover',
@@ -7,10 +9,25 @@ import { LoaderComponent } from '../loader/loader.component';
   styleUrls: ['./discover.component.scss'],
 })
 export class DiscoverComponent implements OnInit {
-  @ViewChild(LoaderComponent, { static: true })
-  loaderComponent!: LoaderComponent;
+  loadingElement: EChartsOption = {};
+
+  constructor(
+    public loadingService: LoadService,
+    private charts: ChartsService
+  ) {}
 
   ngOnInit(): void {
-    this.loaderComponent.start();
+    this.loadingElement = this.charts.loadingElement();
+
+    const main = document.getElementById('main');
+    if (main) {
+      main.style.display = 'none';
+    }
+    setTimeout(() => {
+      this.loadingService.isLoading.next(false);
+      if (main) {
+        main.style.display = 'block';
+      }
+    }, 2000);
   }
 }

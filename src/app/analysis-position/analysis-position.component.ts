@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { LoaderComponent } from '../loader/loader.component';
+import { BehaviorSubject } from 'rxjs';
+import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { ChartsService } from '../services/charts.service';
 
@@ -12,12 +13,10 @@ import { ChartsService } from '../services/charts.service';
   styleUrls: ['./analysis-position.component.scss'],
 })
 export class AnalysisPositionComponent implements OnInit {
-  @ViewChild(LoaderComponent, { static: true })
-  loaderComponent!: LoaderComponent;
-
   searchForm!: FormGroup;
   lineChart: EChartsOption = {};
   barChart: EChartsOption = {};
+  loadingElement: EChartsOption = {};
 
   symbol: string = '';
   capitalization: number = 0;
@@ -34,7 +33,8 @@ export class AnalysisPositionComponent implements OnInit {
     private service: AnalysisApiService,
     private fb: FormBuilder,
     private charts: ChartsService,
-    private router: Router
+    private router: Router,
+    public loadingService: LoadService
   ) {}
 
   ngOnInit(): void {
@@ -45,13 +45,15 @@ export class AnalysisPositionComponent implements OnInit {
       ],
     });
 
-    this.loaderComponent.start();
-
     this.lineChart = this.charts.lineChart();
     this.barChart = this.charts.barChart();
+    this.loadingElement = this.charts.loadingElement();
+
+    this.loadingEffect();
   }
 
   displayData() {
+    this.loadingEffect();
     if (this.searchForm.valid) {
       this.service
         .getAnalysis(this.searchForm.value['stockSymbol'])
@@ -88,12 +90,12 @@ export class AnalysisPositionComponent implements OnInit {
 
           // Check if there is enough data to analyze
           if (
-            annualTotalAssets.length < 4 ||
-            this.date.length > 0 ||
-            this.revenue.length > 0 ||
-            this.totalAssets.length > 0 ||
-            this.shareHolderEquity.length > 0 ||
-            this.netCashFlow.length > 0
+            annualTotalAssets.length < 4
+            // this.date.length > 0 ||
+            // this.revenue.length > 0 ||
+            // this.totalAssets.length > 0 ||
+            // this.shareHolderEquity.length > 0 ||
+            // this.netCashFlow.length > 0
           ) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisPosition']);
@@ -287,5 +289,18 @@ export class AnalysisPositionComponent implements OnInit {
           };
         });
     }
+  }
+  loadingEffect() {
+    this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
+    const main = document.getElementById('main');
+    if (main) {
+      main.style.display = 'none';
+    }
+    setTimeout(() => {
+      this.loadingService.isLoading.next(false);
+      if (main) {
+        main.style.display = 'block';
+      }
+    }, 2000);
   }
 }

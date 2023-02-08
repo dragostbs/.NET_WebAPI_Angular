@@ -38,9 +38,9 @@ export class CalcMaService {
 
   // Calc the min value
   calculateMin(data: any[]) {
-    let max = data.reduce((previous, current) => {
+    let min = data.reduce((previous, current) => {
       return current[1] < previous[1] ? current : previous;
     });
-    return max;
+    return min;
   }
 }

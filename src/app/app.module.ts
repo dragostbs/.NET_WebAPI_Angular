@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,7 +10,6 @@ import { ChartComponent } from './charts/chart.component';
 import { DiscoverComponent } from './discover/discover.component';
 import { ReportsComponent } from './reports/reports.component';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { LoaderComponent } from './loader/loader.component';
 import { CarouselComponent } from './discover/carousel/carousel.component';
 import { GainerFallerComponent } from './discover/gainer-faller/gainer-faller.component';
 import { NewsComponent } from './discover/news/news.component';
@@ -24,6 +23,7 @@ import { AnalysisLiquidityComponent } from './analysis-liquidity/analysis-liquid
 import { AnalysisSolvencyComponent } from './analysis-solvency/analysis-solvency.component';
 import { AnalysisPerformanceComponent } from './analysis-performance/analysis-performance.component';
 import { AnalysisPositionComponent } from './analysis-position/analysis-position.component';
+import { InterceptorService } from './loading/interceptor.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,6 @@ import { AnalysisPositionComponent } from './analysis-position/analysis-position
     ChartComponent,
     DiscoverComponent,
     ReportsComponent,
-    LoaderComponent,
     CarouselComponent,
     GainerFallerComponent,
     NewsComponent,
@@ -56,7 +55,10 @@ import { AnalysisPositionComponent } from './analysis-position/analysis-position
       echarts: () => import('echarts'),
     }),
   ],
-  providers: [CrudApiService],
+  providers: [
+    CrudApiService,
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

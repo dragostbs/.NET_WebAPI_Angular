@@ -8,7 +8,7 @@ import { AuthApiService } from '../services/auth-api.service';
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit {
-  constructor(public auth: AuthApiService, private router: Router) {}
+  constructor(public auth: AuthApiService, public router: Router) {}
 
   ngOnInit(): void {}
 

@@ -47,7 +47,7 @@ export class TradeComponent implements OnInit {
           if (showSuccess) {
             showSuccess.style.display = 'none';
           }
-        }, 4000);
+        }, 6000);
 
         // Call the function to get all the data once submitted from the form using service and inject
         this.reportComponent.callAllDataTransactions();

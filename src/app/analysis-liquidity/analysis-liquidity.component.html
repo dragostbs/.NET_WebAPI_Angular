@@ -1,11 +1,11 @@
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2">
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Analysis - Liquidity</h1>
     <app-trade></app-trade>
   </div>
-  <div *ngIf="loaderComponent.loading" class="d-flex row">
+  <div class="d-flex row">
     <div class="d-flex">
       <div class="card me-3 search__content">
         <form
@@ -181,5 +181,10 @@
     </div>
   </div>
 </main>
-<app-loader></app-loader>
+<div
+  echarts
+  *ngIf="loadingService.isLoading | async"
+  [options]="loadingElement"
+  class="loader"
+></div>
 <app-nav></app-nav>
