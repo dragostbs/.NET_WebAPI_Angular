@@ -2,6 +2,7 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import { Observable } from 'rxjs';
 import { LoadService } from '../loading/load.service';
+import { AnalysisApiService } from '../services/analysis-api.service';
 import { ChartsService } from '../services/charts.service';
 import { CrudApiService } from '../services/crud-api.service';
 
@@ -25,7 +26,8 @@ export class ReportsComponent implements OnInit {
   constructor(
     private service: CrudApiService,
     public loadingService: LoadService,
-    private charts: ChartsService
+    private charts: ChartsService,
+    private pdfService: AnalysisApiService
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +36,10 @@ export class ReportsComponent implements OnInit {
 
     this.loadingElement = this.charts.loadingElement();
     this.loadingEffect();
+  }
+
+  savePDF() {
+    this.pdfService.downloadPDF();
   }
 
   // GET data from API

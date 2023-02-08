@@ -52,6 +52,10 @@ export class AnalysisPositionComponent implements OnInit {
     this.loadingEffect();
   }
 
+  savePDF() {
+    this.service.downloadPDF();
+  }
+
   displayData() {
     this.loadingEffect();
     if (this.searchForm.valid) {
@@ -89,14 +93,7 @@ export class AnalysisPositionComponent implements OnInit {
           annualStockholdersEquity.reverse();
 
           // Check if there is enough data to analyze
-          if (
-            annualTotalAssets.length < 4
-            // this.date.length > 0 ||
-            // this.revenue.length > 0 ||
-            // this.totalAssets.length > 0 ||
-            // this.shareHolderEquity.length > 0 ||
-            // this.netCashFlow.length > 0
-          ) {
+          if (annualTotalAssets.length < 4) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisPosition']);
             location.reload();
@@ -106,47 +103,55 @@ export class AnalysisPositionComponent implements OnInit {
           this.symbol = symbol;
           this.capitalization = marketCap.fmt;
 
-          this.date.length = 0;
-          for (let value of annualTotalAssets) {
-            this.date.push(value.asOfDate);
-          }
+          try {
+            this.date.length = 0;
+            for (let value of annualTotalAssets) {
+              this.date.push(value.asOfDate);
+            }
 
-          this.totalAssets.length = 0;
-          for (let value of annualTotalAssets) {
-            this.totalAssets.push(value.reportedValue.raw);
-          }
+            this.totalAssets.length = 0;
+            for (let value of annualTotalAssets) {
+              this.totalAssets.push(value.reportedValue.raw);
+            }
 
-          this.netCashFlow.length = 0;
-          for (let value of cashflowStatements) {
-            this.netCashFlow.push(value.changeInCash.raw);
-          }
+            this.netCashFlow.length = 0;
+            for (let value of cashflowStatements) {
+              this.netCashFlow.push(value.changeInCash.raw);
+            }
 
-          this.revenue.length = 0;
-          for (let value of incomeStatementHistory) {
-            this.revenue.push(value.totalRevenue.raw);
-          }
+            this.revenue.length = 0;
+            for (let value of incomeStatementHistory) {
+              this.revenue.push(value.totalRevenue.raw);
+            }
 
-          this.shareHolderEquity.length = 0;
-          for (let value of annualStockholdersEquity) {
-            this.shareHolderEquity.push(value.reportedValue.raw);
-          }
+            this.shareHolderEquity.length = 0;
+            for (let value of annualStockholdersEquity) {
+              this.shareHolderEquity.push(value.reportedValue.raw);
+            }
 
-          // Results
-          this.CFROA.length = 0;
-          for (let i = 0; i < this.netCashFlow.length; i++) {
-            this.CFROA.push((this.netCashFlow[i] / this.totalAssets[i]) * 100);
-          }
+            // Results
+            this.CFROA.length = 0;
+            for (let i = 0; i < this.netCashFlow.length; i++) {
+              this.CFROA.push(
+                (this.netCashFlow[i] / this.totalAssets[i]) * 100
+              );
+            }
 
-          this.CFROE.length = 0;
-          for (let i = 0; i < this.netCashFlow.length; i++) {
-            this.CFROE.push(
-              (this.netCashFlow[i] / this.shareHolderEquity[i]) * 100
-            );
-          }
+            this.CFROE.length = 0;
+            for (let i = 0; i < this.netCashFlow.length; i++) {
+              this.CFROE.push(
+                (this.netCashFlow[i] / this.shareHolderEquity[i]) * 100
+              );
+            }
 
-          this.CFROS.length = 0;
-          for (let i = 0; i < this.netCashFlow.length; i++) {
-            this.CFROS.push((this.netCashFlow[i] / this.revenue[i]) * 100);
+            this.CFROS.length = 0;
+            for (let i = 0; i < this.netCashFlow.length; i++) {
+              this.CFROS.push((this.netCashFlow[i] / this.revenue[i]) * 100);
+            }
+          } catch (error: any) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisPosition']);
+            location.reload();
           }
 
           this.barChart = {

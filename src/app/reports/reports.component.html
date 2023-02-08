@@ -6,9 +6,19 @@
     <div class="alert alert-warning" role="alert" id="add-remove-alert">
       Transaction canceled successfuly !
     </div>
-    <app-trade></app-trade>
+    <span>
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="savePDF()"
+      >
+        <i class="bi bi-download"></i>
+        PDF
+      </button>
+      <app-trade></app-trade
+    ></span>
   </div>
-  <div class="report card rounded-top">
+  <div class="report card rounded-top" id="analysis">
     <table class="table mb-0">
       <thead class="report__head bg-light">
         <tr class="rounded-top">

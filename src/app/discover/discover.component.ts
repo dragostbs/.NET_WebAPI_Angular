@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { LoadService } from '../loading/load.service';
+import { AnalysisApiService } from '../services/analysis-api.service';
 import { ChartsService } from '../services/charts.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class DiscoverComponent implements OnInit {
 
   constructor(
     public loadingService: LoadService,
-    private charts: ChartsService
+    private charts: ChartsService,
+    private service: AnalysisApiService
   ) {}
 
   ngOnInit(): void {
@@ -29,5 +31,9 @@ export class DiscoverComponent implements OnInit {
         main.style.display = 'block';
       }
     }, 2000);
+  }
+
+  savePDF() {
+    this.service.downloadPDF();
   }
 }

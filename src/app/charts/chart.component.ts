@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EChartsOption, number } from 'echarts';
 import { LoadService } from '../loading/load.service';
+import { AnalysisApiService } from '../services/analysis-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
 import { CandlesApiService } from '../services/candles-api.service';
 import { ChartsService } from '../services/charts.service';
@@ -21,7 +22,8 @@ export class ChartComponent implements OnInit {
     private fb: FormBuilder,
     private calcMA: CalcMaService,
     public loadingService: LoadService,
-    private charts: ChartsService
+    private charts: ChartsService,
+    private service: AnalysisApiService
   ) {}
 
   ngOnInit(): void {
@@ -167,6 +169,10 @@ export class ChartComponent implements OnInit {
         ],
       };
     });
+  }
+
+  savePDF() {
+    this.service.downloadPDF();
   }
 
   // Display chart based on search input

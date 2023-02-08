@@ -3,9 +3,19 @@
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Discover</h1>
-    <app-trade></app-trade>
+    <span>
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="savePDF()"
+      >
+        <i class="bi bi-download"></i>
+        PDF
+      </button>
+      <app-trade></app-trade
+    ></span>
   </div>
-  <div class="d-flex justify-content-between">
+  <div class="d-flex justify-content-between" id="analysis">
     <div>
       <app-carousel></app-carousel>
       <app-gainer-faller></app-gainer-faller>

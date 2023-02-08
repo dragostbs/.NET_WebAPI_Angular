@@ -54,6 +54,10 @@ export class AnalysisCCCComponent implements OnInit {
     this.loadingEffect();
   }
 
+  savePDF() {
+    this.service.downloadPDF();
+  }
+
   displayData() {
     this.loadingEffect();
     if (this.searchForm.valid) {
@@ -91,15 +95,7 @@ export class AnalysisCCCComponent implements OnInit {
           annualAccountsPayable.reverse();
 
           // Check if there is enough data to analyze
-          if (
-            annualInventory.length < 4
-            // this.inventory.length > 0 ||
-            // this.receivables.length > 0 ||
-            // this.date.length > 0 ||
-            // this.cogs.length > 0 ||
-            // this.revenue.length > 0 ||
-            // this.accountsPayable.length > 0
-          ) {
+          if (annualInventory.length < 4) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisCash']);
             location.reload();
@@ -109,55 +105,61 @@ export class AnalysisCCCComponent implements OnInit {
           this.symbol = symbol;
           this.capitalization = marketCap.fmt;
 
-          this.date.length = 0;
-          for (let value of annualInventory) {
-            this.date.push(value.asOfDate);
-          }
+          try {
+            this.date.length = 0;
+            for (let value of annualInventory) {
+              this.date.push(value.asOfDate);
+            }
 
-          this.inventory.length = 0;
-          for (let value of annualInventory) {
-            this.inventory.push(value.reportedValue.raw);
-          }
+            this.inventory.length = 0;
+            for (let value of annualInventory) {
+              this.inventory.push(value.reportedValue.raw);
+            }
 
-          this.cogs.length = 0;
-          for (let value of incomeStatementHistory) {
-            this.cogs.push(value.costOfRevenue.raw);
-          }
+            this.cogs.length = 0;
+            for (let value of incomeStatementHistory) {
+              this.cogs.push(value.costOfRevenue.raw);
+            }
 
-          this.revenue.length = 0;
-          for (let value of incomeStatementHistory) {
-            this.revenue.push(value.totalRevenue.raw);
-          }
+            this.revenue.length = 0;
+            for (let value of incomeStatementHistory) {
+              this.revenue.push(value.totalRevenue.raw);
+            }
 
-          this.receivables.length = 0;
-          for (let value of balanceSheetStatements) {
-            this.receivables.push(value.netReceivables.raw);
-          }
+            this.receivables.length = 0;
+            for (let value of balanceSheetStatements) {
+              this.receivables.push(value.netReceivables.raw);
+            }
 
-          this.accountsPayable.length = 0;
-          for (let value of annualAccountsPayable) {
-            this.accountsPayable.push(value.reportedValue.raw);
-          }
+            this.accountsPayable.length = 0;
+            for (let value of annualAccountsPayable) {
+              this.accountsPayable.push(value.reportedValue.raw);
+            }
 
-          //Results
-          this.DIO.length = 0;
-          for (let i = 0; i < this.inventory.length; i++) {
-            this.DIO.push((this.inventory[i] / this.cogs[i]) * 365);
-          }
+            //Results
+            this.DIO.length = 0;
+            for (let i = 0; i < this.inventory.length; i++) {
+              this.DIO.push((this.inventory[i] / this.cogs[i]) * 365);
+            }
 
-          this.DSO.length = 0;
-          for (let i = 0; i < this.receivables.length; i++) {
-            this.DSO.push((this.receivables[i] / this.revenue[i]) * 365);
-          }
+            this.DSO.length = 0;
+            for (let i = 0; i < this.receivables.length; i++) {
+              this.DSO.push((this.receivables[i] / this.revenue[i]) * 365);
+            }
 
-          this.DPO.length = 0;
-          for (let i = 0; i < this.accountsPayable.length; i++) {
-            this.DPO.push((this.accountsPayable[i] / this.cogs[i]) * 365);
-          }
+            this.DPO.length = 0;
+            for (let i = 0; i < this.accountsPayable.length; i++) {
+              this.DPO.push((this.accountsPayable[i] / this.cogs[i]) * 365);
+            }
 
-          this.CCC.length = 0;
-          for (let i = 0; i < this.DIO.length; i++) {
-            this.CCC.push(this.DIO[i] + this.DSO[i] - this.DPO[i]);
+            this.CCC.length = 0;
+            for (let i = 0; i < this.DIO.length; i++) {
+              this.CCC.push(this.DIO[i] + this.DSO[i] - this.DPO[i]);
+            }
+          } catch (error: any) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisCash']);
+            location.reload();
           }
 
           this.barChart = {
@@ -307,6 +309,7 @@ export class AnalysisCCCComponent implements OnInit {
         });
     }
   }
+
   loadingEffect() {
     this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
     const main = document.getElementById('main');

@@ -55,6 +55,10 @@ export class AnalysisLiquidityComponent implements OnInit {
     this.loadingEffect();
   }
 
+  savePDF() {
+    this.service.downloadPDF();
+  }
+
   displayData() {
     this.loadingEffect();
     if (this.searchForm.valid) {
@@ -97,78 +101,75 @@ export class AnalysisLiquidityComponent implements OnInit {
           this.capitalization = marketCap.fmt;
 
           // Check if there is enough data to analyze
-          if (
-            annualInventory.length < 4
-            // this.prePaidExpenses.length > 0 ||
-            // this.inventory.length > 0 ||
-            // this.receivables.length > 0 ||
-            // this.cashOnHand.length > 0 ||
-            // this.assets.length > 0 ||
-            // this.liabillities.length > 0 ||
-            // this.date.length > 0
-          ) {
+          if (annualInventory.length < 4) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisLiquidity']);
             location.reload();
           }
 
-          this.date.length = 0;
-          for (let value of annualInventory) {
-            this.date.push(value.asOfDate);
-          }
+          try {
+            this.date.length = 0;
+            for (let value of annualInventory) {
+              this.date.push(value.asOfDate);
+            }
 
-          this.inventory.length = 0;
-          for (let value of annualInventory) {
-            this.inventory.push(value.reportedValue.raw);
-          }
+            this.inventory.length = 0;
+            for (let value of annualInventory) {
+              this.inventory.push(value.reportedValue.raw);
+            }
 
-          this.receivables.length = 0;
-          for (let value of balanceSheetStatements) {
-            this.receivables.push(value.netReceivables.raw);
-          }
+            this.receivables.length = 0;
+            for (let value of balanceSheetStatements) {
+              this.receivables.push(value.netReceivables.raw);
+            }
 
-          this.prePaidExpenses.length = 0;
-          for (let value of balanceSheetStatements) {
-            this.prePaidExpenses.push(value.deferredLongTermAssetCharges.raw);
-          }
+            this.prePaidExpenses.length = 0;
+            for (let value of balanceSheetStatements) {
+              this.prePaidExpenses.push(value.deferredLongTermAssetCharges.raw);
+            }
 
-          this.cashOnHand.length = 0;
-          for (let value of balanceSheetStatements) {
-            this.cashOnHand.push(value.cash.raw);
-          }
+            this.cashOnHand.length = 0;
+            for (let value of balanceSheetStatements) {
+              this.cashOnHand.push(value.cash.raw);
+            }
 
-          this.assets.length = 0;
-          for (let value of annualCurrentAssets) {
-            this.assets.push(value.reportedValue.raw);
-          }
+            this.assets.length = 0;
+            for (let value of annualCurrentAssets) {
+              this.assets.push(value.reportedValue.raw);
+            }
 
-          this.liabillities.length = 0;
-          for (let value of annualCurrentLiabilities) {
-            this.liabillities.push(value.reportedValue.raw);
-          }
+            this.liabillities.length = 0;
+            for (let value of annualCurrentLiabilities) {
+              this.liabillities.push(value.reportedValue.raw);
+            }
 
-          // Results
-          this.RLC.length = 0;
-          for (let i = 0; i < this.assets.length; i++) {
-            this.RLC.push((this.assets[i] / this.liabillities[i]) * 100);
-          }
+            // Results
+            this.RLC.length = 0;
+            for (let i = 0; i < this.assets.length; i++) {
+              this.RLC.push((this.assets[i] / this.liabillities[i]) * 100);
+            }
 
-          this.RLI.length = 0;
-          for (let i = 0; i < this.assets.length; i++) {
-            this.RLI.push(
-              ((this.assets[i] - this.inventory[i]) / this.liabillities[i]) *
-                100
-            );
-          }
+            this.RLI.length = 0;
+            for (let i = 0; i < this.assets.length; i++) {
+              this.RLI.push(
+                ((this.assets[i] - this.inventory[i]) / this.liabillities[i]) *
+                  100
+              );
+            }
 
-          this.TR.length = 0;
-          for (let i = 0; i < this.prePaidExpenses.length; i++) {
-            this.TR.push(this.prePaidExpenses[i] + this.cashOnHand[i]);
-          }
+            this.TR.length = 0;
+            for (let i = 0; i < this.prePaidExpenses.length; i++) {
+              this.TR.push(this.prePaidExpenses[i] + this.cashOnHand[i]);
+            }
 
-          this.RLE.length = 0;
-          for (let i = 0; i < this.liabillities.length; i++) {
-            this.RLE.push((this.TR[i] / this.liabillities[i]) * 100);
+            this.RLE.length = 0;
+            for (let i = 0; i < this.liabillities.length; i++) {
+              this.RLE.push((this.TR[i] / this.liabillities[i]) * 100);
+            }
+          } catch (error: any) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisLiquidity']);
+            location.reload();
           }
 
           this.lineChart = {

@@ -54,6 +54,10 @@ export class AnalysisSolvencyComponent implements OnInit {
     this.loadingEffect();
   }
 
+  savePDF() {
+    this.service.downloadPDF();
+  }
+
   displayData() {
     this.loadingEffect();
     if (this.searchForm.valid) {
@@ -98,15 +102,7 @@ export class AnalysisSolvencyComponent implements OnInit {
           annualTotalNonCurrentLiabilitiesNetMinorityInterest.reverse();
 
           // Check if there is enough data to analyze
-          if (
-            annualTotalAssets.length < 4
-            // this.date.length > 0 ||
-            // this.totalAssets.length > 0 ||
-            // this.shareHolderEquity.length > 0 ||
-            // this.totalLiabilities.length > 0 ||
-            // this.totalCurrLiabilities.length > 0 ||
-            // this.totalLongLiabilities.length > 0
-          ) {
+          if (annualTotalAssets.length < 4) {
             alert('🌋 Insufficient data to analyse the stock !!!');
             this.router.navigate(['/analysisSolvency']);
             location.reload();
@@ -116,65 +112,71 @@ export class AnalysisSolvencyComponent implements OnInit {
           this.symbol = symbol;
           this.capitalization = marketCap.fmt;
 
-          this.date.length = 0;
-          for (let value of annualStockholdersEquity) {
-            this.date.push(value.asOfDate);
-          }
+          try {
+            this.date.length = 0;
+            for (let value of annualStockholdersEquity) {
+              this.date.push(value.asOfDate);
+            }
 
-          this.shareHolderEquity.length = 0;
-          for (let value of annualStockholdersEquity) {
-            this.shareHolderEquity.push(value.reportedValue.raw);
-          }
+            this.shareHolderEquity.length = 0;
+            for (let value of annualStockholdersEquity) {
+              this.shareHolderEquity.push(value.reportedValue.raw);
+            }
 
-          this.totalAssets.length = 0;
-          for (let value of annualTotalAssets) {
-            this.totalAssets.push(value.reportedValue.raw);
-          }
+            this.totalAssets.length = 0;
+            for (let value of annualTotalAssets) {
+              this.totalAssets.push(value.reportedValue.raw);
+            }
 
-          this.totalLiabilities.length = 0;
-          for (let value of annualTotalLiabilitiesNetMinorityInterest) {
-            this.totalLiabilities.push(value.reportedValue.raw);
-          }
+            this.totalLiabilities.length = 0;
+            for (let value of annualTotalLiabilitiesNetMinorityInterest) {
+              this.totalLiabilities.push(value.reportedValue.raw);
+            }
 
-          this.totalCurrLiabilities.length = 0;
-          for (let value of annualCurrentLiabilities) {
-            this.totalCurrLiabilities.push(value.reportedValue.raw);
-          }
+            this.totalCurrLiabilities.length = 0;
+            for (let value of annualCurrentLiabilities) {
+              this.totalCurrLiabilities.push(value.reportedValue.raw);
+            }
 
-          this.totalLongLiabilities.length = 0;
-          for (let value of annualTotalNonCurrentLiabilitiesNetMinorityInterest) {
-            this.totalLongLiabilities.push(value.reportedValue.raw);
-          }
+            this.totalLongLiabilities.length = 0;
+            for (let value of annualTotalNonCurrentLiabilitiesNetMinorityInterest) {
+              this.totalLongLiabilities.push(value.reportedValue.raw);
+            }
 
-          // Results
-          this.RS.length = 0;
-          for (let i = 0; i < this.totalAssets.length; i++) {
-            this.RS.push(
-              ((this.totalAssets[i] - this.totalCurrLiabilities[i]) /
-                this.totalLongLiabilities[i]) *
-                100
-            );
-          }
+            // Results
+            this.RS.length = 0;
+            for (let i = 0; i < this.totalAssets.length; i++) {
+              this.RS.push(
+                ((this.totalAssets[i] - this.totalCurrLiabilities[i]) /
+                  this.totalLongLiabilities[i]) *
+                  100
+              );
+            }
 
-          this.DAR.length = 0;
-          for (let i = 0; i < this.totalLiabilities.length; i++) {
-            this.DAR.push(
-              (this.totalLiabilities[i] / this.totalAssets[i]) * 100
-            );
-          }
+            this.DAR.length = 0;
+            for (let i = 0; i < this.totalLiabilities.length; i++) {
+              this.DAR.push(
+                (this.totalLiabilities[i] / this.totalAssets[i]) * 100
+              );
+            }
 
-          this.DER.length = 0;
-          for (let i = 0; i < this.totalLiabilities.length; i++) {
-            this.DER.push(
-              (this.totalLiabilities[i] / this.shareHolderEquity[i]) * 100
-            );
-          }
+            this.DER.length = 0;
+            for (let i = 0; i < this.totalLiabilities.length; i++) {
+              this.DER.push(
+                (this.totalLiabilities[i] / this.shareHolderEquity[i]) * 100
+              );
+            }
 
-          this.EAR.length = 0;
-          for (let i = 0; i < this.shareHolderEquity.length; i++) {
-            this.EAR.push(
-              (this.shareHolderEquity[i] / this.totalAssets[i]) * 100
-            );
+            this.EAR.length = 0;
+            for (let i = 0; i < this.shareHolderEquity.length; i++) {
+              this.EAR.push(
+                (this.shareHolderEquity[i] / this.totalAssets[i]) * 100
+              );
+            }
+          } catch (error: any) {
+            alert('🌋 Insufficient data to analyse the stock !!!');
+            this.router.navigate(['/analysisSolvency']);
+            location.reload();
           }
 
           this.lineChart = {
