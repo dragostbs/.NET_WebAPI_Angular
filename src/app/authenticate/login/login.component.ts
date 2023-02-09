@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.auth.loginUser(this.loginForm.value).subscribe({
         next: (res) => {
-          this.router.navigate(['/chart']);
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           this.loginForm.reset();

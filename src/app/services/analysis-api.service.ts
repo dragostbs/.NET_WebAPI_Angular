@@ -28,7 +28,7 @@ export class AnalysisApiService {
       const FILEURI = canvas.toDataURL('image/png');
       let PDF = new jsPDF('p', 'mm', 'a4');
       let position = 2;
-      PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+      PDF.addImage(FILEURI, 'PNG', 1, position, fileWidth, fileHeight);
       PDF.save('financials.pdf');
     });
   }

@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ChartComponent } from './charts/chart.component';
 import { DiscoverComponent } from './discover/discover.component';
 import { ReportsComponent } from './reports/reports.component';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -24,11 +23,11 @@ import { AnalysisSolvencyComponent } from './analysis-solvency/analysis-solvency
 import { AnalysisPerformanceComponent } from './analysis-performance/analysis-performance.component';
 import { AnalysisPositionComponent } from './analysis-position/analysis-position.component';
 import { InterceptorService } from './loading/interceptor.service';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChartComponent,
     DiscoverComponent,
     ReportsComponent,
     CarouselComponent,
@@ -43,6 +42,7 @@ import { InterceptorService } from './loading/interceptor.service';
     AnalysisSolvencyComponent,
     AnalysisPerformanceComponent,
     AnalysisPositionComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

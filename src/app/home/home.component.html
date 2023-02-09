@@ -1,0 +1,14 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="text-secondary">Home</h1>
+  </div>
+</main>
+<div
+  echarts
+  *ngIf="loadingService.isLoading | async"
+  [options]="loadingElement"
+  class="loader"
+></div>
+<app-nav></app-nav>

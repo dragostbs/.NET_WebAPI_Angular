@@ -15,182 +15,189 @@
       <app-trade></app-trade
     ></span>
   </div>
-  <div class="d-flex row" id="analysis">
-    <div class="d-flex">
-      <div class="card me-3 search__content">
-        <form
-          class="input-group input-group-sm p-2"
-          [formGroup]="searchForm"
-          (ngSubmit)="displayData()"
-        >
-          <input
-            type="text"
-            class="input form-control"
-            placeholder="Stock name..."
-            formControlName="stockSymbol"
-            oninput="this.value = this.value.toUpperCase()"
-          />
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="displayData()"
-            [disabled]="searchForm.invalid"
+  <div id="analysis">
+    <div class="d-flex row">
+      <div class="d-flex">
+        <div class="card me-3 search__content">
+          <form
+            class="input-group input-group-sm p-2"
+            [formGroup]="searchForm"
+            (ngSubmit)="displayData()"
+            (ngSubmit)="displayChart()"
           >
-            Search
-          </button>
-        </form>
-        <p
-          class="error"
-          *ngIf="searchForm.get('stockSymbol')?.hasError('maxlength')"
-        >
-          Stock Symbol should have min 1 to 4 characters 📢
-        </p>
-        <div>
-          <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-            {{ symbol || "TICKER" }}
-          </h1>
-          <hr />
-          <h1 class="cap__element text-center fw-normal fs-2">
-            {{ capitalization }} cap
-          </h1>
+            <input
+              type="text"
+              class="input form-control"
+              placeholder="Stock name..."
+              formControlName="stockSymbol"
+              oninput="this.value = this.value.toUpperCase()"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="displayData()"
+              (click)="displayChart()"
+              [disabled]="searchForm.invalid"
+            >
+              Search
+            </button>
+          </form>
+          <p
+            class="error"
+            *ngIf="searchForm.get('stockSymbol')?.hasError('maxlength')"
+          >
+            Stock Symbol should have min 1 to 4 characters 📢
+          </p>
+          <div>
+            <h1 class="ticker__element text-center fw-normal fs-2 p-2">
+              {{ symbol || "TICKER" }}
+            </h1>
+            <hr />
+            <h1 class="cap__element text-center fw-normal fs-2">
+              {{ capitalization }} cap
+            </h1>
+          </div>
         </div>
-      </div>
 
-      <div class="card card__content">
-        <table class="table table-bordered text-start text-center mb-0">
-          <thead class="bg-light">
-            <tr class="text_size">
-              <th scope="col">Year</th>
-              <th scope="col">Inventory</th>
-              <th scope="col">Cost of Goods Sold</th>
-              <th scope="col">Revenue</th>
-              <th scope="col">Receivables</th>
-              <th scope="col">Accounts Payable</th>
-            </tr>
-          </thead>
-          <tbody class="text_size">
-            <tr>
-              <td class="text-center">
-                <p *ngFor="let data of date">
-                  {{ data | slice : 0 : 4 }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of inventory">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of cogs">{{ data | number : "1.0-2" }}</p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of revenue">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of receivables">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of accountsPayable">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="d-flex mt-3">
-      <div class="card me-3">
-        <div echarts [options]="barChart" class="bar__chart"></div>
-      </div>
-      <div class="card">
-        <div echarts [options]="lineChart" class="line__chart"></div>
-      </div>
-    </div>
-
-    <div class="d-flex mt-3 mb-3">
-      <div class="card__analysis card flex-column text-start text-center">
-        <div class="analysis">
-          <table class="table__results table table-bordered mb-0 rounded-top">
+        <div class="card card__content">
+          <table class="table table-bordered text-start text-center mb-0">
             <thead class="bg-light">
               <tr class="text_size">
-                <th scope="col">Indicator</th>
-                <th scope="col">Formula</th>
-                <th *ngFor="let data of date.reverse()" scope="col">
-                  {{ data | slice : 0 : 4 }}
-                </th>
+                <th scope="col">Year</th>
+                <th scope="col">Inventory</th>
+                <th scope="col">Cost of Goods Sold</th>
+                <th scope="col">Revenue</th>
+                <th scope="col">Receivables</th>
+                <th scope="col">Accounts Payable</th>
               </tr>
             </thead>
             <tbody class="text_size">
               <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Termenul mediu de stocare"
-                  >
-                  </i>
-                  Days Inventory Outstanding (DIO)
+                <td class="text-center">
+                  <p *ngFor="let data of date">
+                    {{ data | slice : 0 : 4 }}
+                  </p>
                 </td>
-                <td>(Inventory / Cogs) * 365</td>
-                <td *ngFor="let data of DIO.reverse()">
-                  {{ data | number : "1.0-0" }} days
+                <td class="text-center">
+                  <p *ngFor="let data of inventory">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-              </tr>
-              <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Termenul mediu de incasare a creantelor"
-                  >
-                  </i>
-                  Days Sales Outstanding (DSO)
+                <td class="text-center">
+                  <p *ngFor="let data of cogs">{{ data | number : "1.0-2" }}</p>
                 </td>
-                <td>(Rceivables / Revenue) * 365</td>
-                <td *ngFor="let data of DSO.reverse()">
-                  {{ data | number : "1.0-0" }} days
+                <td class="text-center">
+                  <p *ngFor="let data of revenue">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-              </tr>
-              <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Termenul mediu de plata a datoriilor comerciale"
-                  >
-                  </i>
-                  Days Payable Outstanding (DPO)
+                <td class="text-center">
+                  <p *ngFor="let data of receivables">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-                <td>(Accounts Payable / Cogs) * 365</td>
-                <td *ngFor="let data of DPO.reverse()">
-                  {{ data | number : "1.0-0" }} days
-                </td>
-              </tr>
-              <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Cate zile pe an se invartesc banii in companie"
-                  >
-                  </i>
-                  Cash Conversion Cycle (CCC)
-                </td>
-                <td>DIO + DSO - DPO</td>
-                <td *ngFor="let data of CCC.reverse()">
-                  {{ data | number : "1.0-0" }} days
+                <td class="text-center">
+                  <p *ngFor="let data of accountsPayable">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <div class="d-flex mt-3">
+        <div class="card me-3">
+          <div echarts [options]="barChart" class="bar__chart"></div>
+        </div>
+        <div class="card">
+          <div echarts [options]="lineChart" class="line__chart"></div>
+        </div>
+      </div>
+
+      <div class="d-flex mt-3 mb-3">
+        <div class="card__analysis card flex-column text-start text-center">
+          <div class="analysis">
+            <table class="table__results table table-bordered mb-0 rounded-top">
+              <thead class="bg-light">
+                <tr class="text_size">
+                  <th scope="col">Indicator</th>
+                  <th scope="col">Formula</th>
+                  <th *ngFor="let data of date.reverse()" scope="col">
+                    {{ data | slice : 0 : 4 }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="text_size">
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Termenul mediu de stocare"
+                    >
+                    </i>
+                    Days Inventory Outstanding (DIO)
+                  </td>
+                  <td>(Inventory / Cogs) * 365</td>
+                  <td *ngFor="let data of DIO.reverse()">
+                    {{ data | number : "1.0-0" }} days
+                  </td>
+                </tr>
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Termenul mediu de incasare a creantelor"
+                    >
+                    </i>
+                    Days Sales Outstanding (DSO)
+                  </td>
+                  <td>(Rceivables / Revenue) * 365</td>
+                  <td *ngFor="let data of DSO.reverse()">
+                    {{ data | number : "1.0-0" }} days
+                  </td>
+                </tr>
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Termenul mediu de plata a datoriilor comerciale"
+                    >
+                    </i>
+                    Days Payable Outstanding (DPO)
+                  </td>
+                  <td>(Accounts Payable / Cogs) * 365</td>
+                  <td *ngFor="let data of DPO.reverse()">
+                    {{ data | number : "1.0-0" }} days
+                  </td>
+                </tr>
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Cate zile pe an se invartesc banii in companie"
+                    >
+                    </i>
+                    Cash Conversion Cycle (CCC)
+                  </td>
+                  <td>DIO + DSO - DPO</td>
+                  <td *ngFor="let data of CCC.reverse()">
+                    {{ data | number : "1.0-0" }} days
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div echarts [options]="candlesChart" class="candles__chart"></div>
     </div>
   </div>
 </main>

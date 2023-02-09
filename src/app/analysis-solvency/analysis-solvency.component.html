@@ -15,181 +15,188 @@
       <app-trade></app-trade
     ></span>
   </div>
-  <div class="d-flex row" id="analysis">
-    <div class="d-flex">
-      <div class="card me-3 search__content">
-        <form
-          class="input-group input-group-sm p-2"
-          [formGroup]="searchForm"
-          (ngSubmit)="displayData()"
-        >
-          <input
-            type="text"
-            class="input form-control"
-            placeholder="Stock name..."
-            formControlName="stockSymbol"
-            oninput="this.value = this.value.toUpperCase()"
-          />
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="displayData()"
-            [disabled]="searchForm.invalid"
+  <div id="analysis">
+    <div class="d-flex row">
+      <div class="d-flex">
+        <div class="card me-3 search__content">
+          <form
+            class="input-group input-group-sm p-2"
+            [formGroup]="searchForm"
+            (ngSubmit)="displayData()"
+            (ngSubmit)="displayChart()"
           >
-            Search
-          </button>
-        </form>
-        <p
-          class="error"
-          *ngIf="searchForm.get('stockSymbol')?.hasError('maxlength')"
-        >
-          Stock Symbol should have min 1 to 4 characters 📢
-        </p>
-        <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-          {{ symbol || "TICKER" }}
-        </h1>
-        <hr />
-        <h1 class="cap__element text-center fw-normal fs-2">
-          {{ capitalization }} cap
-        </h1>
-      </div>
-      <div class="card card__content">
-        <table class="table table-bordered text-start text-center mb-0">
-          <thead class="bg-light">
-            <tr class="text_size">
-              <th scope="col">Year</th>
-              <th scope="col">Total Assets</th>
-              <th scope="col">Total Liabilities</th>
-              <th scope="col">Current Liabilities</th>
-              <th scope="col">Long Term Liabilities</th>
-              <th scope="col">Share Holder Equity</th>
-            </tr>
-          </thead>
-          <tbody class="text_size">
-            <tr>
-              <td class="text-center">
-                <p *ngFor="let data of date">
-                  {{ data | slice : 0 : 4 }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of totalAssets">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of totalLiabilities">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of totalCurrLiabilities">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of totalLongLiabilities">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-              <td class="text-center">
-                <p *ngFor="let data of shareHolderEquity">
-                  {{ data | number : "1.0-2" }}
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="d-flex mt-3">
-      <div class="card me-3">
-        <div echarts [options]="barChart" class="bar__chart"></div>
-      </div>
-      <div class="card">
-        <div echarts [options]="lineChart" class="line__chart"></div>
-      </div>
-    </div>
-
-    <div class="d-flex mt-3 mb-3">
-      <div class="card__analysis card flex-column text-start text-center">
-        <div class="analysis">
-          <table class="table__results table table-bordered mb-0 rounded-top">
+            <input
+              type="text"
+              class="input form-control"
+              placeholder="Stock name..."
+              formControlName="stockSymbol"
+              oninput="this.value = this.value.toUpperCase()"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="displayData()"
+              (click)="displayChart()"
+              [disabled]="searchForm.invalid"
+            >
+              Search
+            </button>
+          </form>
+          <p
+            class="error"
+            *ngIf="searchForm.get('stockSymbol')?.hasError('maxlength')"
+          >
+            Stock Symbol should have min 1 to 4 characters 📢
+          </p>
+          <h1 class="ticker__element text-center fw-normal fs-2 p-2">
+            {{ symbol || "TICKER" }}
+          </h1>
+          <hr />
+          <h1 class="cap__element text-center fw-normal fs-2">
+            {{ capitalization }} cap
+          </h1>
+        </div>
+        <div class="card card__content">
+          <table class="table table-bordered text-start text-center mb-0">
             <thead class="bg-light">
               <tr class="text_size">
-                <th scope="col">Indicator</th>
-                <th scope="col">Formula</th>
-                <th *ngFor="let data of date.reverse()" scope="col">
-                  {{ data | slice : 0 : 4 }}
-                </th>
+                <th scope="col">Year</th>
+                <th scope="col">Total Assets</th>
+                <th scope="col">Total Liabilities</th>
+                <th scope="col">Current Liabilities</th>
+                <th scope="col">Long Term Liabilities</th>
+                <th scope="col">Share Holder Equity</th>
               </tr>
             </thead>
             <tbody class="text_size">
               <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Capacitatea activelor rămase după achitarea datoriilor curente"
-                  >
-                  </i>
-                  Solvency Ratio (RS)
+                <td class="text-center">
+                  <p *ngFor="let data of date">
+                    {{ data | slice : 0 : 4 }}
+                  </p>
                 </td>
-                <td>(Tot Assets - Curr Liab) / Long Liab * 100</td>
-                <td *ngFor="let data of RS.reverse()">
-                  {{ data / 100 | percent : "1.0-2" }}
+                <td class="text-center">
+                  <p *ngFor="let data of totalAssets">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-              </tr>
-              <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Rata de finanțare a activelor din surse externe"
-                  >
-                  </i>
-                  Debt To Assets Ratio (DAR)
+                <td class="text-center">
+                  <p *ngFor="let data of totalLiabilities">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-                <td>(Total Liabilities / Total Assets) * 100</td>
-                <td *ngFor="let data of DAR.reverse()">
-                  {{ data / 100 | percent : "1.0-2" }}
+                <td class="text-center">
+                  <p *ngFor="let data of totalCurrLiabilities">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-              </tr>
-              <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Levierul financiar, gradul de indatorare"
-                  >
-                  </i>
-                  Debt To Equity Ratio (DER)
+                <td class="text-center">
+                  <p *ngFor="let data of totalLongLiabilities">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
-                <td>(Total Liabilities / Share Holder Equity) * 100</td>
-                <td *ngFor="let data of DER.reverse()">
-                  {{ data / 100 | percent : "1.0-2" }}
-                </td>
-              </tr>
-              <tr>
-                <td class="indicators">
-                  <i
-                    class="bi bi-info-square"
-                    placement="top"
-                    ngbTooltip="Rata de finanțare a activelor din surse proprii"
-                  >
-                  </i>
-                  Equity To Assets Ratio (EAR)
-                </td>
-                <td>(Share Holder Equity / Total Assets) * 100</td>
-                <td *ngFor="let data of EAR.reverse()">
-                  {{ data / 100 | percent : "1.0-2" }}
+                <td class="text-center">
+                  <p *ngFor="let data of shareHolderEquity">
+                    {{ data | number : "1.0-2" }}
+                  </p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <div class="d-flex mt-3">
+        <div class="card me-3">
+          <div echarts [options]="barChart" class="bar__chart"></div>
+        </div>
+        <div class="card">
+          <div echarts [options]="lineChart" class="line__chart"></div>
+        </div>
+      </div>
+
+      <div class="d-flex mt-3 mb-3">
+        <div class="card__analysis card flex-column text-start text-center">
+          <div class="analysis">
+            <table class="table__results table table-bordered mb-0 rounded-top">
+              <thead class="bg-light">
+                <tr class="text_size">
+                  <th scope="col">Indicator</th>
+                  <th scope="col">Formula</th>
+                  <th *ngFor="let data of date.reverse()" scope="col">
+                    {{ data | slice : 0 : 4 }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="text_size">
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Capacitatea activelor rămase după achitarea datoriilor curente"
+                    >
+                    </i>
+                    Solvency Ratio (RS)
+                  </td>
+                  <td>(Tot Assets - Curr Liab) / Long Liab * 100</td>
+                  <td *ngFor="let data of RS.reverse()">
+                    {{ data / 100 | percent : "1.0-2" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Rata de finanțare a activelor din surse externe"
+                    >
+                    </i>
+                    Debt To Assets Ratio (DAR)
+                  </td>
+                  <td>(Total Liabilities / Total Assets) * 100</td>
+                  <td *ngFor="let data of DAR.reverse()">
+                    {{ data / 100 | percent : "1.0-2" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Levierul financiar, gradul de indatorare"
+                    >
+                    </i>
+                    Debt To Equity Ratio (DER)
+                  </td>
+                  <td>(Total Liabilities / Share Holder Equity) * 100</td>
+                  <td *ngFor="let data of DER.reverse()">
+                    {{ data / 100 | percent : "1.0-2" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="indicators">
+                    <i
+                      class="bi bi-info-square"
+                      placement="top"
+                      ngbTooltip="Rata de finanțare a activelor din surse proprii"
+                    >
+                    </i>
+                    Equity To Assets Ratio (EAR)
+                  </td>
+                  <td>(Share Holder Equity / Total Assets) * 100</td>
+                  <td *ngFor="let data of EAR.reverse()">
+                    {{ data / 100 | percent : "1.0-2" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div echarts [options]="candlesChart" class="candles__chart"></div>
     </div>
   </div>
 </main>

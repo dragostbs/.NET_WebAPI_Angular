@@ -7,15 +7,15 @@ import { AnalysisPositionComponent } from './analysis-position/analysis-position
 import { AnalysisSolvencyComponent } from './analysis-solvency/analysis-solvency.component';
 import { LoginComponent } from './authenticate/login/login.component';
 import { RegisterComponent } from './authenticate/register/register.component';
-import { ChartComponent } from './charts/chart.component';
 import { DiscoverComponent } from './discover/discover.component';
+import { HomeComponent } from './home/home.component';
 import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'login/register', component: RegisterComponent },
-  { path: 'chart', component: ChartComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'discover', component: DiscoverComponent },
   { path: 'reports', component: ReportsComponent },
   { path: 'analysisCash', component: AnalysisCCCComponent },
