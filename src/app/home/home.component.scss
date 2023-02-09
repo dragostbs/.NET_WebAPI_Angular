@@ -8,3 +8,37 @@
   transform: translate(-50%, -50%);
   z-index: 99;
 }
+
+.image-background {
+  height: 31rem;
+  width: 72rem;
+  object-fit: cover;
+}
+
+.description__analysis {
+  width: 560px;
+  height: 270px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: xx-large;
+  display: flex;
+  justify-content: center;
+  background-color: #f7f7f7;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 5px;
+}
+
+hr {
+  margin: -0.5rem 0 !important;
+}
+
+li {
+  margin-top: 1rem !important;
+}
+
+.list__info {
+  color: #686363;
+}
