@@ -20,7 +20,7 @@ export class TradeComponent implements OnInit {
   ngOnInit(): void {
     this.transactionForm = this.fb.group({
       result: ['Buy', [Validators.required]],
-      date: [new Date()],
+      date: [new Date().toISOString(), [Validators.required]],
       stock: this.fb.group({
         symbol: ['', [Validators.required, Validators.maxLength(10)]],
         price: [
@@ -32,6 +32,7 @@ export class TradeComponent implements OnInit {
   }
 
   submitTransaction() {
+    console.log(this.transactionForm.value);
     // POST to database
     this.service
       .addTransactions(this.transactionForm.value)
@@ -45,13 +46,13 @@ export class TradeComponent implements OnInit {
           if (showSuccess) {
             showSuccess.style.display = 'none';
           }
-        }, 5000);
+        }, 4000);
 
         // Call the function to get all the data once submitted from the form using service and inject
         this.reportComponent.callAllDataTransactions();
         this.transactionForm.reset({
           result: 'Buy',
-          date: '',
+          date: new Date().toISOString(),
           stock: {
             symbol: '',
             price: '0.1',

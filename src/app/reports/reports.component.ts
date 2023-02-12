@@ -86,7 +86,7 @@ export class ReportsComponent implements OnInit {
         if (showRemove) {
           showRemove.style.display = 'none';
         }
-      }, 5000);
+      }, 4000);
 
       this.transactions$ = this.service.getTransactionsList();
     });
