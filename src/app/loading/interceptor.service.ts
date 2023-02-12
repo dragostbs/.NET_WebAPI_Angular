@@ -1,4 +1,5 @@
 import {
+  HttpContextToken,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -7,6 +8,8 @@ import {
 import { Injectable } from '@angular/core';
 import { finalize, Observable } from 'rxjs';
 import { LoadService } from './load.service';
+
+export const BYPASS_INTERCEPTOR = new HttpContextToken(() => false);
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +21,13 @@ export class InterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    if (req.context.get(BYPASS_INTERCEPTOR) === true) return next.handle(req);
+
     this.loadingService.isLoading.next(true);
 
     return next.handle(req).pipe(
       finalize(() => {
-        setTimeout(() => {
-          this.loadingService.isLoading.next(false);
-        }, 2000);
+        this.loadingService.isLoading.next(false);
       })
     );
   }

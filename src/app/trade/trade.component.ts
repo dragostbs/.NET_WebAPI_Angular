@@ -38,21 +38,24 @@ export class TradeComponent implements OnInit {
       .subscribe((res) => {
         // Show success message
         const showSuccess = document.getElementById('add-success-alert');
-
         if (showSuccess) {
           showSuccess.style.display = 'block';
         }
-
         setTimeout(() => {
           if (showSuccess) {
             showSuccess.style.display = 'none';
           }
-        }, 6000);
+        }, 5000);
 
         // Call the function to get all the data once submitted from the form using service and inject
         this.reportComponent.callAllDataTransactions();
         this.transactionForm.reset({
           result: 'Buy',
+          date: '',
+          stock: {
+            symbol: '',
+            price: '0.1',
+          },
         });
       });
   }

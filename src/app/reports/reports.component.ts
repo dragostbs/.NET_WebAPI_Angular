@@ -1,6 +1,6 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts/types/dist/echarts';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { ChartsService } from '../services/charts.service';
@@ -15,6 +15,8 @@ import { CrudApiService } from '../services/crud-api.service';
   styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+  sortOrder: boolean = true;
+
   transactions$!: Observable<any[]>;
   loadingElement: EChartsOption = {};
 
@@ -35,7 +37,22 @@ export class ReportsComponent implements OnInit {
     this.StocksDataMap();
 
     this.loadingElement = this.charts.loadingElement();
+
     this.loadingEffect();
+  }
+
+  sortTable(key: string) {
+    this.sortOrder = !this.sortOrder;
+    this.transactions$.subscribe((transactions) => {
+      transactions.sort((a, b) => {
+        if (this.sortOrder) {
+          return a[key] > b[key] ? 1 : -1;
+        } else {
+          return b[key] > a[key] ? 1 : -1;
+        }
+      });
+      this.transactions$ = of(transactions);
+    });
   }
 
   savePDF() {
@@ -44,7 +61,6 @@ export class ReportsComponent implements OnInit {
 
   // GET data from API
   StocksDataMap() {
-    this.loadingEffect();
     this.service.getStocksList().subscribe((data) => {
       // assign the data to stockList variable
       this.stockList = data;
@@ -58,7 +74,6 @@ export class ReportsComponent implements OnInit {
   }
 
   removeTransactions(transaction: any) {
-    this.loadingEffect();
     this.service.deleteTransactions(transaction.id).subscribe((data) => {
       // Show success message
       const showRemove = document.getElementById('add-remove-alert');
@@ -71,7 +86,7 @@ export class ReportsComponent implements OnInit {
         if (showRemove) {
           showRemove.style.display = 'none';
         }
-      }, 6000);
+      }, 5000);
 
       this.transactions$ = this.service.getTransactionsList();
     });
@@ -86,9 +101,13 @@ export class ReportsComponent implements OnInit {
   loadingEffect() {
     const main = document.getElementById('main');
     if (main) {
+      setTimeout(() => {
+        this.loadingService.isLoading.next(true);
+      }, 100);
       main.style.display = 'none';
     }
     setTimeout(() => {
+      this.loadingService.isLoading.next(false);
       if (main) {
         main.style.display = 'block';
       }

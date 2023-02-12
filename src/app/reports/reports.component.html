@@ -22,11 +22,11 @@
     <table class="table mb-0">
       <thead class="report__head bg-light">
         <tr class="rounded-top">
-          <th scope="col">Id</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Result</th>
-          <th scope="col">Price</th>
-          <th scope="col">Date</th>
+          <th scope="col"><p (click)="sortTable('id')">Id</p></th>
+          <th scope="col"><p (click)="sortTable('stock')">Stock</p></th>
+          <th scope="col"><p (click)="sortTable('result')">Result</p></th>
+          <th scope="col"><p (click)="sortTable('price')">Price</p></th>
+          <th scope="col"><p (click)="sortTable('date')">Date</p></th>
           <th scope="col">Actions</th>
         </tr>
       </thead>

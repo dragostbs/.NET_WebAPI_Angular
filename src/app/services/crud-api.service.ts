@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { BYPASS_INTERCEPTOR } from '../loading/interceptor.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,18 +13,17 @@ export class CrudApiService {
 
   // Transactions
   getTransactionsList(): Observable<any[]> {
-    return this.http.get<any>(
-      this.financialsAPIUrl + '/transactions',
-      this.getToken()
-    );
+    return this.http.get<any>(this.financialsAPIUrl + '/transactions', {
+      context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
+      ...this.getToken(),
+    });
   }
 
   addTransactions(data: any) {
-    return this.http.post(
-      this.financialsAPIUrl + '/transactions',
-      data,
-      this.getToken()
-    );
+    return this.http.post(this.financialsAPIUrl + '/transactions', data, {
+      context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
+      ...this.getToken(),
+    });
   }
 
   updateTransactions(id: number | string, data: any) {
@@ -35,10 +35,10 @@ export class CrudApiService {
   }
 
   deleteTransactions(id: number | string) {
-    return this.http.delete(
-      this.financialsAPIUrl + `/transactions/${id}`,
-      this.getToken()
-    );
+    return this.http.delete(this.financialsAPIUrl + `/transactions/${id}`, {
+      context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
+      ...this.getToken(),
+    });
   }
 
   // Adding the token once logged in, withou it we can't use the transaction methods
