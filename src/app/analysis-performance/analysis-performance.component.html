@@ -129,14 +129,18 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Profitabilitatea companiei in raport cu activele sale totale"
+                      ngbTooltip="Profitabilitatea companiei in raport cu activele sale totale (Best ROA > 5%)"
                     >
                     </i>
                     Return On Assets (ROA)
                   </td>
                   <td>(Net Income / Total Assets) * 100</td>
                   <td *ngFor="let data of ROA.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="data < 5 ? 'red_indicator' : 'green_indicator'"
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -144,14 +148,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Capacitatea companiei de a transforma finanțarea prin capital propriu in profit"
+                      ngbTooltip="Capacitatea companiei de a transforma finanțarea prin capital propriu in profit (Best ROE > 15%)"
                     >
                     </i>
                     Return On Equity (ROE)
                   </td>
                   <td>(Net Income / Share Holder Equity) * 100</td>
                   <td *ngFor="let data of ROE.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="
+                        data < 15 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -159,14 +169,18 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Perspectiva asupra a cat de mult profit este realizat pe dolar de vanzari"
+                      ngbTooltip="Perspectiva asupra a cat de mult profit este realizat pe dolar de vanzari (Best ROS > 5%)"
                     >
                     </i>
                     Return On Sales (ROS)
                   </td>
                   <td>(Net Income / Revenue) * 100</td>
                   <td *ngFor="let data of ROS.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="data < 5 ? 'red_indicator' : 'green_indicator'"
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -175,14 +189,18 @@
                       class="bi bi-info-square"
                       placement="top"
                       ngbTooltip="
-                    De cate ori activele sunt transformate in vanzari intr-o anumita perioada de timp"
+                    De cate ori activele sunt transformate in vanzari intr-o anumita perioada de timp (Best ATR - aproape de 1 si mai mare)"
                     >
                     </i>
                     Assets Turnover Ratio
                   </td>
                   <td>Revenue / Total Assets</td>
                   <td *ngFor="let data of VRA.reverse()">
-                    {{ data | number : "1.0-2" }}
+                    <p
+                      [ngClass]="data < 1 ? 'red_indicator' : 'green_indicator'"
+                    >
+                      {{ data | number : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -197,7 +215,9 @@
                   </td>
                   <td>Total Assets / Share Holder Equity</td>
                   <td *ngFor="let data of AER.reverse()">
-                    {{ data | number : "1.0-2" }}
+                    <p class="neutral_indicator">
+                      {{ data | number : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
               </tbody>

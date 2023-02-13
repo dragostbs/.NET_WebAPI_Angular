@@ -63,10 +63,22 @@
   margin-bottom: 0 !important;
 }
 
-.imortant_indicator {
+.red_indicator {
   background-color: salmon;
-  margin-left: 139px;
-  margin-right: 139px;
+  display: inline-block;
+  width: 3rem;
+}
+
+.green_indicator {
+  background-color: rgb(114, 250, 114);
+  display: inline-block;
+  width: 3rem;
+}
+
+.neutral_indicator {
+  background-color: rgb(114, 193, 250);
+  display: inline-block;
+  width: 3rem;
 }
 
 .text_size {

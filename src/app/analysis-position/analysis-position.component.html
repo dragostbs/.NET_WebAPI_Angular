@@ -129,14 +129,18 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Cat de eficient compania foloseste activele pentru a genera fluxuri de numerar operationale"
+                      ngbTooltip="Cat de eficient compania foloseste activele pentru a genera fluxuri de numerar operationale (Best CFROA > 5%)"
                     >
                     </i>
                     Cash Return On Assets (CFROA)
                   </td>
                   <td>(Net Cash Flow / Total Assets) * 100</td>
                   <td *ngFor="let data of CFROA.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="data < 5 ? 'red_indicator' : 'green_indicator'"
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -144,14 +148,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Cat de eficient compania foloseste investitiile pentru a genera fluxuri de numerar operationale"
+                      ngbTooltip="Cat de eficient compania foloseste investitiile pentru a genera fluxuri de numerar operationale (Best CFROE > 15%)"
                     >
                     </i>
                     Cash Return On Equity (CFROE)
                   </td>
                   <td>(Net Cash Flow / Share Holder Equity) * 100</td>
                   <td *ngFor="let data of CFROE.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="
+                        data < 15 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -159,14 +169,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Cat de eficient compania vinde pentru a genera fluxuri de numerar operationale"
+                      ngbTooltip="Cat de eficient compania vinde pentru a genera fluxuri de numerar operationale (Best CFROS > 10%)"
                     >
                     </i>
                     Cash Return On Revenue (CFROS)
                   </td>
                   <td>(Net Cash Flow / Revenue) * 100</td>
                   <td *ngFor="let data of CFROS.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="
+                        data < 10 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
               </tbody>

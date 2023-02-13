@@ -147,14 +147,22 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Capacitatea activelor curente de a se transforma in disponibilitati banesti"
+                      ngbTooltip="Capacitatea activelor curente de a se transforma in disponibilitati banesti (150% > Best RLC < 250%)"
                     >
                     </i>
                     Current ratio (RLC)
                   </td>
                   <td>(Assets / Liabilities) * 100</td>
                   <td *ngFor="let data of RLC.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="
+                        data < 150 || data > 250
+                          ? 'red_indicator'
+                          : 'green_indicator'
+                      "
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -162,14 +170,22 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Capacitatea activelor curente de a participa la finantarea datoriilor curente"
+                      ngbTooltip="Capacitatea activelor curente de a participa la finantarea datoriilor curente (50% > Best RLI < 100%)"
                     >
                     </i>
                     Quick Ratio (RLI)
                   </td>
                   <td>(Assets - Inventory) / Liabilities * 100</td>
                   <td *ngFor="let data of RLI.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="
+                        data < 50 || data > 100
+                          ? 'red_indicator'
+                          : 'green_indicator'
+                      "
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -177,14 +193,22 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Gradul în care disponibilităților bănești acoperă plățile curente"
+                      ngbTooltip="Gradul în care disponibilităților bănești acoperă plățile curente (50% > Best RLE < 100%)"
                     >
                     </i>
                     Cash Ratio (RLE)
                   </td>
                   <td>(Treasury / Liabilities) * 100</td>
                   <td *ngFor="let data of RLE.reverse()">
-                    {{ data / 100 | percent : "1.0-2" }}
+                    <p
+                      [ngClass]="
+                        data < 50 || data > 100
+                          ? 'red_indicator'
+                          : 'green_indicator'
+                      "
+                    >
+                      {{ data / 100 | percent : "1.0-2" }}
+                    </p>
                   </td>
                 </tr>
               </tbody>

@@ -135,14 +135,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Termenul mediu de stocare"
+                      ngbTooltip="Termenul mediu de stocare (Best DIO < 40 days)"
                     >
                     </i>
                     Days Inventory Outstanding (DIO)
                   </td>
                   <td>(Inventory / Cogs) * 365</td>
                   <td *ngFor="let data of DIO.reverse()">
-                    {{ data | number : "1.0-0" }} days
+                    <p
+                      [ngClass]="
+                        data > 40 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data | number : "1.0-0" }} days
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -150,14 +156,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Termenul mediu de incasare a creantelor"
+                      ngbTooltip="Termenul mediu de incasare a creantelor (Best DSO < 60 days)"
                     >
                     </i>
                     Days Sales Outstanding (DSO)
                   </td>
                   <td>(Rceivables / Revenue) * 365</td>
                   <td *ngFor="let data of DSO.reverse()">
-                    {{ data | number : "1.0-0" }} days
+                    <p
+                      [ngClass]="
+                        data > 60 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data | number : "1.0-0" }} days
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -165,14 +177,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Termenul mediu de plata a datoriilor comerciale"
+                      ngbTooltip="Termenul mediu de plata a datoriilor comerciale (Best DPO < 45 days)"
                     >
                     </i>
                     Days Payable Outstanding (DPO)
                   </td>
                   <td>(Accounts Payable / Cogs) * 365</td>
                   <td *ngFor="let data of DPO.reverse()">
-                    {{ data | number : "1.0-0" }} days
+                    <p
+                      [ngClass]="
+                        data > 45 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data | number : "1.0-0" }} days
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -180,14 +198,20 @@
                     <i
                       class="bi bi-info-square"
                       placement="top"
-                      ngbTooltip="Cate zile pe an se invartesc banii in companie"
+                      ngbTooltip="Cate zile pe an se invartesc banii in companie (Best CCC < 45 days)"
                     >
                     </i>
                     Cash Conversion Cycle (CCC)
                   </td>
                   <td>DIO + DSO - DPO</td>
                   <td *ngFor="let data of CCC.reverse()">
-                    {{ data | number : "1.0-0" }} days
+                    <p
+                      [ngClass]="
+                        data > 45 ? 'red_indicator' : 'green_indicator'
+                      "
+                    >
+                      {{ data | number : "1.0-0" }} days
+                    </p>
                   </td>
                 </tr>
               </tbody>
