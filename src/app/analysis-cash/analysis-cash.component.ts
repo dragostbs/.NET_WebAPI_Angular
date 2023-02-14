@@ -10,11 +10,11 @@ import { CandlesApiService } from '../services/candles-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
 
 @Component({
-  selector: 'app-analysis-ccc',
-  templateUrl: './analysis-ccc.component.html',
-  styleUrls: ['./analysis-ccc.component.scss'],
+  selector: 'app-analysis-cash',
+  templateUrl: './analysis-cash.component.html',
+  styleUrls: ['./analysis-cash.component.scss'],
 })
-export class AnalysisCCCComponent implements OnInit {
+export class AnalysisCashComponent implements OnInit {
   searchForm!: FormGroup;
   barChart: EChartsOption = {};
   lineChart: EChartsOption = {};
