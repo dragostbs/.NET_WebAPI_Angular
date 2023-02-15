@@ -1,4 +1,4 @@
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2 text_size" id="main">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
@@ -19,40 +19,247 @@
       <div class="description__analysis">
         <h3 class="title text-center">Fundamental Analysis</h3>
         <hr />
-        <ul class="list__info mt-3 px-md-5">
-          <li>
-            Fundamental analysis evaluates stocks by attempting to measure their
-            intrinsic value.
-          </li>
-          <li>
-            The main focus is the overall economy and industry conditions to the
-            financial strength and management of companies.
-          </li>
-          <li>
-            Earnings, expenses, assets, and liabilities all come under scrutiny
-            by fundamental analysts.
-          </li>
-        </ul>
+        <div class="list__info mt-4 px-md-5">
+          <div class="d-flex">
+            <i class="bi bi-exclamation-square"></i>
+            <p>
+              Fundamental analysis evaluates stocks by attempting to measure
+              their intrinsic value.
+            </p>
+          </div>
+          <div class="d-flex">
+            <i class="bi bi-exclamation-square"></i>
+            <p>
+              The main focus is the overall economy and industry conditions to
+              the financial strength and management of companies.
+            </p>
+          </div>
+          <div class="d-flex">
+            <i class="bi bi-exclamation-square"></i>
+            <p>
+              Earnings, expenses, assets, and liabilities all come under
+              scrutiny by fundamental analysts which looks into to find
+              opportunities.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="card">
       <div class="description__analysis">
         <h3 class="title text-center">Technical Analysis</h3>
         <hr />
-        <ul class="list__info mt-3 px-md-5">
-          <li>
-            Technical analysis evaluates statistical trends, such as movements
-            in a stock's price and volume.
-          </li>
-          <li>
-            The main focus is the stock charts to identify patterns and trends
-            that suggest what a stock will do in the future.
-          </li>
-          <li>
-            Multiple indicators are used to identify patterns and trends in the
-            stock charts.
-          </li>
+        <ul class="list__info mt-4 px-md-5">
+          <div class="d-flex">
+            <i class="bi bi-exclamation-square"></i>
+            <p>
+              Technical analysis evaluates statistical trends, such as movements
+              in a stock's price and volume.
+            </p>
+          </div>
+          <div class="d-flex">
+            <i class="bi bi-exclamation-square"></i>
+            <p>
+              The main focus is the stock charts to identify patterns and trends
+              that suggest what a stock will do in the future.
+            </p>
+          </div>
+          <div class="d-flex">
+            <i class="bi bi-exclamation-square"></i>
+            <p>
+              Multiple indicators are used to identify patterns and trends in
+              the stock charts.
+            </p>
+          </div>
         </ul>
+      </div>
+    </div>
+  </div>
+  <div class="analysis__cards justify-content-between mb-2">
+    <div class="card card__analysis">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="me-4">
+            <h5 class="card-title">
+              <i class="bi bi-cash me-2"></i>
+              Cash
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted fw-lighter">
+              Cash Conversion Cycle Analysis
+            </h6>
+            <div class="analysis__indicators text-center mt-3">
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>DIO - Days Inventory Outstanding</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>DPO - Days Sales Outstanding</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>DSO - Days Payable Outstanding</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>CCC - Cash Conversion Cycle</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card__analysis">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="me-4">
+            <h5 class="card-title">
+              <i class="bi bi-clipboard2-pulse me-2"></i>
+              Liquidity
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted fw-lighter">
+              Liquidity Analysis, Ability to Pay Bills in Time
+            </h6>
+            <div class="analysis__indicators text-center mt-3">
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>RLC - Current ratio</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>RLI - Quik Ratio</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>RLE - Cash Ratio</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card__analysis">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="me-4">
+            <h5 class="card-title">
+              <i class="bi bi-bank me-2"></i>
+              Solvency
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted fw-lighter">
+              Solvency Analysis, Profitability vs Obligations
+            </h6>
+            <div class="analysis__indicators text-center mt-3">
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>RS - Solvency Ratio</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>DAR - Debt To Assets Ratio</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>DER - Debt To Equity Ratio</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>EAR - Equity To Assets Ratio</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card__analysis">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="me-4">
+            <h5 class="card-title">
+              <i class="bi bi-graph-up-arrow me-2"></i>
+              Performance
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted fw-lighter">
+              Financial Performance Analysis
+            </h6>
+            <div class="analysis__indicators text-center mt-3">
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>ROA - Return On Assets</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>ROE - Return On Equity</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>ROS - Return On Sales</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>ATR - Assets Turnover Ratio</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>AER - Equity Multiplier</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card__analysis">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="me-4">
+            <h5 class="card-title">
+              <i class="bi bi-signpost-split me-2"></i>
+              Position
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted fw-lighter">
+              Changes in Financial Position Analysis
+            </h6>
+            <div class="analysis__indicators text-center mt-3">
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>CFROA - Cash Return On Assets</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>CFROE - Cash Return On Equity</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>CFROS - Cash Return On Revenue</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card__analysis">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="me-4">
+            <h5 class="card-title">
+              <i class="bi bi-shield-exclamation me-2"></i>
+              Risk
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted fw-lighter">
+              Risk Of Bankruptcy Analysis
+            </h6>
+            <div class="analysis__indicators text-center mt-3">
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>A,B,C,D,E - Financial ratios based mostly on Assets</p>
+              </div>
+              <div class="card-text d-flex fw-lighter">
+                <i class="bi bi-arrow-return-right"></i>
+                <p>Altman Z Score - Bankruptcy Score</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
