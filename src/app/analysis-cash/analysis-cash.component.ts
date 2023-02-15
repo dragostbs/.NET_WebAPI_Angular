@@ -73,45 +73,38 @@ export class AnalysisCashComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
-          // Destruct Data
-          let { symbol }: any = data;
-
-          let {
-            summaryDetail: { marketCap },
-          }: any = data;
-
-          let {
-            timeSeries: { annualInventory },
-          }: any = data;
-
-          let {
-            incomeStatementHistory: { incomeStatementHistory },
-          }: any = data;
-
-          let {
-            balanceSheetHistory: { balanceSheetStatements },
-          }: any = data;
-
-          let {
-            timeSeries: { annualAccountsPayable },
-          }: any = data;
-
-          // Reversing values
-          annualInventory.reverse();
-          annualAccountsPayable.reverse();
-
-          // Check if there is enough data to analyze
-          if (annualInventory.length < 4) {
-            alert('🌋 Insufficient data to analyse the stock !!!');
-            this.router.navigate(['/analysisCash']);
-            location.reload();
-          }
-
-          // Push values
-          this.symbol = symbol;
-          this.capitalization = marketCap.fmt;
-
           try {
+            // Destruct Data
+            let { symbol }: any = data;
+
+            let {
+              summaryDetail: { marketCap },
+            }: any = data;
+
+            let {
+              timeSeries: { annualInventory },
+            }: any = data;
+
+            let {
+              incomeStatementHistory: { incomeStatementHistory },
+            }: any = data;
+
+            let {
+              balanceSheetHistory: { balanceSheetStatements },
+            }: any = data;
+
+            let {
+              timeSeries: { annualAccountsPayable },
+            }: any = data;
+
+            // Reversing values
+            annualInventory.reverse();
+            annualAccountsPayable.reverse();
+
+            // Push values
+            this.symbol = symbol;
+            this.capitalization = marketCap.fmt;
+
             this.date.length = 0;
             for (let value of annualInventory) {
               this.date.push(value.asOfDate);
@@ -168,6 +161,32 @@ export class AnalysisCashComponent implements OnInit {
             location.reload();
           }
 
+          // Check if there is enough data to analyze
+          if (
+            [
+              this.inventory,
+              this.cogs,
+              this.revenue,
+              this.receivables,
+              this.accountsPayable,
+            ].some((array) => array.length < 4) ||
+            [
+              ...this.inventory,
+              ...this.cogs,
+              ...this.revenue,
+              ...this.receivables,
+              ...this.accountsPayable,
+            ].some((value) => value === 0)
+          ) {
+            alert(
+              '🌋 Insufficient data or invalid data to analyse the stock !!!'
+            );
+            this.loadingEffect();
+            this.router.navigate(['/analysisCash']);
+            location.reload();
+          }
+
+          // Display chart
           this.barChart = {
             title: [
               {

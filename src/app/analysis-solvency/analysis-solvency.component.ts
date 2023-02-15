@@ -73,52 +73,47 @@ export class AnalysisSolvencyComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
-          // Destruct Data
-          let { symbol }: any = data;
-
-          let {
-            summaryDetail: { marketCap },
-          }: any = data;
-
-          let {
-            timeSeries: { annualStockholdersEquity },
-          }: any = data;
-
-          let {
-            timeSeries: { annualTotalAssets },
-          }: any = data;
-
-          let {
-            timeSeries: { annualTotalLiabilitiesNetMinorityInterest },
-          }: any = data;
-
-          let {
-            timeSeries: { annualCurrentLiabilities },
-          }: any = data;
-
-          let {
-            timeSeries: { annualTotalNonCurrentLiabilitiesNetMinorityInterest },
-          }: any = data;
-
-          // Reversing values
-          annualStockholdersEquity.reverse();
-          annualTotalAssets.reverse();
-          annualTotalLiabilitiesNetMinorityInterest.reverse();
-          annualCurrentLiabilities.reverse();
-          annualTotalNonCurrentLiabilitiesNetMinorityInterest.reverse();
-
-          // Check if there is enough data to analyze
-          if (annualTotalAssets.length < 4) {
-            alert('🌋 Insufficient data to analyse the stock !!!');
-            this.router.navigate(['/analysisSolvency']);
-            location.reload();
-          }
-
-          // Push values
-          this.symbol = symbol;
-          this.capitalization = marketCap.fmt;
-
           try {
+            // Destruct Data
+            let { symbol }: any = data;
+
+            let {
+              summaryDetail: { marketCap },
+            }: any = data;
+
+            let {
+              timeSeries: { annualStockholdersEquity },
+            }: any = data;
+
+            let {
+              timeSeries: { annualTotalAssets },
+            }: any = data;
+
+            let {
+              timeSeries: { annualTotalLiabilitiesNetMinorityInterest },
+            }: any = data;
+
+            let {
+              timeSeries: { annualCurrentLiabilities },
+            }: any = data;
+
+            let {
+              timeSeries: {
+                annualTotalNonCurrentLiabilitiesNetMinorityInterest,
+              },
+            }: any = data;
+
+            // Reversing values
+            annualStockholdersEquity.reverse();
+            annualTotalAssets.reverse();
+            annualTotalLiabilitiesNetMinorityInterest.reverse();
+            annualCurrentLiabilities.reverse();
+            annualTotalNonCurrentLiabilitiesNetMinorityInterest.reverse();
+
+            // Push values
+            this.symbol = symbol;
+            this.capitalization = marketCap.fmt;
+
             this.date.length = 0;
             for (let value of annualStockholdersEquity) {
               this.date.push(value.asOfDate);
@@ -185,6 +180,32 @@ export class AnalysisSolvencyComponent implements OnInit {
             location.reload();
           }
 
+          // Check if there is enough data to analyze
+          if (
+            [
+              this.totalAssets,
+              this.totalLiabilities,
+              this.shareHolderEquity,
+              this.totalCurrLiabilities,
+              this.totalLongLiabilities,
+            ].some((array) => array.length < 4) ||
+            [
+              ...this.totalAssets,
+              ...this.totalLiabilities,
+              ...this.shareHolderEquity,
+              ...this.totalCurrLiabilities,
+              ...this.totalLongLiabilities,
+            ].some((value) => value === 0)
+          ) {
+            alert(
+              '🌋 Insufficient data or invalid data to analyse the stock !!!'
+            );
+            this.loadingEffect();
+            this.router.navigate(['/analysisSolvency']);
+            location.reload();
+          }
+
+          // Display charts
           this.lineChart = {
             title: {
               text: 'RS vs DAR vs DER vs EAR',

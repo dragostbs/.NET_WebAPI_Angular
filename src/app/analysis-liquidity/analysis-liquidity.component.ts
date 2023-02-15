@@ -74,46 +74,39 @@ export class AnalysisLiquidityComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
-          // Destruct Data
-          let { symbol }: any = data;
-
-          let {
-            summaryDetail: { marketCap },
-          }: any = data;
-
-          let {
-            timeSeries: { annualInventory },
-          }: any = data;
-
-          let {
-            balanceSheetHistory: { balanceSheetStatements },
-          }: any = data;
-
-          let {
-            timeSeries: { annualCurrentAssets },
-          }: any = data;
-
-          let {
-            timeSeries: { annualCurrentLiabilities },
-          }: any = data;
-
-          // Reversing values
-          annualInventory.reverse();
-          annualCurrentAssets.reverse();
-          annualCurrentLiabilities.reverse();
-
-          // Push values
-          this.symbol = symbol;
-          this.capitalization = marketCap.fmt;
-
-          // Check if there is enough data to analyze
-          if (annualInventory.length < 4) {
-            alert('🌋 Insufficient data to analyse the stock !!!');
-            this.router.navigate(['/analysisLiquidity']);
-            location.reload();
-          }
-
           try {
+            // Destruct Data
+            let { symbol }: any = data;
+
+            let {
+              summaryDetail: { marketCap },
+            }: any = data;
+
+            let {
+              timeSeries: { annualInventory },
+            }: any = data;
+
+            let {
+              balanceSheetHistory: { balanceSheetStatements },
+            }: any = data;
+
+            let {
+              timeSeries: { annualCurrentAssets },
+            }: any = data;
+
+            let {
+              timeSeries: { annualCurrentLiabilities },
+            }: any = data;
+
+            // Reversing values
+            annualInventory.reverse();
+            annualCurrentAssets.reverse();
+            annualCurrentLiabilities.reverse();
+
+            // Push values
+            this.symbol = symbol;
+            this.capitalization = marketCap.fmt;
+
             this.date.length = 0;
             for (let value of annualInventory) {
               this.date.push(value.asOfDate);
@@ -178,6 +171,34 @@ export class AnalysisLiquidityComponent implements OnInit {
             location.reload();
           }
 
+          // Check if there is enough data to analyze
+          if (
+            [
+              this.inventory,
+              this.prePaidExpenses,
+              this.cashOnHand,
+              this.receivables,
+              this.assets,
+              this.liabillities,
+            ].some((array) => array.length < 4) ||
+            [
+              ...this.inventory,
+              ...this.prePaidExpenses,
+              ...this.cashOnHand,
+              ...this.receivables,
+              ...this.assets,
+              ...this.liabillities,
+            ].some((value) => value === 0)
+          ) {
+            alert(
+              '🌋 Insufficient data or invalid data to analyse the stock !!!'
+            );
+            this.loadingEffect();
+            this.router.navigate(['/analysisLiquidity']);
+            location.reload();
+          }
+
+          // Display chart
           this.lineChart = {
             title: {
               text: 'RLC vs RLI vs RLE',

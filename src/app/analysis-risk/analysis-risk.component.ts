@@ -79,61 +79,54 @@ export class AnalysisRiskComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
-          // Destruct Data
-          let { symbol }: any = data;
-
-          let {
-            summaryDetail: { marketCap },
-          }: any = data;
-
-          let {
-            timeSeries: { annualTotalAssets },
-          }: any = data;
-
-          let {
-            timeSeries: { annualTotalLiabilitiesNetMinorityInterest },
-          }: any = data;
-
-          let {
-            timeSeries: { annualCurrentAssets },
-          }: any = data;
-
-          let {
-            timeSeries: { annualCurrentLiabilities },
-          }: any = data;
-
-          let {
-            timeSeries: { annualRetainedEarnings },
-          }: any = data;
-
-          let {
-            incomeStatementHistory: { incomeStatementHistory },
-          }: any = data;
-
-          let {
-            timeSeries: { annualStockholdersEquity },
-          }: any = data;
-
-          // Reversing values
-          annualTotalAssets.reverse();
-          annualTotalLiabilitiesNetMinorityInterest.reverse();
-          annualCurrentAssets.reverse();
-          annualCurrentLiabilities.reverse();
-          annualRetainedEarnings.reverse();
-          annualStockholdersEquity.reverse();
-
-          // Check if there is enough data to analyze
-          if (this.currentAssets.length < 4) {
-            alert('🌋 Insufficient data to analyse the stock !!!');
-            this.router.navigate(['/analysisRisk']);
-            location.reload();
-          }
-
-          // Push values
-          this.symbol = symbol;
-          this.capitalization = marketCap.fmt;
-
           try {
+            // Destruct Data
+            let { symbol }: any = data;
+
+            let {
+              summaryDetail: { marketCap },
+            }: any = data;
+
+            let {
+              timeSeries: { annualTotalAssets },
+            }: any = data;
+
+            let {
+              timeSeries: { annualTotalLiabilitiesNetMinorityInterest },
+            }: any = data;
+
+            let {
+              timeSeries: { annualCurrentAssets },
+            }: any = data;
+
+            let {
+              timeSeries: { annualCurrentLiabilities },
+            }: any = data;
+
+            let {
+              timeSeries: { annualRetainedEarnings },
+            }: any = data;
+
+            let {
+              incomeStatementHistory: { incomeStatementHistory },
+            }: any = data;
+
+            let {
+              timeSeries: { annualStockholdersEquity },
+            }: any = data;
+
+            // Reversing values
+            annualTotalAssets.reverse();
+            annualTotalLiabilitiesNetMinorityInterest.reverse();
+            annualCurrentAssets.reverse();
+            annualCurrentLiabilities.reverse();
+            annualRetainedEarnings.reverse();
+            annualStockholdersEquity.reverse();
+
+            // Push values
+            this.symbol = symbol;
+            this.capitalization = marketCap.fmt;
+
             this.date.length = 0;
             for (let value of annualTotalAssets) {
               this.date.push(value.asOfDate);
@@ -228,6 +221,38 @@ export class AnalysisRiskComponent implements OnInit {
             location.reload();
           }
 
+          // Check if there is enough data to analyze
+          if (
+            [
+              this.totalAssets,
+              this.totalLiabilities,
+              this.currentAssets,
+              this.currentLiabilities,
+              this.retainedEarnings,
+              this.shareHolderEquity,
+              this.revenue,
+              this.ebit,
+            ].some((array) => array.length < 4) ||
+            [
+              ...this.totalAssets,
+              ...this.totalLiabilities,
+              ...this.currentAssets,
+              ...this.currentLiabilities,
+              ...this.retainedEarnings,
+              ...this.shareHolderEquity,
+              ...this.revenue,
+              ...this.ebit,
+            ].some((value) => value === 0)
+          ) {
+            alert(
+              '🌋 Insufficient data or invalid data to analyse the stock !!!'
+            );
+            this.loadingEffect();
+            this.router.navigate(['/analysisRisk']);
+            location.reload();
+          }
+
+          // Display charts
           this.lineChart = {
             title: {
               text: 'A vs B vs C vs D vs E',

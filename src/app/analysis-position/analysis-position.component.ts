@@ -71,45 +71,38 @@ export class AnalysisPositionComponent implements OnInit {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
 
-          // Destruct Data
-          let { symbol }: any = data;
-
-          let {
-            summaryDetail: { marketCap },
-          }: any = data;
-
-          let {
-            timeSeries: { annualTotalAssets },
-          }: any = data;
-
-          let {
-            cashflowStatementHistory: { cashflowStatements },
-          }: any = data;
-
-          let {
-            incomeStatementHistory: { incomeStatementHistory },
-          }: any = data;
-
-          let {
-            timeSeries: { annualStockholdersEquity },
-          }: any = data;
-
-          // Reversing values
-          annualTotalAssets.reverse();
-          annualStockholdersEquity.reverse();
-
-          // Check if there is enough data to analyze
-          if (annualTotalAssets.length < 4) {
-            alert('🌋 Insufficient data to analyse the stock !!!');
-            this.router.navigate(['/analysisPosition']);
-            location.reload();
-          }
-
-          // Push values
-          this.symbol = symbol;
-          this.capitalization = marketCap.fmt;
-
           try {
+            // Destruct Data
+            let { symbol }: any = data;
+
+            let {
+              summaryDetail: { marketCap },
+            }: any = data;
+
+            let {
+              timeSeries: { annualTotalAssets },
+            }: any = data;
+
+            let {
+              cashflowStatementHistory: { cashflowStatements },
+            }: any = data;
+
+            let {
+              incomeStatementHistory: { incomeStatementHistory },
+            }: any = data;
+
+            let {
+              timeSeries: { annualStockholdersEquity },
+            }: any = data;
+
+            // Reversing values
+            annualTotalAssets.reverse();
+            annualStockholdersEquity.reverse();
+
+            // Push values
+            this.symbol = symbol;
+            this.capitalization = marketCap.fmt;
+
             this.date.length = 0;
             for (let value of annualTotalAssets) {
               this.date.push(value.asOfDate);
@@ -160,6 +153,30 @@ export class AnalysisPositionComponent implements OnInit {
             location.reload();
           }
 
+          // Check if there is enough data to analyze
+          if (
+            [
+              this.totalAssets,
+              this.netCashFlow,
+              this.revenue,
+              this.shareHolderEquity,
+            ].some((array) => array.length < 4) ||
+            [
+              ...this.totalAssets,
+              ...this.netCashFlow,
+              ...this.revenue,
+              ...this.shareHolderEquity,
+            ].some((value) => value === 0)
+          ) {
+            alert(
+              '🌋 Insufficient data or invalid data to analyse the stock !!!'
+            );
+            this.loadingEffect();
+            this.router.navigate(['/analysisPosition']);
+            location.reload();
+          }
+
+          // Display chart
           this.barChart = {
             title: [
               {
