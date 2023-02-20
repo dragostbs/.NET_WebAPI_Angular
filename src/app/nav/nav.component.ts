@@ -8,6 +8,8 @@ import { AuthApiService } from '../services/auth-api.service';
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit {
+  username: string | null = localStorage.getItem('username');
+
   constructor(public auth: AuthApiService, public router: Router) {}
 
   ngOnInit(): void {}

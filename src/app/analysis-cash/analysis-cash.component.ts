@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChartsService } from '../services/charts.service';
 import { Router } from '@angular/router';
 import { LoadService } from '../loading/load.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError } from 'rxjs';
 import { CandlesApiService } from '../services/candles-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
 

@@ -25,6 +25,7 @@ export class AuthApiService {
     return this.http.post(this.financialsAPIUrl + '/login', data).pipe(
       map((res: any) => {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('username', res.username);
 
         this.loggedUser.username = res.username;
         this.loggedUser.email = res.email;

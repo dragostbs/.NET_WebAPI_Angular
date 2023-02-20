@@ -21,7 +21,8 @@ export class ReportsComponent implements OnInit {
   loadingElement: EChartsOption = {};
 
   // Map to acces key data such as price, symbol... for transactions
-  stockList: any = [];
+  stockList: any[] = [];
+  userList: any[] = [];
   stockSymbolMap: Map<number, string> = new Map();
   stockPriceMap: Map<number, string> = new Map();
 
@@ -64,7 +65,6 @@ export class ReportsComponent implements OnInit {
     this.service.getStocksList().subscribe((data) => {
       // assign the data to stockList variable
       this.stockList = data;
-
       for (let i = 0; i < data.length; i++) {
         // GET by id the symbol and the price
         this.stockSymbolMap.set(this.stockList[i].id, this.stockList[i].symbol);
