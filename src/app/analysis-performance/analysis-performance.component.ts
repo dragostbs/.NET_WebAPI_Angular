@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { BehaviorSubject } from 'rxjs';
+import {
+  CandlesChart,
+  candlesData,
+  Performance,
+  performanceData,
+} from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
@@ -21,18 +27,8 @@ export class AnalysisPerformanceComponent implements OnInit {
   loadingElement: EChartsOption = {};
   candlesChart: EChartsOption = {};
 
-  symbol: string = '';
-  capitalization: number = 0;
-  date: string[] = ['2022', '2021', '2020', '2019'];
-  totalAssets: number[] = [0, 0, 0, 0];
-  netIncome: number[] = [0, 0, 0, 0];
-  revenue: number[] = [0, 0, 0, 0];
-  shareHolderEquity: number[] = [0, 0, 0, 0];
-  ROA: number[] = [0, 0, 0, 0];
-  ROE: number[] = [0, 0, 0, 0];
-  ROS: number[] = [0, 0, 0, 0];
-  VRA: number[] = [0, 0, 0, 0];
-  AER: number[] = [0, 0, 0, 0];
+  performance: Performance = performanceData;
+  candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
@@ -98,60 +94,74 @@ export class AnalysisPerformanceComponent implements OnInit {
             annualStockholdersEquity.reverse();
 
             // Push values
-            this.symbol = symbol;
-            this.capitalization = marketCap.fmt;
+            this.performance.symbol = symbol;
+            this.performance.capitalization = marketCap.fmt;
 
-            this.date.length = 0;
+            this.performance.date.length = 0;
             for (let value of annualTotalAssets) {
-              this.date.push(value.asOfDate);
+              this.performance.date.push(value.asOfDate);
             }
 
-            this.totalAssets.length = 0;
+            this.performance.totalAssets.length = 0;
             for (let value of annualTotalAssets) {
-              this.totalAssets.push(value.reportedValue.raw);
+              this.performance.totalAssets.push(value.reportedValue.raw);
             }
 
-            this.netIncome.length = 0;
+            this.performance.netIncome.length = 0;
             for (let value of incomeStatementHistory) {
-              this.netIncome.push(value.netIncome.raw);
+              this.performance.netIncome.push(value.netIncome.raw);
             }
 
-            this.revenue.length = 0;
+            this.performance.revenue.length = 0;
             for (let value of incomeStatementHistory) {
-              this.revenue.push(value.totalRevenue.raw);
+              this.performance.revenue.push(value.totalRevenue.raw);
             }
 
-            this.shareHolderEquity.length = 0;
+            this.performance.shareHolderEquity.length = 0;
             for (let value of annualStockholdersEquity) {
-              this.shareHolderEquity.push(value.reportedValue.raw);
+              this.performance.shareHolderEquity.push(value.reportedValue.raw);
             }
 
             // Results
-            this.ROA.length = 0;
-            for (let i = 0; i < this.netIncome.length; i++) {
-              this.ROA.push((this.netIncome[i] / this.totalAssets[i]) * 100);
-            }
-
-            this.ROE.length = 0;
-            for (let i = 0; i < this.netIncome.length; i++) {
-              this.ROE.push(
-                (this.netIncome[i] / this.shareHolderEquity[i]) * 100
+            this.performance.ROA.length = 0;
+            for (let i = 0; i < this.performance.netIncome.length; i++) {
+              this.performance.ROA.push(
+                (this.performance.netIncome[i] /
+                  this.performance.totalAssets[i]) *
+                  100
               );
             }
 
-            this.ROS.length = 0;
-            for (let i = 0; i < this.netIncome.length; i++) {
-              this.ROS.push((this.netIncome[i] / this.revenue[i]) * 100);
+            this.performance.ROE.length = 0;
+            for (let i = 0; i < this.performance.netIncome.length; i++) {
+              this.performance.ROE.push(
+                (this.performance.netIncome[i] /
+                  this.performance.shareHolderEquity[i]) *
+                  100
+              );
             }
 
-            this.VRA.length = 0;
-            for (let i = 0; i < this.revenue.length; i++) {
-              this.VRA.push(this.revenue[i] / this.totalAssets[i]);
+            this.performance.ROS.length = 0;
+            for (let i = 0; i < this.performance.netIncome.length; i++) {
+              this.performance.ROS.push(
+                (this.performance.netIncome[i] / this.performance.revenue[i]) *
+                  100
+              );
             }
 
-            this.AER.length = 0;
-            for (let i = 0; i < this.totalAssets.length; i++) {
-              this.AER.push(this.totalAssets[i] / this.shareHolderEquity[i]);
+            this.performance.VRA.length = 0;
+            for (let i = 0; i < this.performance.revenue.length; i++) {
+              this.performance.VRA.push(
+                this.performance.revenue[i] / this.performance.totalAssets[i]
+              );
+            }
+
+            this.performance.AER.length = 0;
+            for (let i = 0; i < this.performance.totalAssets.length; i++) {
+              this.performance.AER.push(
+                this.performance.totalAssets[i] /
+                  this.performance.shareHolderEquity[i]
+              );
             }
           } catch (error: any) {
             alert('🌋 Insufficient data to analyse the stock !!!');
@@ -162,16 +172,16 @@ export class AnalysisPerformanceComponent implements OnInit {
           // Check if there is enough data to analyze
           if (
             [
-              this.totalAssets,
-              this.netIncome,
-              this.revenue,
-              this.shareHolderEquity,
+              this.performance.totalAssets,
+              this.performance.netIncome,
+              this.performance.revenue,
+              this.performance.shareHolderEquity,
             ].some((array) => array.length < 4) ||
             [
-              ...this.totalAssets,
-              ...this.netIncome,
-              ...this.revenue,
-              ...this.shareHolderEquity,
+              ...this.performance.totalAssets,
+              ...this.performance.netIncome,
+              ...this.performance.revenue,
+              ...this.performance.shareHolderEquity,
             ].some((value) => value === 0)
           ) {
             alert(
@@ -228,17 +238,17 @@ export class AnalysisPerformanceComponent implements OnInit {
               {
                 name: 'ROA',
                 type: 'line',
-                data: [...this.ROA].reverse(),
+                data: [...this.performance.ROA].reverse(),
               },
               {
                 name: 'ROE',
                 type: 'line',
-                data: [...this.ROE].reverse(),
+                data: [...this.performance.ROE].reverse(),
               },
               {
                 name: 'ROS',
                 type: 'line',
-                data: [...this.ROS].reverse(),
+                data: [...this.performance.ROS].reverse(),
               },
             ],
           };
@@ -280,13 +290,13 @@ export class AnalysisPerformanceComponent implements OnInit {
             series: [
               {
                 type: 'bar',
-                data: [...this.VRA].reverse(),
+                data: [...this.performance.VRA].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Assets Turnover',
               },
               {
                 type: 'bar',
-                data: [...this.AER].reverse(),
+                data: [...this.performance.AER].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Equity Multiplier',
               },
@@ -302,13 +312,6 @@ export class AnalysisPerformanceComponent implements OnInit {
   }
 
   displayChart() {
-    let dates: string[] = [];
-    let ticker: any[] = [];
-
-    let closePrice: any[] = [];
-    let maxData: any[] = [];
-    let minData: any[] = [];
-
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -318,11 +321,16 @@ export class AnalysisPerformanceComponent implements OnInit {
 
           // Push data
           for (let [key, value] of Object.entries(data)) {
-            dates.push(key);
-            ticker.push([value.Open, value.Close, value.Low, value.High]);
-            closePrice.push(value.Close);
-            maxData.push([key, value.High]);
-            minData.push([key, value.Low]);
+            this.candles.dates.push(key);
+            this.candles.ticker.push([
+              value.Open,
+              value.Close,
+              value.Low,
+              value.High,
+            ]);
+            this.candles.closePrice.push(value.Close);
+            this.candles.maxData.push([key, value.High]);
+            this.candles.minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
@@ -342,7 +350,7 @@ export class AnalysisPerformanceComponent implements OnInit {
               },
             ],
             xAxis: {
-              data: dates,
+              data: this.candles.dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
             yAxis: {
@@ -362,21 +370,21 @@ export class AnalysisPerformanceComponent implements OnInit {
               {
                 name: 'Chart',
                 type: 'candlestick',
-                data: ticker,
+                data: this.candles.ticker,
                 markPoint: {
                   data: [
                     {
                       name: 'Max Mark',
-                      coord: this.calcMA.calculateMax(maxData),
-                      value: this.calcMA.calculateMax(maxData),
+                      coord: this.calcMA.calculateMax(this.candles.maxData),
+                      value: this.calcMA.calculateMax(this.candles.maxData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
                     },
                     {
                       name: 'Min Mark',
-                      coord: this.calcMA.calculateMin(minData),
-                      value: this.calcMA.calculateMin(minData),
+                      coord: this.calcMA.calculateMin(this.candles.minData),
+                      value: this.calcMA.calculateMin(this.candles.minData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
@@ -387,7 +395,7 @@ export class AnalysisPerformanceComponent implements OnInit {
               {
                 name: 'MA 21',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 21),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 21),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -397,7 +405,7 @@ export class AnalysisPerformanceComponent implements OnInit {
               {
                 name: 'MA 50',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 50),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 50),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -407,7 +415,7 @@ export class AnalysisPerformanceComponent implements OnInit {
               {
                 name: 'MA 100',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 100),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 100),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {

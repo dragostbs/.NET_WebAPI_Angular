@@ -49,11 +49,11 @@
             Stock Symbol should have min 1 to 4 characters 📢
           </p>
           <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-            {{ symbol || "TICKER" }}
+            {{ solvency.symbol || "TICKER" }}
           </h1>
           <hr />
           <h1 class="cap__element text-center fw-normal fs-2">
-            {{ capitalization }} cap
+            {{ solvency.capitalization }} cap
           </h1>
         </div>
         <div class="card card__content">
@@ -71,32 +71,32 @@
             <tbody class="text_size">
               <tr>
                 <td class="text-center">
-                  <p *ngFor="let data of date">
+                  <p *ngFor="let data of solvency.date">
                     {{ data | slice : 0 : 4 }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalAssets">
+                  <p *ngFor="let data of solvency.totalAssets">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalLiabilities">
+                  <p *ngFor="let data of solvency.totalLiabilities">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalCurrLiabilities">
+                  <p *ngFor="let data of solvency.totalCurrLiabilities">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalLongLiabilities">
+                  <p *ngFor="let data of solvency.totalLongLiabilities">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of shareHolderEquity">
+                  <p *ngFor="let data of solvency.shareHolderEquity">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
@@ -123,7 +123,7 @@
                 <tr class="text_size">
                   <th scope="col">Indicator</th>
                   <th scope="col">Formula</th>
-                  <th *ngFor="let data of date.reverse()" scope="col">
+                  <th *ngFor="let data of solvency.date.reverse()" scope="col">
                     {{ data | slice : 0 : 4 }}
                   </th>
                 </tr>
@@ -140,7 +140,7 @@
                     Solvency Ratio (RS)
                   </td>
                   <td>(Tot Assets - Curr Liab) / Long Liab * 100</td>
-                  <td *ngFor="let data of RS.reverse()">
+                  <td *ngFor="let data of solvency.RS.reverse()">
                     <p
                       [ngClass]="
                         data < 80 || data > 180
@@ -163,7 +163,7 @@
                     Debt To Assets Ratio (DAR)
                   </td>
                   <td>(Total Liabilities / Total Assets) * 100</td>
-                  <td *ngFor="let data of DAR.reverse()">
+                  <td *ngFor="let data of solvency.DAR.reverse()">
                     <p
                       [ngClass]="
                         data > 35 ? 'red_indicator' : 'green_indicator'
@@ -184,7 +184,7 @@
                     Debt To Equity Ratio (DER)
                   </td>
                   <td>(Total Liabilities / Share Holder Equity) * 100</td>
-                  <td *ngFor="let data of DER.reverse()">
+                  <td *ngFor="let data of solvency.DER.reverse()">
                     <p
                       [ngClass]="
                         data > 35 ? 'red_indicator' : 'green_indicator'
@@ -205,7 +205,7 @@
                     Equity To Assets Ratio (EAR)
                   </td>
                   <td>(Share Holder Equity / Total Assets) * 100</td>
-                  <td *ngFor="let data of EAR.reverse()">
+                  <td *ngFor="let data of solvency.EAR.reverse()">
                     <p
                       [ngClass]="
                         data < 65 ? 'red_indicator' : 'green_indicator'

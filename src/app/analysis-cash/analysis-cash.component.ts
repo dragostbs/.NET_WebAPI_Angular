@@ -5,9 +5,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChartsService } from '../services/charts.service';
 import { Router } from '@angular/router';
 import { LoadService } from '../loading/load.service';
-import { BehaviorSubject, catchError } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CandlesApiService } from '../services/candles-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
+import {
+  CandlesChart,
+  candlesData,
+  Cash,
+  cashData,
+} from '../interfaces/interfaces';
 
 @Component({
   selector: 'app-analysis-cash',
@@ -21,18 +27,8 @@ export class AnalysisCashComponent implements OnInit {
   loadingElement: EChartsOption = {};
   candlesChart: EChartsOption = {};
 
-  symbol: string = '';
-  capitalization: number = 0;
-  date: string[] = ['2022', '2021', '2020', '2019'];
-  inventory: number[] = [0, 0, 0, 0];
-  cogs: number[] = [0, 0, 0, 0];
-  revenue: number[] = [0, 0, 0, 0];
-  receivables: number[] = [0, 0, 0, 0];
-  accountsPayable: number[] = [0, 0, 0, 0];
-  DIO: number[] = [0, 0, 0, 0];
-  DSO: number[] = [0, 0, 0, 0];
-  DPO: number[] = [0, 0, 0, 0];
-  CCC: number[] = [0, 0, 0, 0];
+  cash: Cash = cashData;
+  candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
@@ -102,58 +98,66 @@ export class AnalysisCashComponent implements OnInit {
             annualAccountsPayable.reverse();
 
             // Push values
-            this.symbol = symbol;
-            this.capitalization = marketCap.fmt;
+            this.cash.symbol = symbol;
+            this.cash.capitalization = marketCap.fmt;
 
-            this.date.length = 0;
+            this.cash.date.length = 0;
             for (let value of annualInventory) {
-              this.date.push(value.asOfDate);
+              this.cash.date.push(value.asOfDate);
             }
 
-            this.inventory.length = 0;
+            this.cash.inventory.length = 0;
             for (let value of annualInventory) {
-              this.inventory.push(value.reportedValue.raw);
+              this.cash.inventory.push(value.reportedValue.raw);
             }
 
-            this.cogs.length = 0;
+            this.cash.cogs.length = 0;
             for (let value of incomeStatementHistory) {
-              this.cogs.push(value.costOfRevenue.raw);
+              this.cash.cogs.push(value.costOfRevenue.raw);
             }
 
-            this.revenue.length = 0;
+            this.cash.revenue.length = 0;
             for (let value of incomeStatementHistory) {
-              this.revenue.push(value.totalRevenue.raw);
+              this.cash.revenue.push(value.totalRevenue.raw);
             }
 
-            this.receivables.length = 0;
+            this.cash.receivables.length = 0;
             for (let value of balanceSheetStatements) {
-              this.receivables.push(value.netReceivables.raw);
+              this.cash.receivables.push(value.netReceivables.raw);
             }
 
-            this.accountsPayable.length = 0;
+            this.cash.accountsPayable.length = 0;
             for (let value of annualAccountsPayable) {
-              this.accountsPayable.push(value.reportedValue.raw);
+              this.cash.accountsPayable.push(value.reportedValue.raw);
             }
 
             //Results
-            this.DIO.length = 0;
-            for (let i = 0; i < this.inventory.length; i++) {
-              this.DIO.push((this.inventory[i] / this.cogs[i]) * 365);
+            this.cash.DIO.length = 0;
+            for (let i = 0; i < this.cash.inventory.length; i++) {
+              this.cash.DIO.push(
+                (this.cash.inventory[i] / this.cash.cogs[i]) * 365
+              );
             }
 
-            this.DSO.length = 0;
-            for (let i = 0; i < this.receivables.length; i++) {
-              this.DSO.push((this.receivables[i] / this.revenue[i]) * 365);
+            this.cash.DSO.length = 0;
+            for (let i = 0; i < this.cash.receivables.length; i++) {
+              this.cash.DSO.push(
+                (this.cash.receivables[i] / this.cash.revenue[i]) * 365
+              );
             }
 
-            this.DPO.length = 0;
-            for (let i = 0; i < this.accountsPayable.length; i++) {
-              this.DPO.push((this.accountsPayable[i] / this.cogs[i]) * 365);
+            this.cash.DPO.length = 0;
+            for (let i = 0; i < this.cash.accountsPayable.length; i++) {
+              this.cash.DPO.push(
+                (this.cash.accountsPayable[i] / this.cash.cogs[i]) * 365
+              );
             }
 
-            this.CCC.length = 0;
-            for (let i = 0; i < this.DIO.length; i++) {
-              this.CCC.push(this.DIO[i] + this.DSO[i] - this.DPO[i]);
+            this.cash.CCC.length = 0;
+            for (let i = 0; i < this.cash.DIO.length; i++) {
+              this.cash.CCC.push(
+                this.cash.DIO[i] + this.cash.DSO[i] - this.cash.DPO[i]
+              );
             }
           } catch (error: any) {
             alert('🌋 Insufficient data to analyse the stock !!!');
@@ -164,18 +168,18 @@ export class AnalysisCashComponent implements OnInit {
           // Check if there is enough data to analyze
           if (
             [
-              this.inventory,
-              this.cogs,
-              this.revenue,
-              this.receivables,
-              this.accountsPayable,
+              this.cash.inventory,
+              this.cash.cogs,
+              this.cash.revenue,
+              this.cash.receivables,
+              this.cash.accountsPayable,
             ].some((array) => array.length < 4) ||
             [
-              ...this.inventory,
-              ...this.cogs,
-              ...this.revenue,
-              ...this.receivables,
-              ...this.accountsPayable,
+              ...this.cash.inventory,
+              ...this.cash.cogs,
+              ...this.cash.revenue,
+              ...this.cash.receivables,
+              ...this.cash.accountsPayable,
             ].some((value) => value === 0)
           ) {
             alert(
@@ -247,27 +251,27 @@ export class AnalysisCashComponent implements OnInit {
               {
                 name: 'Inventory',
                 type: 'bar',
-                data: [...this.inventory].reverse(),
+                data: [...this.cash.inventory].reverse(),
               },
               {
                 name: 'Receivables',
                 type: 'bar',
-                data: [...this.receivables].reverse(),
+                data: [...this.cash.receivables].reverse(),
               },
               {
                 name: 'Cogs',
                 type: 'bar',
-                data: [...this.cogs].reverse(),
+                data: [...this.cash.cogs].reverse(),
               },
               {
                 name: 'Revenue',
                 type: 'bar',
-                data: [...this.revenue].reverse(),
+                data: [...this.cash.revenue].reverse(),
               },
               {
                 name: 'Accounts Payable',
                 type: 'bar',
-                data: [...this.accountsPayable].reverse(),
+                data: [...this.cash.accountsPayable].reverse(),
               },
             ],
           };
@@ -317,17 +321,17 @@ export class AnalysisCashComponent implements OnInit {
               {
                 name: 'DIO',
                 type: 'line',
-                data: [...this.DIO].reverse(),
+                data: [...this.cash.DIO].reverse(),
               },
               {
                 name: 'DSO',
                 type: 'line',
-                data: [...this.DSO].reverse(),
+                data: [...this.cash.DSO].reverse(),
               },
               {
                 name: 'DPO',
                 type: 'line',
-                data: [...this.DPO].reverse(),
+                data: [...this.cash.DPO].reverse(),
               },
             ],
           };
@@ -336,13 +340,6 @@ export class AnalysisCashComponent implements OnInit {
   }
 
   displayChart() {
-    let dates: string[] = [];
-    let ticker: any[] = [];
-
-    let closePrice: any[] = [];
-    let maxData: any[] = [];
-    let minData: any[] = [];
-
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -352,11 +349,16 @@ export class AnalysisCashComponent implements OnInit {
 
           // Push data
           for (let [key, value] of Object.entries(data)) {
-            dates.push(key);
-            ticker.push([value.Open, value.Close, value.Low, value.High]);
-            closePrice.push(value.Close);
-            maxData.push([key, value.High]);
-            minData.push([key, value.Low]);
+            this.candles.dates.push(key);
+            this.candles.ticker.push([
+              value.Open,
+              value.Close,
+              value.Low,
+              value.High,
+            ]);
+            this.candles.closePrice.push(value.Close);
+            this.candles.maxData.push([key, value.High]);
+            this.candles.minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
@@ -376,7 +378,7 @@ export class AnalysisCashComponent implements OnInit {
               },
             ],
             xAxis: {
-              data: dates,
+              data: this.candles.dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
             yAxis: {
@@ -396,21 +398,21 @@ export class AnalysisCashComponent implements OnInit {
               {
                 name: 'Chart',
                 type: 'candlestick',
-                data: ticker,
+                data: this.candles.ticker,
                 markPoint: {
                   data: [
                     {
                       name: 'Max Mark',
-                      coord: this.calcMA.calculateMax(maxData),
-                      value: this.calcMA.calculateMax(maxData),
+                      coord: this.calcMA.calculateMax(this.candles.maxData),
+                      value: this.calcMA.calculateMax(this.candles.maxData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
                     },
                     {
                       name: 'Min Mark',
-                      coord: this.calcMA.calculateMin(minData),
-                      value: this.calcMA.calculateMin(minData),
+                      coord: this.calcMA.calculateMin(this.candles.minData),
+                      value: this.calcMA.calculateMin(this.candles.minData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
@@ -421,7 +423,7 @@ export class AnalysisCashComponent implements OnInit {
               {
                 name: 'MA 21',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 21),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 21),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -431,7 +433,7 @@ export class AnalysisCashComponent implements OnInit {
               {
                 name: 'MA 50',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 50),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 50),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -441,7 +443,7 @@ export class AnalysisCashComponent implements OnInit {
               {
                 name: 'MA 100',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 100),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 100),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {

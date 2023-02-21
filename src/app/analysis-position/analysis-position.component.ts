@@ -3,6 +3,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { BehaviorSubject } from 'rxjs';
+import {
+  CandlesChart,
+  candlesData,
+  Position,
+  positionData,
+} from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
@@ -21,16 +27,8 @@ export class AnalysisPositionComponent implements OnInit {
   loadingElement: EChartsOption = {};
   candlesChart: EChartsOption = {};
 
-  symbol: string = '';
-  capitalization: number = 0;
-  date: string[] = ['2022', '2021', '2020', '2019'];
-  totalAssets: number[] = [0, 0, 0, 0];
-  netCashFlow: number[] = [0, 0, 0, 0];
-  revenue: number[] = [0, 0, 0, 0];
-  shareHolderEquity: number[] = [0, 0, 0, 0];
-  CFROA: number[] = [0, 0, 0, 0];
-  CFROE: number[] = [0, 0, 0, 0];
-  CFROS: number[] = [0, 0, 0, 0];
+  position: Position = positionData;
+  candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
@@ -100,52 +98,57 @@ export class AnalysisPositionComponent implements OnInit {
             annualStockholdersEquity.reverse();
 
             // Push values
-            this.symbol = symbol;
-            this.capitalization = marketCap.fmt;
+            this.position.symbol = symbol;
+            this.position.capitalization = marketCap.fmt;
 
-            this.date.length = 0;
+            this.position.date.length = 0;
             for (let value of annualTotalAssets) {
-              this.date.push(value.asOfDate);
+              this.position.date.push(value.asOfDate);
             }
 
-            this.totalAssets.length = 0;
+            this.position.totalAssets.length = 0;
             for (let value of annualTotalAssets) {
-              this.totalAssets.push(value.reportedValue.raw);
+              this.position.totalAssets.push(value.reportedValue.raw);
             }
 
-            this.netCashFlow.length = 0;
+            this.position.netCashFlow.length = 0;
             for (let value of cashflowStatements) {
-              this.netCashFlow.push(value.changeInCash.raw);
+              this.position.netCashFlow.push(value.changeInCash.raw);
             }
 
-            this.revenue.length = 0;
+            this.position.revenue.length = 0;
             for (let value of incomeStatementHistory) {
-              this.revenue.push(value.totalRevenue.raw);
+              this.position.revenue.push(value.totalRevenue.raw);
             }
 
-            this.shareHolderEquity.length = 0;
+            this.position.shareHolderEquity.length = 0;
             for (let value of annualStockholdersEquity) {
-              this.shareHolderEquity.push(value.reportedValue.raw);
+              this.position.shareHolderEquity.push(value.reportedValue.raw);
             }
 
             // Results
-            this.CFROA.length = 0;
-            for (let i = 0; i < this.netCashFlow.length; i++) {
-              this.CFROA.push(
-                (this.netCashFlow[i] / this.totalAssets[i]) * 100
+            this.position.CFROA.length = 0;
+            for (let i = 0; i < this.position.netCashFlow.length; i++) {
+              this.position.CFROA.push(
+                (this.position.netCashFlow[i] / this.position.totalAssets[i]) *
+                  100
               );
             }
 
-            this.CFROE.length = 0;
-            for (let i = 0; i < this.netCashFlow.length; i++) {
-              this.CFROE.push(
-                (this.netCashFlow[i] / this.shareHolderEquity[i]) * 100
+            this.position.CFROE.length = 0;
+            for (let i = 0; i < this.position.netCashFlow.length; i++) {
+              this.position.CFROE.push(
+                (this.position.netCashFlow[i] /
+                  this.position.shareHolderEquity[i]) *
+                  100
               );
             }
 
-            this.CFROS.length = 0;
-            for (let i = 0; i < this.netCashFlow.length; i++) {
-              this.CFROS.push((this.netCashFlow[i] / this.revenue[i]) * 100);
+            this.position.CFROS.length = 0;
+            for (let i = 0; i < this.position.netCashFlow.length; i++) {
+              this.position.CFROS.push(
+                (this.position.netCashFlow[i] / this.position.revenue[i]) * 100
+              );
             }
           } catch (error: any) {
             alert('🌋 Insufficient data to analyse the stock !!!');
@@ -156,16 +159,16 @@ export class AnalysisPositionComponent implements OnInit {
           // Check if there is enough data to analyze
           if (
             [
-              this.totalAssets,
-              this.netCashFlow,
-              this.revenue,
-              this.shareHolderEquity,
+              this.position.totalAssets,
+              this.position.netCashFlow,
+              this.position.revenue,
+              this.position.shareHolderEquity,
             ].some((array) => array.length < 4) ||
             [
-              ...this.totalAssets,
-              ...this.netCashFlow,
-              ...this.revenue,
-              ...this.shareHolderEquity,
+              ...this.position.totalAssets,
+              ...this.position.netCashFlow,
+              ...this.position.revenue,
+              ...this.position.shareHolderEquity,
             ].some((value) => value === 0)
           ) {
             alert(
@@ -236,22 +239,22 @@ export class AnalysisPositionComponent implements OnInit {
               {
                 name: 'Total Assets',
                 type: 'bar',
-                data: [...this.totalAssets].reverse(),
+                data: [...this.position.totalAssets].reverse(),
               },
               {
                 name: 'Revenue',
                 type: 'bar',
-                data: [...this.revenue].reverse(),
+                data: [...this.position.revenue].reverse(),
               },
               {
                 name: 'Net Cash Flow',
                 type: 'bar',
-                data: [...this.netCashFlow].reverse(),
+                data: [...this.position.netCashFlow].reverse(),
               },
               {
                 name: 'Share Holder Equity',
                 type: 'bar',
-                data: [...this.shareHolderEquity].reverse(),
+                data: [...this.position.shareHolderEquity].reverse(),
               },
             ],
           };
@@ -301,17 +304,17 @@ export class AnalysisPositionComponent implements OnInit {
               {
                 name: 'CFROA',
                 type: 'line',
-                data: [...this.CFROA].reverse(),
+                data: [...this.position.CFROA].reverse(),
               },
               {
                 name: 'CFROE',
                 type: 'line',
-                data: [...this.CFROE].reverse(),
+                data: [...this.position.CFROE].reverse(),
               },
               {
                 name: 'CFROS',
                 type: 'line',
-                data: [...this.CFROS].reverse(),
+                data: [...this.position.CFROS].reverse(),
               },
             ],
           };
@@ -320,13 +323,6 @@ export class AnalysisPositionComponent implements OnInit {
   }
 
   displayChart() {
-    let dates: string[] = [];
-    let ticker: any[] = [];
-
-    let closePrice: any[] = [];
-    let maxData: any[] = [];
-    let minData: any[] = [];
-
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -336,11 +332,16 @@ export class AnalysisPositionComponent implements OnInit {
 
           // Push data
           for (let [key, value] of Object.entries(data)) {
-            dates.push(key);
-            ticker.push([value.Open, value.Close, value.Low, value.High]);
-            closePrice.push(value.Close);
-            maxData.push([key, value.High]);
-            minData.push([key, value.Low]);
+            this.candles.dates.push(key);
+            this.candles.ticker.push([
+              value.Open,
+              value.Close,
+              value.Low,
+              value.High,
+            ]);
+            this.candles.closePrice.push(value.Close);
+            this.candles.maxData.push([key, value.High]);
+            this.candles.minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
@@ -360,7 +361,7 @@ export class AnalysisPositionComponent implements OnInit {
               },
             ],
             xAxis: {
-              data: dates,
+              data: this.candles.dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
             yAxis: {
@@ -380,21 +381,21 @@ export class AnalysisPositionComponent implements OnInit {
               {
                 name: 'Chart',
                 type: 'candlestick',
-                data: ticker,
+                data: this.candles.ticker,
                 markPoint: {
                   data: [
                     {
                       name: 'Max Mark',
-                      coord: this.calcMA.calculateMax(maxData),
-                      value: this.calcMA.calculateMax(maxData),
+                      coord: this.calcMA.calculateMax(this.candles.maxData),
+                      value: this.calcMA.calculateMax(this.candles.maxData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
                     },
                     {
                       name: 'Min Mark',
-                      coord: this.calcMA.calculateMin(minData),
-                      value: this.calcMA.calculateMin(minData),
+                      coord: this.calcMA.calculateMin(this.candles.minData),
+                      value: this.calcMA.calculateMin(this.candles.minData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
@@ -405,7 +406,7 @@ export class AnalysisPositionComponent implements OnInit {
               {
                 name: 'MA 21',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 21),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 21),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -415,7 +416,7 @@ export class AnalysisPositionComponent implements OnInit {
               {
                 name: 'MA 50',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 50),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 50),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -425,7 +426,7 @@ export class AnalysisPositionComponent implements OnInit {
               {
                 name: 'MA 100',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 100),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 100),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {

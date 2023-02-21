@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { BehaviorSubject } from 'rxjs';
+import {
+  CandlesChart,
+  candlesData,
+  Solvency,
+  solvencyData,
+} from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
@@ -21,18 +27,8 @@ export class AnalysisSolvencyComponent implements OnInit {
   loadingElement: EChartsOption = {};
   candlesChart: EChartsOption = {};
 
-  symbol: string = '';
-  capitalization: number = 0;
-  date: string[] = ['2022', '2021', '2020', '2019'];
-  shareHolderEquity: number[] = [0, 0, 0, 0];
-  totalAssets: number[] = [0, 0, 0, 0];
-  totalLiabilities: number[] = [0, 0, 0, 0];
-  totalCurrLiabilities: number[] = [0, 0, 0, 0];
-  totalLongLiabilities: number[] = [0, 0, 0, 0];
-  RS: number[] = [0, 0, 0, 0];
-  DAR: number[] = [0, 0, 0, 0];
-  DER: number[] = [0, 0, 0, 0];
-  EAR: number[] = [0, 0, 0, 0];
+  solvency: Solvency = solvencyData;
+  candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
@@ -111,67 +107,74 @@ export class AnalysisSolvencyComponent implements OnInit {
             annualTotalNonCurrentLiabilitiesNetMinorityInterest.reverse();
 
             // Push values
-            this.symbol = symbol;
-            this.capitalization = marketCap.fmt;
+            this.solvency.symbol = symbol;
+            this.solvency.capitalization = marketCap.fmt;
 
-            this.date.length = 0;
+            this.solvency.date.length = 0;
             for (let value of annualStockholdersEquity) {
-              this.date.push(value.asOfDate);
+              this.solvency.date.push(value.asOfDate);
             }
 
-            this.shareHolderEquity.length = 0;
+            this.solvency.shareHolderEquity.length = 0;
             for (let value of annualStockholdersEquity) {
-              this.shareHolderEquity.push(value.reportedValue.raw);
+              this.solvency.shareHolderEquity.push(value.reportedValue.raw);
             }
 
-            this.totalAssets.length = 0;
+            this.solvency.totalAssets.length = 0;
             for (let value of annualTotalAssets) {
-              this.totalAssets.push(value.reportedValue.raw);
+              this.solvency.totalAssets.push(value.reportedValue.raw);
             }
 
-            this.totalLiabilities.length = 0;
+            this.solvency.totalLiabilities.length = 0;
             for (let value of annualTotalLiabilitiesNetMinorityInterest) {
-              this.totalLiabilities.push(value.reportedValue.raw);
+              this.solvency.totalLiabilities.push(value.reportedValue.raw);
             }
 
-            this.totalCurrLiabilities.length = 0;
+            this.solvency.totalCurrLiabilities.length = 0;
             for (let value of annualCurrentLiabilities) {
-              this.totalCurrLiabilities.push(value.reportedValue.raw);
+              this.solvency.totalCurrLiabilities.push(value.reportedValue.raw);
             }
 
-            this.totalLongLiabilities.length = 0;
+            this.solvency.totalLongLiabilities.length = 0;
             for (let value of annualTotalNonCurrentLiabilitiesNetMinorityInterest) {
-              this.totalLongLiabilities.push(value.reportedValue.raw);
+              this.solvency.totalLongLiabilities.push(value.reportedValue.raw);
             }
 
             // Results
-            this.RS.length = 0;
-            for (let i = 0; i < this.totalAssets.length; i++) {
-              this.RS.push(
-                ((this.totalAssets[i] - this.totalCurrLiabilities[i]) /
-                  this.totalLongLiabilities[i]) *
+            this.solvency.RS.length = 0;
+            for (let i = 0; i < this.solvency.totalAssets.length; i++) {
+              this.solvency.RS.push(
+                ((this.solvency.totalAssets[i] -
+                  this.solvency.totalCurrLiabilities[i]) /
+                  this.solvency.totalLongLiabilities[i]) *
                   100
               );
             }
 
-            this.DAR.length = 0;
-            for (let i = 0; i < this.totalLiabilities.length; i++) {
-              this.DAR.push(
-                (this.totalLiabilities[i] / this.totalAssets[i]) * 100
+            this.solvency.DAR.length = 0;
+            for (let i = 0; i < this.solvency.totalLiabilities.length; i++) {
+              this.solvency.DAR.push(
+                (this.solvency.totalLiabilities[i] /
+                  this.solvency.totalAssets[i]) *
+                  100
               );
             }
 
-            this.DER.length = 0;
-            for (let i = 0; i < this.totalLiabilities.length; i++) {
-              this.DER.push(
-                (this.totalLiabilities[i] / this.shareHolderEquity[i]) * 100
+            this.solvency.DER.length = 0;
+            for (let i = 0; i < this.solvency.totalLiabilities.length; i++) {
+              this.solvency.DER.push(
+                (this.solvency.totalLiabilities[i] /
+                  this.solvency.shareHolderEquity[i]) *
+                  100
               );
             }
 
-            this.EAR.length = 0;
-            for (let i = 0; i < this.shareHolderEquity.length; i++) {
-              this.EAR.push(
-                (this.shareHolderEquity[i] / this.totalAssets[i]) * 100
+            this.solvency.EAR.length = 0;
+            for (let i = 0; i < this.solvency.shareHolderEquity.length; i++) {
+              this.solvency.EAR.push(
+                (this.solvency.shareHolderEquity[i] /
+                  this.solvency.totalAssets[i]) *
+                  100
               );
             }
           } catch (error: any) {
@@ -183,18 +186,18 @@ export class AnalysisSolvencyComponent implements OnInit {
           // Check if there is enough data to analyze
           if (
             [
-              this.totalAssets,
-              this.totalLiabilities,
-              this.shareHolderEquity,
-              this.totalCurrLiabilities,
-              this.totalLongLiabilities,
+              this.solvency.totalAssets,
+              this.solvency.totalLiabilities,
+              this.solvency.shareHolderEquity,
+              this.solvency.totalCurrLiabilities,
+              this.solvency.totalLongLiabilities,
             ].some((array) => array.length < 4) ||
             [
-              ...this.totalAssets,
-              ...this.totalLiabilities,
-              ...this.shareHolderEquity,
-              ...this.totalCurrLiabilities,
-              ...this.totalLongLiabilities,
+              ...this.solvency.totalAssets,
+              ...this.solvency.totalLiabilities,
+              ...this.solvency.shareHolderEquity,
+              ...this.solvency.totalCurrLiabilities,
+              ...this.solvency.totalLongLiabilities,
             ].some((value) => value === 0)
           ) {
             alert(
@@ -251,22 +254,22 @@ export class AnalysisSolvencyComponent implements OnInit {
               {
                 name: 'RS',
                 type: 'line',
-                data: [...this.RS].reverse(),
+                data: [...this.solvency.RS].reverse(),
               },
               {
                 name: 'DAR',
                 type: 'line',
-                data: [...this.DAR].reverse(),
+                data: [...this.solvency.DAR].reverse(),
               },
               {
                 name: 'DER',
                 type: 'line',
-                data: [...this.DER].reverse(),
+                data: [...this.solvency.DER].reverse(),
               },
               {
                 name: 'EAR',
                 type: 'line',
-                data: [...this.EAR].reverse(),
+                data: [...this.solvency.EAR].reverse(),
               },
             ],
           };
@@ -329,17 +332,17 @@ export class AnalysisSolvencyComponent implements OnInit {
               {
                 name: 'Total Liabilities',
                 type: 'bar',
-                data: [...this.totalLiabilities].reverse(),
+                data: [...this.solvency.totalLiabilities].reverse(),
               },
               {
                 name: 'Total Current Liabilities',
                 type: 'bar',
-                data: [...this.totalCurrLiabilities].reverse(),
+                data: [...this.solvency.totalCurrLiabilities].reverse(),
               },
               {
                 name: 'Total Long Term Liabilities',
                 type: 'bar',
-                data: [...this.totalLongLiabilities].reverse(),
+                data: [...this.solvency.totalLongLiabilities].reverse(),
               },
             ],
           };
@@ -348,13 +351,6 @@ export class AnalysisSolvencyComponent implements OnInit {
   }
 
   displayChart() {
-    let dates: string[] = [];
-    let ticker: any[] = [];
-
-    let closePrice: any[] = [];
-    let maxData: any[] = [];
-    let minData: any[] = [];
-
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -364,11 +360,16 @@ export class AnalysisSolvencyComponent implements OnInit {
 
           // Push data
           for (let [key, value] of Object.entries(data)) {
-            dates.push(key);
-            ticker.push([value.Open, value.Close, value.Low, value.High]);
-            closePrice.push(value.Close);
-            maxData.push([key, value.High]);
-            minData.push([key, value.Low]);
+            this.candles.dates.push(key);
+            this.candles.ticker.push([
+              value.Open,
+              value.Close,
+              value.Low,
+              value.High,
+            ]);
+            this.candles.closePrice.push(value.Close);
+            this.candles.maxData.push([key, value.High]);
+            this.candles.minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
@@ -388,7 +389,7 @@ export class AnalysisSolvencyComponent implements OnInit {
               },
             ],
             xAxis: {
-              data: dates,
+              data: this.candles.dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
             yAxis: {
@@ -408,21 +409,21 @@ export class AnalysisSolvencyComponent implements OnInit {
               {
                 name: 'Chart',
                 type: 'candlestick',
-                data: ticker,
+                data: this.candles.ticker,
                 markPoint: {
                   data: [
                     {
                       name: 'Max Mark',
-                      coord: this.calcMA.calculateMax(maxData),
-                      value: this.calcMA.calculateMax(maxData),
+                      coord: this.calcMA.calculateMax(this.candles.maxData),
+                      value: this.calcMA.calculateMax(this.candles.maxData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
                     },
                     {
                       name: 'Min Mark',
-                      coord: this.calcMA.calculateMin(minData),
-                      value: this.calcMA.calculateMin(minData),
+                      coord: this.calcMA.calculateMin(this.candles.minData),
+                      value: this.calcMA.calculateMin(this.candles.minData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
@@ -433,7 +434,7 @@ export class AnalysisSolvencyComponent implements OnInit {
               {
                 name: 'MA 21',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 21),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 21),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -443,7 +444,7 @@ export class AnalysisSolvencyComponent implements OnInit {
               {
                 name: 'MA 50',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 50),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 50),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -453,7 +454,7 @@ export class AnalysisSolvencyComponent implements OnInit {
               {
                 name: 'MA 100',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 100),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 100),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {

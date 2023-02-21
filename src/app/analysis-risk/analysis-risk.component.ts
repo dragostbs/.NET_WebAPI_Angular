@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { BehaviorSubject } from 'rxjs';
+import {
+  CandlesChart,
+  candlesData,
+  Risk,
+  riskData,
+} from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
@@ -21,24 +27,8 @@ export class AnalysisRiskComponent implements OnInit {
   loadingElement: EChartsOption = {};
   candlesChart: EChartsOption = {};
 
-  symbol: string = '';
-  capitalization: number = 0;
-  date: string[] = ['2022', '2021', '2020', '2019'];
-  totalAssets: number[] = [0, 0, 0, 0];
-  totalLiabilities: number[] = [0, 0, 0, 0];
-  currentAssets: number[] = [0, 0, 0, 0];
-  currentLiabilities: number[] = [0, 0, 0, 0];
-  retainedEarnings: number[] = [0, 0, 0, 0];
-  shareHolderEquity: number[] = [0, 0, 0, 0];
-  revenue: number[] = [0, 0, 0, 0];
-  ebit: number[] = [0, 0, 0, 0];
-  workingCapital: number[] = [0, 0, 0, 0];
-  A: number[] = [0, 0, 0, 0];
-  B: number[] = [0, 0, 0, 0];
-  C: number[] = [0, 0, 0, 0];
-  D: number[] = [0, 0, 0, 0];
-  E: number[] = [0, 0, 0, 0];
-  ALTMAN: number[] = [0, 0, 0, 0];
+  risk: Risk = riskData;
+  candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
@@ -124,95 +114,101 @@ export class AnalysisRiskComponent implements OnInit {
             annualStockholdersEquity.reverse();
 
             // Push values
-            this.symbol = symbol;
-            this.capitalization = marketCap.fmt;
+            this.risk.symbol = symbol;
+            this.risk.capitalization = marketCap.fmt;
 
-            this.date.length = 0;
+            this.risk.date.length = 0;
             for (let value of annualTotalAssets) {
-              this.date.push(value.asOfDate);
+              this.risk.date.push(value.asOfDate);
             }
 
-            this.totalAssets.length = 0;
+            this.risk.totalAssets.length = 0;
             for (let value of annualTotalAssets) {
-              this.totalAssets.push(value.reportedValue.raw);
+              this.risk.totalAssets.push(value.reportedValue.raw);
             }
 
-            this.totalLiabilities.length = 0;
+            this.risk.totalLiabilities.length = 0;
             for (let value of annualTotalLiabilitiesNetMinorityInterest) {
-              this.totalLiabilities.push(value.reportedValue.raw);
+              this.risk.totalLiabilities.push(value.reportedValue.raw);
             }
 
-            this.currentAssets.length = 0;
+            this.risk.currentAssets.length = 0;
             for (let value of annualCurrentAssets) {
-              this.currentAssets.push(value.reportedValue.raw);
+              this.risk.currentAssets.push(value.reportedValue.raw);
             }
 
-            this.currentLiabilities.length = 0;
+            this.risk.currentLiabilities.length = 0;
             for (let value of annualCurrentLiabilities) {
-              this.currentLiabilities.push(value.reportedValue.raw);
+              this.risk.currentLiabilities.push(value.reportedValue.raw);
             }
 
-            this.retainedEarnings.length = 0;
+            this.risk.retainedEarnings.length = 0;
             for (let value of annualRetainedEarnings) {
-              this.retainedEarnings.push(value.reportedValue.raw);
+              this.risk.retainedEarnings.push(value.reportedValue.raw);
             }
 
-            this.revenue.length = 0;
+            this.risk.revenue.length = 0;
             for (let value of incomeStatementHistory) {
-              this.revenue.push(value.totalRevenue.raw);
+              this.risk.revenue.push(value.totalRevenue.raw);
             }
 
-            this.shareHolderEquity.length = 0;
+            this.risk.shareHolderEquity.length = 0;
             for (let value of annualStockholdersEquity) {
-              this.shareHolderEquity.push(value.reportedValue.raw);
+              this.risk.shareHolderEquity.push(value.reportedValue.raw);
             }
 
-            this.ebit.length = 0;
+            this.risk.ebit.length = 0;
             for (let value of incomeStatementHistory) {
-              this.ebit.push(value.ebit.raw);
+              this.risk.ebit.push(value.ebit.raw);
             }
 
             // Results
-            this.workingCapital.length = 0;
-            for (let i = 0; i < this.currentAssets.length; i++) {
-              this.workingCapital.push(
-                this.currentAssets[i] - this.currentLiabilities[i]
+            this.risk.workingCapital.length = 0;
+            for (let i = 0; i < this.risk.currentAssets.length; i++) {
+              this.risk.workingCapital.push(
+                this.risk.currentAssets[i] - this.risk.currentLiabilities[i]
               );
             }
 
-            this.A.length = 0;
-            for (let i = 0; i < this.workingCapital.length; i++) {
-              this.A.push(this.workingCapital[i] / this.totalAssets[i]);
+            this.risk.A.length = 0;
+            for (let i = 0; i < this.risk.workingCapital.length; i++) {
+              this.risk.A.push(
+                this.risk.workingCapital[i] / this.risk.totalAssets[i]
+              );
             }
 
-            this.B.length = 0;
-            for (let i = 0; i < this.retainedEarnings.length; i++) {
-              this.B.push(this.retainedEarnings[i] / this.totalAssets[i]);
+            this.risk.B.length = 0;
+            for (let i = 0; i < this.risk.retainedEarnings.length; i++) {
+              this.risk.B.push(
+                this.risk.retainedEarnings[i] / this.risk.totalAssets[i]
+              );
             }
 
-            this.C.length = 0;
-            for (let i = 0; i < this.ebit.length; i++) {
-              this.C.push(this.ebit[i] / this.totalAssets[i]);
+            this.risk.C.length = 0;
+            for (let i = 0; i < this.risk.ebit.length; i++) {
+              this.risk.C.push(this.risk.ebit[i] / this.risk.totalAssets[i]);
             }
 
-            this.D.length = 0;
-            for (let i = 0; i < this.shareHolderEquity.length; i++) {
-              this.D.push(this.shareHolderEquity[i] / this.totalLiabilities[i]);
+            this.risk.D.length = 0;
+            for (let i = 0; i < this.risk.shareHolderEquity.length; i++) {
+              this.risk.D.push(
+                this.risk.shareHolderEquity[i] / this.risk.totalLiabilities[i]
+              );
             }
 
-            this.E.length = 0;
-            for (let i = 0; i < this.revenue.length; i++) {
-              this.E.push(this.revenue[i] / this.totalAssets[i]);
+            this.risk.E.length = 0;
+            for (let i = 0; i < this.risk.revenue.length; i++) {
+              this.risk.E.push(this.risk.revenue[i] / this.risk.totalAssets[i]);
             }
 
-            this.ALTMAN.length = 0;
-            for (let i = 0; i < this.A.length; i++) {
-              this.ALTMAN.push(
-                0.717 * this.A[i] +
-                  0.847 * this.B[i] +
-                  3.107 * this.C[i] +
-                  0.42 * this.D[i] +
-                  0.998 * this.E[i]
+            this.risk.ALTMAN.length = 0;
+            for (let i = 0; i < this.risk.A.length; i++) {
+              this.risk.ALTMAN.push(
+                0.717 * this.risk.A[i] +
+                  0.847 * this.risk.B[i] +
+                  3.107 * this.risk.C[i] +
+                  0.42 * this.risk.D[i] +
+                  0.998 * this.risk.E[i]
               );
             }
           } catch (error: any) {
@@ -224,24 +220,24 @@ export class AnalysisRiskComponent implements OnInit {
           // Check if there is enough data to analyze
           if (
             [
-              this.totalAssets,
-              this.totalLiabilities,
-              this.currentAssets,
-              this.currentLiabilities,
-              this.retainedEarnings,
-              this.shareHolderEquity,
-              this.revenue,
-              this.ebit,
+              this.risk.totalAssets,
+              this.risk.totalLiabilities,
+              this.risk.currentAssets,
+              this.risk.currentLiabilities,
+              this.risk.retainedEarnings,
+              this.risk.shareHolderEquity,
+              this.risk.revenue,
+              this.risk.ebit,
             ].some((array) => array.length < 4) ||
             [
-              ...this.totalAssets,
-              ...this.totalLiabilities,
-              ...this.currentAssets,
-              ...this.currentLiabilities,
-              ...this.retainedEarnings,
-              ...this.shareHolderEquity,
-              ...this.revenue,
-              ...this.ebit,
+              ...this.risk.totalAssets,
+              ...this.risk.totalLiabilities,
+              ...this.risk.currentAssets,
+              ...this.risk.currentLiabilities,
+              ...this.risk.retainedEarnings,
+              ...this.risk.shareHolderEquity,
+              ...this.risk.revenue,
+              ...this.risk.ebit,
             ].some((value) => value === 0)
           ) {
             alert(
@@ -298,27 +294,27 @@ export class AnalysisRiskComponent implements OnInit {
               {
                 name: 'A',
                 type: 'line',
-                data: [...this.A].reverse(),
+                data: [...this.risk.A].reverse(),
               },
               {
                 name: 'B',
                 type: 'line',
-                data: [...this.B].reverse(),
+                data: [...this.risk.B].reverse(),
               },
               {
                 name: 'C',
                 type: 'line',
-                data: [...this.C].reverse(),
+                data: [...this.risk.C].reverse(),
               },
               {
                 name: 'D',
                 type: 'line',
-                data: [...this.D].reverse(),
+                data: [...this.risk.D].reverse(),
               },
               {
                 name: 'E',
                 type: 'line',
-                data: [...this.E].reverse(),
+                data: [...this.risk.E].reverse(),
               },
             ],
           };
@@ -358,41 +354,41 @@ export class AnalysisRiskComponent implements OnInit {
                 data: [
                   {
                     value: [
-                      this.A[0],
-                      this.B[0],
-                      this.C[0],
-                      this.D[0],
-                      this.E[0],
+                      this.risk.A[0],
+                      this.risk.B[0],
+                      this.risk.C[0],
+                      this.risk.D[0],
+                      this.risk.E[0],
                     ],
                     name: '2022',
                   },
                   {
                     value: [
-                      this.A[0],
-                      this.B[1],
-                      this.C[1],
-                      this.D[1],
-                      this.E[1],
+                      this.risk.A[0],
+                      this.risk.B[1],
+                      this.risk.C[1],
+                      this.risk.D[1],
+                      this.risk.E[1],
                     ],
                     name: '2021',
                   },
                   {
                     value: [
-                      this.A[2],
-                      this.B[2],
-                      this.C[2],
-                      this.D[2],
-                      this.E[2],
+                      this.risk.A[2],
+                      this.risk.B[2],
+                      this.risk.C[2],
+                      this.risk.D[2],
+                      this.risk.E[2],
                     ],
                     name: '2020',
                   },
                   {
                     value: [
-                      this.A[3],
-                      this.B[3],
-                      this.C[3],
-                      this.D[3],
-                      this.E[3],
+                      this.risk.A[3],
+                      this.risk.B[3],
+                      this.risk.C[3],
+                      this.risk.D[3],
+                      this.risk.E[3],
                     ],
                     name: '2019',
                   },
@@ -405,13 +401,6 @@ export class AnalysisRiskComponent implements OnInit {
   }
 
   displayChart() {
-    let dates: string[] = [];
-    let ticker: any[] = [];
-
-    let closePrice: any[] = [];
-    let maxData: any[] = [];
-    let minData: any[] = [];
-
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -421,11 +410,16 @@ export class AnalysisRiskComponent implements OnInit {
 
           // Push data
           for (let [key, value] of Object.entries(data)) {
-            dates.push(key);
-            ticker.push([value.Open, value.Close, value.Low, value.High]);
-            closePrice.push(value.Close);
-            maxData.push([key, value.High]);
-            minData.push([key, value.Low]);
+            this.candles.dates.push(key);
+            this.candles.ticker.push([
+              value.Open,
+              value.Close,
+              value.Low,
+              value.High,
+            ]);
+            this.candles.closePrice.push(value.Close);
+            this.candles.maxData.push([key, value.High]);
+            this.candles.minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
@@ -445,7 +439,7 @@ export class AnalysisRiskComponent implements OnInit {
               },
             ],
             xAxis: {
-              data: dates,
+              data: this.candles.dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
             yAxis: {
@@ -465,21 +459,21 @@ export class AnalysisRiskComponent implements OnInit {
               {
                 name: 'Chart',
                 type: 'candlestick',
-                data: ticker,
+                data: this.candles.ticker,
                 markPoint: {
                   data: [
                     {
                       name: 'Max Mark',
-                      coord: this.calcMA.calculateMax(maxData),
-                      value: this.calcMA.calculateMax(maxData),
+                      coord: this.calcMA.calculateMax(this.candles.maxData),
+                      value: this.calcMA.calculateMax(this.candles.maxData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
                     },
                     {
                       name: 'Min Mark',
-                      coord: this.calcMA.calculateMin(minData),
-                      value: this.calcMA.calculateMin(minData),
+                      coord: this.calcMA.calculateMin(this.candles.minData),
+                      value: this.calcMA.calculateMin(this.candles.minData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
@@ -490,7 +484,7 @@ export class AnalysisRiskComponent implements OnInit {
               {
                 name: 'MA 21',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 21),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 21),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -500,7 +494,7 @@ export class AnalysisRiskComponent implements OnInit {
               {
                 name: 'MA 50',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 50),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 50),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -510,7 +504,7 @@ export class AnalysisRiskComponent implements OnInit {
               {
                 name: 'MA 100',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 100),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 100),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {

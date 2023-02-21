@@ -50,11 +50,11 @@
           </p>
           <div>
             <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-              {{ symbol || "TICKER" }}
+              {{ cash.symbol || "TICKER" }}
             </h1>
             <hr />
             <h1 class="cap__element text-center fw-normal fs-2">
-              {{ capitalization }} cap
+              {{ cash.capitalization }} cap
             </h1>
           </div>
         </div>
@@ -74,30 +74,32 @@
             <tbody class="text_size">
               <tr>
                 <td class="text-center">
-                  <p *ngFor="let data of date">
+                  <p *ngFor="let data of cash.date">
                     {{ data | slice : 0 : 4 }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of inventory">
+                  <p *ngFor="let data of cash.inventory">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of cogs">{{ data | number : "1.0-2" }}</p>
-                </td>
-                <td class="text-center">
-                  <p *ngFor="let data of revenue">
+                  <p *ngFor="let data of cash.cogs">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of receivables">
+                  <p *ngFor="let data of cash.revenue">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of accountsPayable">
+                  <p *ngFor="let data of cash.receivables">
+                    {{ data | number : "1.0-2" }}
+                  </p>
+                </td>
+                <td class="text-center">
+                  <p *ngFor="let data of cash.accountsPayable">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
@@ -124,7 +126,7 @@
                 <tr class="text_size">
                   <th scope="col">Indicator</th>
                   <th scope="col">Formula</th>
-                  <th *ngFor="let data of date.reverse()" scope="col">
+                  <th *ngFor="let data of cash.date.reverse()" scope="col">
                     {{ data | slice : 0 : 4 }}
                   </th>
                 </tr>
@@ -141,7 +143,7 @@
                     Days Inventory Outstanding (DIO)
                   </td>
                   <td>(Inventory / Cogs) * 365</td>
-                  <td *ngFor="let data of DIO.reverse()">
+                  <td *ngFor="let data of cash.DIO.reverse()">
                     <p
                       [ngClass]="
                         data > 40 ? 'red_indicator' : 'green_indicator'
@@ -162,7 +164,7 @@
                     Days Sales Outstanding (DSO)
                   </td>
                   <td>(Rceivables / Revenue) * 365</td>
-                  <td *ngFor="let data of DSO.reverse()">
+                  <td *ngFor="let data of cash.DSO.reverse()">
                     <p
                       [ngClass]="
                         data > 60 ? 'red_indicator' : 'green_indicator'
@@ -183,7 +185,7 @@
                     Days Payable Outstanding (DPO)
                   </td>
                   <td>(Accounts Payable / Cogs) * 365</td>
-                  <td *ngFor="let data of DPO.reverse()">
+                  <td *ngFor="let data of cash.DPO.reverse()">
                     <p
                       [ngClass]="
                         data > 45 ? 'red_indicator' : 'green_indicator'
@@ -204,7 +206,7 @@
                     Cash Conversion Cycle (CCC)
                   </td>
                   <td>DIO + DSO - DPO</td>
-                  <td *ngFor="let data of CCC.reverse()">
+                  <td *ngFor="let data of cash.CCC.reverse()">
                     <p
                       [ngClass]="
                         data > 45 ? 'red_indicator' : 'green_indicator'

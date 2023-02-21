@@ -49,11 +49,11 @@
             Stock Symbol should have min 1 to 4 characters 📢
           </p>
           <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-            {{ symbol || "TICKER" }}
+            {{ performance.symbol || "TICKER" }}
           </h1>
           <hr />
           <h1 class="cap__element text-center fw-normal fs-2">
-            {{ capitalization }} cap
+            {{ performance.capitalization }} cap
           </h1>
         </div>
 
@@ -71,27 +71,27 @@
             <tbody class="text_size">
               <tr>
                 <td class="text-center">
-                  <p *ngFor="let data of date">
+                  <p *ngFor="let data of performance.date">
                     {{ data | slice : 0 : 4 }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalAssets">
+                  <p *ngFor="let data of performance.totalAssets">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of netIncome">
+                  <p *ngFor="let data of performance.netIncome">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of revenue">
+                  <p *ngFor="let data of performance.revenue">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of shareHolderEquity">
+                  <p *ngFor="let data of performance.shareHolderEquity">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
@@ -118,7 +118,10 @@
                 <tr class="text_size">
                   <th scope="col">Indicator</th>
                   <th scope="col">Formula</th>
-                  <th *ngFor="let data of date.reverse()" scope="col">
+                  <th
+                    *ngFor="let data of performance.date.reverse()"
+                    scope="col"
+                  >
                     {{ data | slice : 0 : 4 }}
                   </th>
                 </tr>
@@ -135,7 +138,7 @@
                     Return On Assets (ROA)
                   </td>
                   <td>(Net Income / Total Assets) * 100</td>
-                  <td *ngFor="let data of ROA.reverse()">
+                  <td *ngFor="let data of performance.ROA.reverse()">
                     <p
                       [ngClass]="data < 5 ? 'red_indicator' : 'green_indicator'"
                     >
@@ -154,7 +157,7 @@
                     Return On Equity (ROE)
                   </td>
                   <td>(Net Income / Share Holder Equity) * 100</td>
-                  <td *ngFor="let data of ROE.reverse()">
+                  <td *ngFor="let data of performance.ROE.reverse()">
                     <p
                       [ngClass]="
                         data < 15 ? 'red_indicator' : 'green_indicator'
@@ -175,7 +178,7 @@
                     Return On Sales (ROS)
                   </td>
                   <td>(Net Income / Revenue) * 100</td>
-                  <td *ngFor="let data of ROS.reverse()">
+                  <td *ngFor="let data of performance.ROS.reverse()">
                     <p
                       [ngClass]="data < 5 ? 'red_indicator' : 'green_indicator'"
                     >
@@ -195,7 +198,7 @@
                     Assets Turnover Ratio (ATR)
                   </td>
                   <td>Revenue / Total Assets</td>
-                  <td *ngFor="let data of VRA.reverse()">
+                  <td *ngFor="let data of performance.VRA.reverse()">
                     <p
                       [ngClass]="data < 1 ? 'red_indicator' : 'green_indicator'"
                     >
@@ -214,7 +217,7 @@
                     Equity Multiplier (AER)
                   </td>
                   <td>Total Assets / Share Holder Equity</td>
-                  <td *ngFor="let data of AER.reverse()">
+                  <td *ngFor="let data of performance.AER.reverse()">
                     <p class="neutral_indicator">
                       {{ data | number : "1.0-2" }}
                     </p>

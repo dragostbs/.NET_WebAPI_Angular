@@ -67,21 +67,4 @@ export class CrudApiService {
   deleteStocks(id: number | string) {
     return this.http.delete(this.financialsAPIUrl + `/stocks/${id}`);
   }
-
-  // Users
-  // getUsersList(): Observable<any[]> {
-  //   return this.http.get<any>(this.financialsAPIUrl + '/UserLogins');
-  // }
-
-  // addUsers(data: any) {
-  //   return this.http.post(this.financialsAPIUrl + '/UserLogins', data);
-  // }
-
-  // updateUsers(id: number | string, data: any) {
-  //   return this.http.put(this.financialsAPIUrl + `/UserLogins/${id}`, data);
-  // }
-
-  // deleteUsers(id: number | string) {
-  //   return this.http.delete(this.financialsAPIUrl + `/UserLogins/${id}`);
-  // }
 }

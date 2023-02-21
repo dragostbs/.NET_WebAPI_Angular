@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
 import { BehaviorSubject } from 'rxjs';
+import {
+  CandlesChart,
+  candlesData,
+  Liquidity,
+  liquidityData,
+} from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { CalcMaService } from '../services/calc-ma.service';
@@ -21,19 +27,8 @@ export class AnalysisLiquidityComponent implements OnInit {
   loadingElement: EChartsOption = {};
   candlesChart: EChartsOption = {};
 
-  symbol: string = '';
-  capitalization: number = 0;
-  date: string[] = ['2022', '2021', '2020', '2019'];
-  inventory: number[] = [0, 0, 0, 0];
-  receivables: number[] = [0, 0, 0, 0];
-  prePaidExpenses: number[] = [0, 0, 0, 0];
-  cashOnHand: number[] = [0, 0, 0, 0];
-  assets: number[] = [0, 0, 0, 0];
-  liabillities: number[] = [0, 0, 0, 0];
-  RLC: number[] = [0, 0, 0, 0];
-  RLI: number[] = [0, 0, 0, 0];
-  TR: number[] = [0, 0, 0, 0];
-  RLE: number[] = [0, 0, 0, 0];
+  liquidity: Liquidity = liquidityData;
+  candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
@@ -104,66 +99,75 @@ export class AnalysisLiquidityComponent implements OnInit {
             annualCurrentLiabilities.reverse();
 
             // Push values
-            this.symbol = symbol;
-            this.capitalization = marketCap.fmt;
+            this.liquidity.symbol = symbol;
+            this.liquidity.capitalization = marketCap.fmt;
 
-            this.date.length = 0;
+            this.liquidity.date.length = 0;
             for (let value of annualInventory) {
-              this.date.push(value.asOfDate);
+              this.liquidity.date.push(value.asOfDate);
             }
 
-            this.inventory.length = 0;
+            this.liquidity.inventory.length = 0;
             for (let value of annualInventory) {
-              this.inventory.push(value.reportedValue.raw);
+              this.liquidity.inventory.push(value.reportedValue.raw);
             }
 
-            this.receivables.length = 0;
+            this.liquidity.receivables.length = 0;
             for (let value of balanceSheetStatements) {
-              this.receivables.push(value.netReceivables.raw);
+              this.liquidity.receivables.push(value.netReceivables.raw);
             }
 
-            this.prePaidExpenses.length = 0;
+            this.liquidity.prePaidExpenses.length = 0;
             for (let value of balanceSheetStatements) {
-              this.prePaidExpenses.push(value.deferredLongTermAssetCharges.raw);
+              this.liquidity.prePaidExpenses.push(
+                value.deferredLongTermAssetCharges.raw
+              );
             }
 
-            this.cashOnHand.length = 0;
+            this.liquidity.cashOnHand.length = 0;
             for (let value of balanceSheetStatements) {
-              this.cashOnHand.push(value.cash.raw);
+              this.liquidity.cashOnHand.push(value.cash.raw);
             }
 
-            this.assets.length = 0;
+            this.liquidity.assets.length = 0;
             for (let value of annualCurrentAssets) {
-              this.assets.push(value.reportedValue.raw);
+              this.liquidity.assets.push(value.reportedValue.raw);
             }
 
-            this.liabillities.length = 0;
+            this.liquidity.liabilities.length = 0;
             for (let value of annualCurrentLiabilities) {
-              this.liabillities.push(value.reportedValue.raw);
+              this.liquidity.liabilities.push(value.reportedValue.raw);
             }
 
             // Results
-            this.RLC.length = 0;
-            for (let i = 0; i < this.assets.length; i++) {
-              this.RLC.push((this.assets[i] / this.liabillities[i]) * 100);
+            this.liquidity.RLC.length = 0;
+            for (let i = 0; i < this.liquidity.assets.length; i++) {
+              this.liquidity.RLC.push(
+                (this.liquidity.assets[i] / this.liquidity.liabilities[i]) * 100
+              );
             }
 
-            this.RLI.length = 0;
-            for (let i = 0; i < this.assets.length; i++) {
-              this.RLI.push(
-                ((this.assets[i] - this.inventory[i]) / this.liabillities[i]) *
+            this.liquidity.RLI.length = 0;
+            for (let i = 0; i < this.liquidity.assets.length; i++) {
+              this.liquidity.RLI.push(
+                ((this.liquidity.assets[i] - this.liquidity.inventory[i]) /
+                  this.liquidity.liabilities[i]) *
                   100
               );
             }
 
-            this.TR.length = 0;
-            for (let i = 0; i < this.prePaidExpenses.length; i++) {
-              this.TR.push(this.prePaidExpenses[i] + this.cashOnHand[i]);
+            this.liquidity.TR.length = 0;
+            for (let i = 0; i < this.liquidity.prePaidExpenses.length; i++) {
+              this.liquidity.TR.push(
+                this.liquidity.prePaidExpenses[i] + this.liquidity.cashOnHand[i]
+              );
             }
 
-            this.RLE.length = 0;
-            for (let i = 0; i < this.liabillities.length; i++) {
-              this.RLE.push((this.TR[i] / this.liabillities[i]) * 100);
+            this.liquidity.RLE.length = 0;
+            for (let i = 0; i < this.liquidity.liabilities.length; i++) {
+              this.liquidity.RLE.push(
+                (this.liquidity.TR[i] / this.liquidity.liabilities[i]) * 100
+              );
             }
           } catch (error: any) {
             alert('🌋 Insufficient data to analyse the stock !!!');
@@ -174,20 +178,20 @@ export class AnalysisLiquidityComponent implements OnInit {
           // Check if there is enough data to analyze
           if (
             [
-              this.inventory,
-              this.prePaidExpenses,
-              this.cashOnHand,
-              this.receivables,
-              this.assets,
-              this.liabillities,
+              this.liquidity.inventory,
+              this.liquidity.prePaidExpenses,
+              this.liquidity.cashOnHand,
+              this.liquidity.receivables,
+              this.liquidity.assets,
+              this.liquidity.liabilities,
             ].some((array) => array.length < 4) ||
             [
-              ...this.inventory,
-              ...this.prePaidExpenses,
-              ...this.cashOnHand,
-              ...this.receivables,
-              ...this.assets,
-              ...this.liabillities,
+              ...this.liquidity.inventory,
+              ...this.liquidity.prePaidExpenses,
+              ...this.liquidity.cashOnHand,
+              ...this.liquidity.receivables,
+              ...this.liquidity.assets,
+              ...this.liquidity.liabilities,
             ].some((value) => value === 0)
           ) {
             alert(
@@ -244,17 +248,17 @@ export class AnalysisLiquidityComponent implements OnInit {
               {
                 name: 'RLE',
                 type: 'line',
-                data: [...this.RLE].reverse(),
+                data: [...this.liquidity.RLE].reverse(),
               },
               {
                 name: 'RLI',
                 type: 'line',
-                data: [...this.RLI].reverse(),
+                data: [...this.liquidity.RLI].reverse(),
               },
               {
                 name: 'RLC',
                 type: 'line',
-                data: [...this.RLC].reverse(),
+                data: [...this.liquidity.RLC].reverse(),
               },
             ],
           };
@@ -296,13 +300,13 @@ export class AnalysisLiquidityComponent implements OnInit {
             series: [
               {
                 type: 'bar',
-                data: [...this.assets].reverse(),
+                data: [...this.liquidity.assets].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Assets',
               },
               {
                 type: 'bar',
-                data: [...this.liabillities].reverse(),
+                data: [...this.liquidity.liabilities].reverse(),
                 coordinateSystem: 'polar',
                 name: 'Liabilities',
               },
@@ -318,13 +322,6 @@ export class AnalysisLiquidityComponent implements OnInit {
   }
 
   displayChart() {
-    let dates: string[] = [];
-    let ticker: any[] = [];
-
-    let closePrice: any[] = [];
-    let maxData: any[] = [];
-    let minData: any[] = [];
-
     if (this.searchForm.valid) {
       this.dataCandles
         .getCandlesData(this.searchForm.value['stockSymbol'])
@@ -334,11 +331,16 @@ export class AnalysisLiquidityComponent implements OnInit {
 
           // Push data
           for (let [key, value] of Object.entries(data)) {
-            dates.push(key);
-            ticker.push([value.Open, value.Close, value.Low, value.High]);
-            closePrice.push(value.Close);
-            maxData.push([key, value.High]);
-            minData.push([key, value.Low]);
+            this.candles.dates.push(key);
+            this.candles.ticker.push([
+              value.Open,
+              value.Close,
+              value.Low,
+              value.High,
+            ]);
+            this.candles.closePrice.push(value.Close);
+            this.candles.maxData.push([key, value.High]);
+            this.candles.minData.push([key, value.Low]);
           }
 
           this.candlesChart = {
@@ -358,7 +360,7 @@ export class AnalysisLiquidityComponent implements OnInit {
               },
             ],
             xAxis: {
-              data: dates,
+              data: this.candles.dates,
               axisLine: { lineStyle: { color: '#8392A5' } },
             },
             yAxis: {
@@ -378,21 +380,21 @@ export class AnalysisLiquidityComponent implements OnInit {
               {
                 name: 'Chart',
                 type: 'candlestick',
-                data: ticker,
+                data: this.candles.ticker,
                 markPoint: {
                   data: [
                     {
                       name: 'Max Mark',
-                      coord: this.calcMA.calculateMax(maxData),
-                      value: this.calcMA.calculateMax(maxData),
+                      coord: this.calcMA.calculateMax(this.candles.maxData),
+                      value: this.calcMA.calculateMax(this.candles.maxData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
                     },
                     {
                       name: 'Min Mark',
-                      coord: this.calcMA.calculateMin(minData),
-                      value: this.calcMA.calculateMin(minData),
+                      coord: this.calcMA.calculateMin(this.candles.minData),
+                      value: this.calcMA.calculateMin(this.candles.minData),
                       itemStyle: {
                         color: 'rgb(41,60,85)',
                       },
@@ -403,7 +405,7 @@ export class AnalysisLiquidityComponent implements OnInit {
               {
                 name: 'MA 21',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 21),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 21),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -413,7 +415,7 @@ export class AnalysisLiquidityComponent implements OnInit {
               {
                 name: 'MA 50',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 50),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 50),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {
@@ -423,7 +425,7 @@ export class AnalysisLiquidityComponent implements OnInit {
               {
                 name: 'MA 100',
                 type: 'line',
-                data: this.calcMA.calculateMA(closePrice, 100),
+                data: this.calcMA.calculateMA(this.candles.closePrice, 100),
                 smooth: true,
                 showSymbol: false,
                 lineStyle: {

@@ -1,12 +1,13 @@
 import {
   HttpContextToken,
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { finalize, Observable } from 'rxjs';
+import { catchError, finalize, Observable, throwError } from 'rxjs';
 import { LoadService } from './load.service';
 
 export const BYPASS_INTERCEPTOR = new HttpContextToken(() => false);
@@ -28,6 +29,11 @@ export class InterceptorService implements HttpInterceptor {
     return next.handle(req).pipe(
       finalize(() => {
         this.loadingService.isLoading.next(false);
+      }),
+
+      catchError((error: HttpErrorResponse) => {
+        console.log(error);
+        return throwError(() => new Error(`HTTP error: ${error.message}`));
       })
     );
   }

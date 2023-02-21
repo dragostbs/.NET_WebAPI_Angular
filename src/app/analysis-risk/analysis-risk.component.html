@@ -49,11 +49,11 @@
             Stock Symbol should have min 1 to 4 characters 📢
           </p>
           <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-            {{ symbol || "TICKER" }}
+            {{ risk.symbol || "TICKER" }}
           </h1>
           <hr />
           <h1 class="cap__element text-center fw-normal fs-2">
-            {{ capitalization }} cap
+            {{ risk.capitalization }} cap
           </h1>
         </div>
 
@@ -76,52 +76,52 @@
             <tbody class="text_size">
               <tr>
                 <td class="text-center">
-                  <p *ngFor="let data of date">
+                  <p *ngFor="let data of risk.date">
                     {{ data | slice : 0 : 4 }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalAssets">
+                  <p *ngFor="let data of risk.totalAssets">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of totalLiabilities">
+                  <p *ngFor="let data of risk.totalLiabilities">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of currentAssets">
+                  <p *ngFor="let data of risk.currentAssets">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of currentLiabilities">
+                  <p *ngFor="let data of risk.currentLiabilities">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of retainedEarnings">
+                  <p *ngFor="let data of risk.retainedEarnings">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of shareHolderEquity">
+                  <p *ngFor="let data of risk.shareHolderEquity">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of workingCapital">
+                  <p *ngFor="let data of risk.workingCapital">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of revenue">
+                  <p *ngFor="let data of risk.revenue">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of ebit">
+                  <p *ngFor="let data of risk.ebit">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
@@ -148,7 +148,7 @@
                 <tr class="text_size">
                   <th scope="col">Indicator</th>
                   <th scope="col">Formula</th>
-                  <th *ngFor="let data of date.reverse()" scope="col">
+                  <th *ngFor="let data of risk.date.reverse()" scope="col">
                     {{ data | slice : 0 : 4 }}
                   </th>
                 </tr>
@@ -165,7 +165,7 @@
                     A
                   </td>
                   <td>Working Capital / Total Assets</td>
-                  <td *ngFor="let data of A.reverse()">
+                  <td *ngFor="let data of risk.A.reverse()">
                     <p class="neutral_indicator">
                       {{ data | number : "1.0-2" }}
                     </p>
@@ -182,7 +182,7 @@
                     B
                   </td>
                   <td>Retained Earnings / Total Assets</td>
-                  <td *ngFor="let data of B.reverse()">
+                  <td *ngFor="let data of risk.B.reverse()">
                     <p class="neutral_indicator">
                       {{ data | number : "1.0-2" }}
                     </p>
@@ -199,7 +199,7 @@
                     C
                   </td>
                   <td>EBIT / Total Assets</td>
-                  <td *ngFor="let data of C.reverse()">
+                  <td *ngFor="let data of risk.C.reverse()">
                     <p class="neutral_indicator">
                       {{ data | number : "1.0-2" }}
                     </p>
@@ -216,7 +216,7 @@
                     D
                   </td>
                   <td>Share Holder Equity / Total Liabilities</td>
-                  <td *ngFor="let data of D.reverse()">
+                  <td *ngFor="let data of risk.D.reverse()">
                     <p class="neutral_indicator">
                       {{ data | number : "1.0-2" }}
                     </p>
@@ -233,7 +233,7 @@
                     E
                   </td>
                   <td>Revenue / Total Assets</td>
-                  <td *ngFor="let data of E.reverse()">
+                  <td *ngFor="let data of risk.E.reverse()">
                     <p class="neutral_indicator">
                       {{ data | number : "1.0-2" }}
                     </p>
@@ -250,7 +250,7 @@
                     Altman Z-Score
                   </td>
                   <td>0.717*A+0.847*B+3.107*C+0.42*D+0.998*E</td>
-                  <td *ngFor="let data of ALTMAN.reverse()">
+                  <td *ngFor="let data of risk.ALTMAN.reverse()">
                     <p
                       [ngClass]="
                         data < 1.81 ? 'red_indicator' : 'green_indicator'

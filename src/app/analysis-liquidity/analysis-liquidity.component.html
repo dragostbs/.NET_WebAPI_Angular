@@ -49,11 +49,11 @@
             Stock Symbol should have min 1 to 4 characters 📢
           </p>
           <h1 class="ticker__element text-center fw-normal fs-2 p-2">
-            {{ symbol || "TICKER" }}
+            {{ liquidity.symbol || "TICKER" }}
           </h1>
           <hr />
           <h1 class="cap__element text-center fw-normal fs-2">
-            {{ capitalization }} cap
+            {{ liquidity.capitalization }} cap
           </h1>
         </div>
 
@@ -74,42 +74,42 @@
             <tbody class="text_size">
               <tr>
                 <td class="text-center">
-                  <p *ngFor="let data of date">
+                  <p *ngFor="let data of liquidity.date">
                     {{ data | slice : 0 : 4 }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of inventory">
+                  <p *ngFor="let data of liquidity.inventory">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of receivables">
+                  <p *ngFor="let data of liquidity.receivables">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of prePaidExpenses">
+                  <p *ngFor="let data of liquidity.prePaidExpenses">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of cashOnHand">
+                  <p *ngFor="let data of liquidity.cashOnHand">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of TR">
+                  <p *ngFor="let data of liquidity.TR">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of assets">
+                  <p *ngFor="let data of liquidity.assets">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
                 <td class="text-center">
-                  <p *ngFor="let data of liabillities">
+                  <p *ngFor="let data of liquidity.liabilities">
                     {{ data | number : "1.0-2" }}
                   </p>
                 </td>
@@ -136,7 +136,7 @@
                 <tr class="text_size">
                   <th scope="col">Indicator</th>
                   <th scope="col">Formula</th>
-                  <th *ngFor="let data of date.reverse()" scope="col">
+                  <th *ngFor="let data of liquidity.date.reverse()" scope="col">
                     {{ data | slice : 0 : 4 }}
                   </th>
                 </tr>
@@ -153,7 +153,7 @@
                     Current ratio (RLC)
                   </td>
                   <td>(Assets / Liabilities) * 100</td>
-                  <td *ngFor="let data of RLC.reverse()">
+                  <td *ngFor="let data of liquidity.RLC.reverse()">
                     <p
                       [ngClass]="
                         data < 150 || data > 250
@@ -176,7 +176,7 @@
                     Quick Ratio (RLI)
                   </td>
                   <td>(Assets - Inventory) / Liabilities * 100</td>
-                  <td *ngFor="let data of RLI.reverse()">
+                  <td *ngFor="let data of liquidity.RLI.reverse()">
                     <p
                       [ngClass]="
                         data < 50 || data > 100
@@ -199,7 +199,7 @@
                     Cash Ratio (RLE)
                   </td>
                   <td>(Treasury / Liabilities) * 100</td>
-                  <td *ngFor="let data of RLE.reverse()">
+                  <td *ngFor="let data of liquidity.RLE.reverse()">
                     <p
                       [ngClass]="
                         data < 50 || data > 100

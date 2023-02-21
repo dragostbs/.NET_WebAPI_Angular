@@ -1,20 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-
-export interface IUser {
-  username: string;
-  email: string;
-}
+import { IUser, loggedUser } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthApiService {
-  loggedUser: IUser = {
-    username: '',
-    email: '',
-  };
+  user: IUser = loggedUser;
 
   readonly financialsAPIUrl = 'https://localhost:44398/api/IdentityUser';
 
@@ -27,10 +20,10 @@ export class AuthApiService {
         localStorage.setItem('token', res.token);
         localStorage.setItem('username', res.username);
 
-        this.loggedUser.username = res.username;
-        this.loggedUser.email = res.email;
+        this.user.username = res.username;
+        this.user.email = res.email;
 
-        return this.loggedUser;
+        return this.user;
       })
     );
   }
