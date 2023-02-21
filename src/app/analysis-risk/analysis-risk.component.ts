@@ -420,6 +420,7 @@ export class AnalysisRiskComponent implements OnInit {
             this.candles.closePrice.push(value.Close);
             this.candles.maxData.push([key, value.High]);
             this.candles.minData.push([key, value.Low]);
+            this.candles.Volume.push(value.Volume);
           }
 
           this.candlesChart = {
@@ -428,24 +429,53 @@ export class AnalysisRiskComponent implements OnInit {
               left: 0,
             },
             legend: {
-              data: ['Chart', 'MA 21', 'MA 50', 'MA 100'],
+              data: ['Chart', 'Volume', 'MA 21', 'MA 50', 'MA 100'],
               inactiveColor: '#777',
             },
             grid: [
               {
                 left: '5%',
                 right: '2%',
-                height: '80%',
+                height: '70%',
+              },
+              {
+                left: '5%',
+                right: '2%',
+                top: '84%',
+                height: '7%',
               },
             ],
-            xAxis: {
-              data: this.candles.dates,
-              axisLine: { lineStyle: { color: '#8392A5' } },
-            },
-            yAxis: {
-              scale: true,
-              axisLine: { lineStyle: { color: '#8392A5' } },
-            },
+            xAxis: [
+              {
+                data: this.candles.dates,
+                axisLine: { lineStyle: { color: '#8392A5' } },
+              },
+              {
+                type: 'category',
+                gridIndex: 1,
+                data: this.candles.Volume,
+                boundaryGap: false,
+                axisLine: { onZero: false },
+                axisTick: { show: false },
+                splitLine: { show: false },
+                axisLabel: { show: false },
+              },
+            ],
+            yAxis: [
+              {
+                scale: true,
+                axisLine: { lineStyle: { color: '#8392A5' } },
+              },
+              {
+                scale: true,
+                gridIndex: 1,
+                splitNumber: 2,
+                axisLabel: { show: false },
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { show: false },
+              },
+            ],
             toolbox: {
               show: true,
               feature: {
@@ -480,6 +510,17 @@ export class AnalysisRiskComponent implements OnInit {
                     },
                   ],
                 },
+              },
+              {
+                name: 'Volume',
+                data: this.candles.Volume,
+                type: 'bar',
+                xAxisIndex: 1,
+                yAxisIndex: 1,
+                itemStyle: {
+                  color: '#5ba0c7',
+                },
+                large: true,
               },
               {
                 name: 'MA 21',
@@ -527,11 +568,13 @@ export class AnalysisRiskComponent implements OnInit {
             dataZoom: [
               {
                 type: 'inside',
-                start: 50,
+                xAxisIndex: [0, 1],
+                start: 20,
                 end: 100,
               },
               {
                 show: true,
+                xAxisIndex: [0, 1],
                 type: 'slider',
                 start: 50,
                 end: 100,

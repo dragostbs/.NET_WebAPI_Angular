@@ -9,6 +9,7 @@ export interface CandlesChart {
   Close: number;
   Low: number;
   High: number;
+  Volume: any[];
 }
 
 export const candlesData: CandlesChart = {
@@ -17,6 +18,7 @@ export const candlesData: CandlesChart = {
   closePrice: [],
   maxData: [],
   minData: [],
+  Volume: [],
   Open: 0,
   Close: 0,
   Low: 0,
