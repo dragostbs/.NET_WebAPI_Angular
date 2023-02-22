@@ -1,6 +1,7 @@
 import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Transactions } from '../interfaces/interfaces';
 import { BYPASS_INTERCEPTOR } from '../loading/interceptor.service';
 
 @Injectable({
@@ -12,21 +13,24 @@ export class CrudApiService {
   constructor(private http: HttpClient) {}
 
   // Transactions
-  getTransactionsList(): Observable<any[]> {
-    return this.http.get<any>(this.financialsAPIUrl + '/transactions', {
-      context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
-      ...this.getToken(),
-    });
+  getTransactionsList(): Observable<Transactions[]> {
+    return this.http.get<Transactions[]>(
+      this.financialsAPIUrl + '/transactions',
+      {
+        context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
+        ...this.getToken(),
+      }
+    );
   }
 
-  addTransactions(data: any) {
+  addTransactions(data: Transactions) {
     return this.http.post(this.financialsAPIUrl + '/transactions', data, {
       context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
       ...this.getToken(),
     });
   }
 
-  updateTransactions(id: number | string, data: any) {
+  updateTransactions(id: number | string, data: Transactions) {
     return this.http.put(
       this.financialsAPIUrl + `/transactions/${id}`,
       data,

@@ -32,7 +32,6 @@ export class TradeComponent implements OnInit {
   }
 
   submitTransaction() {
-    console.log(this.transactionForm.value);
     // POST to database
     this.service
       .addTransactions(this.transactionForm.value)

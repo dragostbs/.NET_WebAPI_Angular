@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Fallers, Gainers } from 'src/app/interfaces/interfaces';
 import { DiscoverApiService } from 'src/app/services/discover-api.service';
 
 @Component({
@@ -7,8 +8,8 @@ import { DiscoverApiService } from 'src/app/services/discover-api.service';
   styleUrls: ['./gainer-faller.component.scss'],
 })
 export class GainerFallerComponent implements OnInit {
-  listGainers: any = [];
-  listFallers: any = [];
+  listGainers: Gainers[] = [];
+  listFallers: Fallers[] = [];
   myMath = Math;
 
   constructor(private service: DiscoverApiService) {}
@@ -16,15 +17,29 @@ export class GainerFallerComponent implements OnInit {
   ngOnInit(): void {
     // Get Gainers
     this.service.getGainers().subscribe((data) => {
-      for (let [key, value] of Object.entries(data)) {
-        this.listGainers.push(value);
+      let { quotes }: any = data;
+
+      for (let value of quotes) {
+        const gainers: Gainers = {
+          symbol: value.symbol,
+          marketChangePercentage: value.regularMarketChangePercent,
+        };
+
+        this.listGainers.push(gainers);
       }
     });
 
     // Get Fallers
     this.service.getFallers().subscribe((data) => {
-      for (let [key, value] of Object.entries(data)) {
-        this.listFallers.push(value);
+      let { quotes }: any = data;
+
+      for (let value of quotes) {
+        const fallers: Fallers = {
+          symbol: value.symbol,
+          marketChangePercentage: value.regularMarketChangePercent,
+        };
+
+        this.listFallers.push(fallers);
       }
     });
   }

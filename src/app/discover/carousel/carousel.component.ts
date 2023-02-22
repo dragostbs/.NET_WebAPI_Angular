@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
+import { Volume, volumeData } from 'src/app/interfaces/interfaces';
 import { DiscoverApiService } from 'src/app/services/discover-api.service';
-
-export interface ActiveStocks {
-  name: string;
-  marketVolume: number;
-  marketPrice: number;
-}
 
 @Component({
   selector: 'app-carousel',
@@ -17,30 +12,26 @@ export class CarouselComponent implements OnInit {
   pieChart: EChartsOption = {};
   barChart: EChartsOption = {};
 
+  volume: Volume = volumeData;
+
   constructor(private service: DiscoverApiService) {}
 
   ngOnInit(): void {
-    let stockName: any[] = [];
-    let regularVolume: any[] = [];
-    let volume3Months: any[] = [];
-    let volume10Days: any[] = [];
-    let marketVolume: any[] = [];
-    let marketPrice: any[] = [];
-
     // Bar Chart Analysis
     this.service.getMostActive().subscribe((data) => {
       // Destructuring the data, get quotes from Object
+
       let { quotes }: any = data;
       for (let value of quotes) {
-        stockName.push(value.shortName);
-        regularVolume.push(value.regularMarketVolume);
-        volume3Months.push(value.averageDailyVolume3Month);
-        volume10Days.push(value.averageDailyVolume10Day);
-        marketVolume.push({
+        this.volume.stockName.push(value.shortName);
+        this.volume.regularVolume.push(value.regularMarketVolume);
+        this.volume.volume3Months.push(value.averageDailyVolume3Month);
+        this.volume.volume10Days.push(value.averageDailyVolume10Day);
+        this.volume.marketVolume.push({
           value: value.regularMarketVolume,
           name: value.shortName,
         });
-        marketPrice.push({
+        this.volume.marketPrice.push({
           value: value.regularMarketPrice,
           name: value.shortName,
         });
@@ -98,7 +89,7 @@ export class CarouselComponent implements OnInit {
             labelLine: {
               show: false,
             },
-            data: marketVolume.slice(0, 5),
+            data: this.volume.marketVolume.slice(0, 5),
           },
           {
             type: 'pie',
@@ -124,7 +115,7 @@ export class CarouselComponent implements OnInit {
             labelLine: {
               show: false,
             },
-            data: marketPrice.slice(0, 5),
+            data: this.volume.marketPrice.slice(0, 5),
           },
         ],
       };
@@ -169,7 +160,7 @@ export class CarouselComponent implements OnInit {
           {
             type: 'category',
             boundaryGap: true,
-            data: stockName.slice(0, 5),
+            data: this.volume.stockName.slice(0, 5),
             axisLabel: {
               fontSize: 5,
             },
@@ -187,17 +178,17 @@ export class CarouselComponent implements OnInit {
           {
             name: 'Regular Volume',
             type: 'bar',
-            data: regularVolume,
+            data: this.volume.regularVolume,
           },
           {
             name: '3 Months Volume',
             type: 'bar',
-            data: volume3Months,
+            data: this.volume.volume3Months,
           },
           {
             name: '10 Days Volume',
             type: 'bar',
-            data: volume10Days,
+            data: this.volume.volume10Days,
           },
         ],
       };

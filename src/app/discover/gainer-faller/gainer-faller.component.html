@@ -11,19 +11,19 @@
     </div>
     <div class="risersFallers">
       <table class="table mb-0">
-        <tbody *ngFor="let gain of listGainers[5]">
+        <tbody *ngFor="let gain of listGainers">
           <tr>
             <td class="text-start ps-4">{{ gain.symbol }}</td>
             <td>
               <ngb-progressbar
                 type="success"
-                [value]="gain.regularMarketChangePercent"
+                [value]="gain.marketChangePercentage"
                 class="progress__bar mt-1"
               >
               </ngb-progressbar>
             </td>
             <td class="text-end pe-4">
-              {{ gain.regularMarketChangePercent | number : "1.0-2" }}%
+              {{ gain.marketChangePercentage | number : "1.0-2" }}%
             </td>
           </tr>
         </tbody>
@@ -43,19 +43,19 @@
     </div>
     <div class="risersFallers">
       <table class="table mb-0">
-        <tbody *ngFor="let fall of listFallers[5]">
+        <tbody *ngFor="let fall of listFallers">
           <tr>
             <td class="text-start ps-4">{{ fall.symbol }}</td>
             <td>
               <ngb-progressbar
                 type="danger"
-                [value]="myMath.abs(fall.regularMarketChangePercent)"
+                [value]="myMath.abs(fall.marketChangePercentage)"
                 class="progress__bar mt-1"
               >
               </ngb-progressbar>
             </td>
             <td class="text-end pe-4">
-              {{ fall.regularMarketChangePercent | number : "1.0-2" }}%
+              {{ fall.marketChangePercentage | number : "1.0-2" }}%
             </td>
           </tr>
         </tbody>

@@ -231,3 +231,56 @@ export const loggedUser: IUser = {
   username: '',
   email: '',
 };
+
+// --- volume --- \\
+export interface Volume {
+  stockName: string[];
+  regularVolume: number[];
+  volume3Months: number[];
+  volume10Days: number[];
+  marketVolume: { value: number; name: string }[];
+  marketPrice: { value: number; name: string }[];
+}
+
+export const volumeData: Volume = {
+  stockName: [],
+  regularVolume: [],
+  volume3Months: [],
+  volume10Days: [],
+  marketVolume: [],
+  marketPrice: [],
+};
+
+// --- News --- \\
+export interface News {
+  title: string;
+  image: string;
+  date: number;
+}
+
+// --- Gainers Fallers --- \\
+export interface Gainers {
+  symbol: string;
+  marketChangePercentage: number;
+}
+
+export interface Fallers {
+  symbol: string;
+  marketChangePercentage: number;
+}
+
+// --- Transactions --- \\
+export interface Transactions {
+  id: number;
+  stockId: number;
+  price: number;
+  stock: string;
+  result: string;
+  date: string;
+}
+
+export interface Stock {
+  id: number;
+  symbol: string;
+  price: string;
+}

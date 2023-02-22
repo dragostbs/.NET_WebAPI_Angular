@@ -1,6 +1,7 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import { Observable, of } from 'rxjs';
+import { Stock, Transactions } from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
 import { ChartsService } from '../services/charts.service';
@@ -17,12 +18,11 @@ import { CrudApiService } from '../services/crud-api.service';
 export class ReportsComponent implements OnInit {
   sortOrder: boolean = true;
 
-  transactions$!: Observable<any[]>;
+  transactions$!: Observable<Transactions[]>;
   loadingElement: EChartsOption = {};
 
   // Map to acces key data such as price, symbol... for transactions
-  stockList: any[] = [];
-  userList: any[] = [];
+  stockList: Stock[] = [];
   stockSymbolMap: Map<number, string> = new Map();
   stockPriceMap: Map<number, string> = new Map();
 
@@ -42,7 +42,7 @@ export class ReportsComponent implements OnInit {
     this.loadingEffect();
   }
 
-  sortTable(key: string) {
+  sortTable(key: keyof Transactions) {
     this.sortOrder = !this.sortOrder;
     this.transactions$.subscribe((transactions) => {
       transactions.sort((a, b) => {
@@ -73,7 +73,7 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  removeTransactions(transaction: any) {
+  removeTransactions(transaction: Transactions) {
     this.service.deleteTransactions(transaction.id).subscribe((data) => {
       // Show success message
       const showRemove = document.getElementById('add-remove-alert');
