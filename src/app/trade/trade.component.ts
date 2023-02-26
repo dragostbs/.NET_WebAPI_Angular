@@ -21,13 +21,11 @@ export class TradeComponent implements OnInit {
     this.transactionForm = this.fb.group({
       result: ['Buy', [Validators.required]],
       date: [new Date().toISOString(), [Validators.required]],
-      stock: this.fb.group({
-        symbol: ['', [Validators.required, Validators.maxLength(10)]],
-        price: [
-          '0.1',
-          [Validators.required, Validators.max(500), Validators.min(0.1)],
-        ],
-      }),
+      symbol: ['', [Validators.required, Validators.maxLength(10)]],
+      price: [
+        '0.1',
+        [Validators.required, Validators.max(500), Validators.min(0.1)],
+      ],
     });
   }
 
@@ -52,10 +50,8 @@ export class TradeComponent implements OnInit {
         this.transactionForm.reset({
           result: 'Buy',
           date: new Date().toISOString(),
-          stock: {
-            symbol: '',
-            price: '0.1',
-          },
+          symbol: '',
+          price: '0.1',
         });
       });
   }

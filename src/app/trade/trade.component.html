@@ -39,7 +39,7 @@
             class="d-flex justify-content-center"
           >
             <div class="pt-2 pb-2">
-              <div formGroupName="stock" class="mb-3 row">
+              <div class="mb-3 row">
                 <label
                   for="typeahead-config"
                   class="col-xs-3 col-sm-auto col-form-label"
@@ -56,9 +56,7 @@
                 </div>
                 <p
                   class="error mt-2 mb-0"
-                  *ngIf="
-                    transactionForm.get('stock.symbol')?.hasError('maxlength')
-                  "
+                  *ngIf="transactionForm.get('symbol')?.hasError('maxlength')"
                 >
                   The stock is required and should be up to 10 characters long
                   📢
@@ -83,7 +81,7 @@
                   The Position is required and should be Buy or Sell 📢
                 </p>
               </div>
-              <div formGroupName="stock" class="mb-3 row">
+              <div class="mb-3 row">
                 <label
                   for="typeahead-config"
                   class="col-xs-3 col-sm-auto col-form-label"
@@ -100,8 +98,8 @@
                 <p
                   class="error mt-2 mb-0"
                   *ngIf="
-                    transactionForm.get('stock.price')?.hasError('max') ||
-                    transactionForm.get('stock.price')?.hasError('min')
+                    transactionForm.get('price')?.hasError('max') ||
+                    transactionForm.get('price')?.hasError('min')
                   "
                 >
                   The Price is required and should be max 500$ and min to 0.1$
