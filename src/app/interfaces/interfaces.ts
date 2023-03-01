@@ -1,29 +1,28 @@
 // --- Candles Chart --- \\
-export interface CandlesChart {
-  dates: string[];
-  ticker: any[];
-  closePrice: any[];
-  maxData: any[];
-  minData: any[];
-  Open: number;
-  Close: number;
-  Low: number;
-  High: number;
-  Volume: any[];
-}
+// export interface Ticker {
+//   Open: number;
+//   Close: number;
+//   Low: number;
+//   High: number;
+// }
 
-export const candlesData: CandlesChart = {
-  dates: [],
-  ticker: [],
-  closePrice: [],
-  maxData: [],
-  minData: [],
-  Volume: [],
-  Open: 0,
-  Close: 0,
-  Low: 0,
-  High: 0,
-};
+// export interface CandlesChart {
+//   dates: string[];
+//   ticker: Ticker[];
+//   closePrice: any[];
+//   maxData: [string, number][];
+//   minData: [string, number][];
+//   Volume: number[];
+// }
+
+// export const candlesData: CandlesChart = {
+//   dates: [],
+//   ticker: [],
+//   closePrice: [],
+//   maxData: [],
+//   minData: [],
+//   Volume: [],
+// };
 
 // --- Cash Analysis --- \\
 export interface Cash {
