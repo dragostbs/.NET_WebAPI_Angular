@@ -112,13 +112,13 @@ p:last-child {
 }
 
 .loader {
-  width: 100%;
-  height: auto;
+  width: 80%;
   position: fixed;
-  margin: 0;
   top: 50%;
-  left: 57%;
+  left: 59%;
   transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  height: 100% !important;
   z-index: 99;
 }
 

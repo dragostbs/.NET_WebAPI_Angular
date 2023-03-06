@@ -21,16 +21,7 @@ export class DiscoverComponent implements OnInit {
   ngOnInit(): void {
     this.loadingElement = this.charts.loadingElement();
 
-    const main = document.getElementById('main');
-    if (main) {
-      main.style.display = 'none';
-    }
-    setTimeout(() => {
-      this.loadingService.isLoading.next(false);
-      if (main) {
-        main.style.display = 'block';
-      }
-    }, 2000);
+    this.loadingService.setLoadingEffect(1000);
   }
 
   savePDF() {

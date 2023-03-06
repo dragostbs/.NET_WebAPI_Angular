@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChartsService } from '../services/charts.service';
 import { Router } from '@angular/router';
 import { LoadService } from '../loading/load.service';
-import { BehaviorSubject } from 'rxjs';
 import { Cash, cashData } from '../interfaces/interfaces';
 import { CandlesChartService } from '../services/candles-chart.service';
 
@@ -340,16 +339,6 @@ export class AnalysisCashComponent implements OnInit {
   }
 
   loadingEffect() {
-    this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
-    const main = document.getElementById('main');
-    if (main) {
-      main.style.display = 'none';
-    }
-    setTimeout(() => {
-      this.loadingService.isLoading.next(false);
-      if (main) {
-        main.style.display = 'block';
-      }
-    }, 2000);
+    this.loadingService.setLoadingEffect(1000);
   }
 }

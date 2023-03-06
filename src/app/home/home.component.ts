@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { BehaviorSubject } from 'rxjs';
 import { LoadService } from '../loading/load.service';
 import { ChartsService } from '../services/charts.service';
 
@@ -23,16 +22,6 @@ export class HomeComponent implements OnInit {
   }
 
   loadingEffect() {
-    this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
-    const main = document.getElementById('main');
-    if (main) {
-      main.style.display = 'none';
-    }
-    setTimeout(() => {
-      this.loadingService.isLoading.next(false);
-      if (main) {
-        main.style.display = 'block';
-      }
-    }, 2000);
+    this.loadingService.setLoadingEffect(1000);
   }
 }

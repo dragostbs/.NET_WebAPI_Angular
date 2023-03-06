@@ -99,18 +99,6 @@ export class ReportsComponent implements OnInit {
   }
 
   loadingEffect() {
-    const main = document.getElementById('main');
-    if (main) {
-      setTimeout(() => {
-        this.loadingService.isLoading.next(true);
-      }, 100);
-      main.style.display = 'none';
-    }
-    setTimeout(() => {
-      this.loadingService.isLoading.next(false);
-      if (main) {
-        main.style.display = 'block';
-      }
-    }, 2000);
+    this.loadingService.setLoadingEffect(1000);
   }
 }

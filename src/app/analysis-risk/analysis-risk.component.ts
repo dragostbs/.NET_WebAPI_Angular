@@ -2,12 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EChartsOption } from 'echarts';
-import { BehaviorSubject } from 'rxjs';
 import { Risk, riskData } from '../interfaces/interfaces';
 import { LoadService } from '../loading/load.service';
 import { AnalysisApiService } from '../services/analysis-api.service';
-import { CalcMaService } from '../services/calc-ma.service';
-import { CandlesApiService } from '../services/candles-api.service';
 import { CandlesChartService } from '../services/candles-chart.service';
 import { ChartsService } from '../services/charts.service';
 
@@ -405,16 +402,6 @@ export class AnalysisRiskComponent implements OnInit {
   }
 
   loadingEffect() {
-    this.loadingService.isLoading = new BehaviorSubject<boolean>(true);
-    const main = document.getElementById('main');
-    if (main) {
-      main.style.display = 'none';
-    }
-    setTimeout(() => {
-      this.loadingService.isLoading.next(false);
-      if (main) {
-        main.style.display = 'block';
-      }
-    }, 2000);
+    this.loadingService.setLoadingEffect(1000);
   }
 }
