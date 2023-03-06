@@ -21,7 +21,10 @@ export class TradeComponent implements OnInit {
     this.transactionForm = this.fb.group({
       result: ['Buy', [Validators.required]],
       date: [new Date().toISOString(), [Validators.required]],
-      symbol: ['', [Validators.required, Validators.maxLength(10)]],
+      symbol: [
+        '',
+        [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
+      ],
       price: [
         '0.1',
         [Validators.required, Validators.max(500), Validators.min(0.1)],

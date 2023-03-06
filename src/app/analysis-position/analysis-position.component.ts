@@ -39,7 +39,7 @@ export class AnalysisPositionComponent implements OnInit {
     this.searchForm = this.fb.group({
       stockSymbol: [
         '',
-        [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
+        [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
       ],
     });
 

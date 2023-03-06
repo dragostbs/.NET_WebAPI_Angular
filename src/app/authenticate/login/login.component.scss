@@ -45,3 +45,14 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.mdc-linear-progress__bar-inner {
+  border-color: var(
+    --mdc-linear-progress-active-indicator-color,
+    rgb(94, 94, 94)
+  ) !important;
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: rgb(94, 94, 94) !important;
+}

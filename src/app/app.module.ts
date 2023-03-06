@@ -25,6 +25,7 @@ import { AnalysisPositionComponent } from './analysis-position/analysis-position
 import { InterceptorService } from './loading/interceptor.service';
 import { HomeComponent } from './home/home.component';
 import { AnalysisRiskComponent } from './analysis-risk/analysis-risk.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { AnalysisRiskComponent } from './analysis-risk/analysis-risk.component';
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     }),
+    MatProgressBarModule,
   ],
   providers: [
     CrudApiService,

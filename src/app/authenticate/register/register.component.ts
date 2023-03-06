@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadService } from 'src/app/loading/load.service';
 import { AuthApiService } from 'src/app/services/auth-api.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthApiService,
-    private router: Router
+    private router: Router,
+    public loadingService: LoadService
   ) {}
 
   ngOnInit(): void {

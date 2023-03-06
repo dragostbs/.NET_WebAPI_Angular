@@ -46,7 +46,7 @@
             class="error"
             *ngIf="searchForm.get('stockSymbol')?.hasError('maxlength')"
           >
-            Stock Symbol should have min 1 to 4 characters 📢
+            Stock Symbol should have min 1 to 5 characters 📢
           </p>
           <h1 class="ticker__element text-center fw-normal fs-2 p-2">
             {{ performance.symbol || "TICKER" }}
@@ -192,7 +192,7 @@
                       class="bi bi-info-square"
                       placement="top"
                       ngbTooltip="
-                    De cate ori activele sunt transformate in vanzari intr-o anumita perioada de timp (Best ATR - aproape de 1 si mai mare)"
+                      Indica masura in care activele totale contribuie la obtinerea veniturilor din activitatea de baza (Best ATR - aproape de 1 si mai mare)"
                     >
                     </i>
                     Assets Turnover Ratio (ATR)

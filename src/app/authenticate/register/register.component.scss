@@ -43,3 +43,14 @@
   font-size: xx-small;
   margin-left: 0.5rem;
 }
+
+.mdc-linear-progress__bar-inner {
+  border-color: var(
+    --mdc-linear-progress-active-indicator-color,
+    rgb(94, 94, 94)
+  ) !important;
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: rgb(94, 94, 94) !important;
+}

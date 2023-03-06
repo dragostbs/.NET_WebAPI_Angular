@@ -22,8 +22,6 @@ export class AnalysisCashComponent implements OnInit {
   candlesChart: EChartsOption = {};
 
   cash: Cash = cashData;
-  // candles: CandlesChart = candlesData;
-  // candles: CandlesChart[] = [];
 
   constructor(
     private service: AnalysisApiService,
@@ -38,7 +36,7 @@ export class AnalysisCashComponent implements OnInit {
     this.searchForm = this.fb.group({
       stockSymbol: [
         '',
-        [Validators.required, Validators.minLength(1), Validators.maxLength(4)],
+        [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
       ],
     });
 
