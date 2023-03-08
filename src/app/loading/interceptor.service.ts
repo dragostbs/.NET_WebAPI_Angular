@@ -25,10 +25,12 @@ export class InterceptorService implements HttpInterceptor {
     if (req.context.get(BYPASS_INTERCEPTOR) === true) return next.handle(req);
 
     this.loadingService.isLoading.next(true);
+    this.loadingService.isTradeLoading.next(true);
 
     return next.handle(req).pipe(
       finalize(() => {
         this.loadingService.isLoading.next(false);
+        this.loadingService.isTradeLoading.next(false);
       }),
 
       catchError((error: HttpErrorResponse) => {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { LoadService } from '../loading/load.service';
 import { ReportsComponent } from '../reports/reports.component';
+import { CandlesApiService } from '../services/candles-api.service';
 import { CrudApiService } from '../services/crud-api.service';
 
 @Component({
@@ -10,11 +12,15 @@ import { CrudApiService } from '../services/crud-api.service';
 })
 export class TradeComponent implements OnInit {
   transactionForm!: FormGroup;
+  showInputs: boolean = false;
+  symbolReadOnly: boolean = false;
 
   constructor(
     private service: CrudApiService,
     private fb: FormBuilder,
-    private reportComponent: ReportsComponent
+    private reportComponent: ReportsComponent,
+    private dataCandles: CandlesApiService,
+    public loadingService: LoadService
   ) {}
 
   ngOnInit(): void {
@@ -25,10 +31,33 @@ export class TradeComponent implements OnInit {
         '',
         [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
       ],
-      price: [
-        '0.1',
-        [Validators.required, Validators.max(500), Validators.min(0.1)],
-      ],
+      price: [0, [Validators.required]],
+    });
+  }
+
+  // Trade based on data from API Candles
+  onSelect(symbol: string) {
+    this.loadingEffect();
+    this.symbolReadOnly = true;
+
+    this.dataCandles.getCandlesData(symbol).subscribe((data) => {
+      if (Object.entries(data).length === 0) {
+        alert('🌋 The Stock could not be found !!!');
+        this.transactionForm.reset({
+          symbol: '',
+        });
+        this.showInputs = false;
+      } else {
+        let lastValue;
+
+        for (let key in data) {
+          if (data.hasOwnProperty(key)) {
+            lastValue = parseFloat(data[key].Close.toFixed(2));
+          }
+        }
+        this.transactionForm.controls['price'].setValue(lastValue);
+        this.showInputs = true;
+      }
     });
   }
 
@@ -54,8 +83,26 @@ export class TradeComponent implements OnInit {
           result: 'Buy',
           date: new Date().toISOString(),
           symbol: '',
-          price: '0.1',
+          price: 0,
         });
+
+        this.showInputs = false;
       });
+  }
+
+  changeStock() {
+    this.transactionForm.reset({
+      result: 'Buy',
+      date: new Date().toISOString(),
+      symbol: '',
+      price: 0,
+    });
+
+    this.showInputs = false;
+    this.symbolReadOnly = false;
+  }
+
+  loadingEffect() {
+    this.loadingService.setTradeLoadingEffect(1200);
   }
 }

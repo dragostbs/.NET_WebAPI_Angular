@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-// import { CandlesChart } from '../interfaces/interfaces';
+import { BYPASS_INTERCEPTOR } from '../loading/interceptor.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,9 @@ export class CandlesApiService {
     });
     let url = `https://stock-prices2.p.rapidapi.com/api/v1/resources/stock-prices/2y?ticker=${stockSymbol}`;
 
-    return this.http.get<any>(url, { headers });
+    return this.http.get<any>(url, {
+      headers,
+      context: new HttpContext().set(BYPASS_INTERCEPTOR, true),
+    });
   }
 }

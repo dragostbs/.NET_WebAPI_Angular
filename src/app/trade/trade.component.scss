@@ -62,3 +62,24 @@ input {
   z-index: 99;
   --bs-alert-padding-y: 1.3rem;
 }
+
+.select {
+  width: 25rem;
+  margin-left: 11rem;
+}
+
+.transaction__btns {
+  width: 25rem;
+  margin-left: 11rem;
+}
+
+.mdc-linear-progress__bar-inner {
+  border-color: var(
+    --mdc-linear-progress-active-indicator-color,
+    rgb(94, 94, 94)
+  ) !important;
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: rgb(0, 132, 214) !important;
+}

@@ -32,10 +32,13 @@
             aria-label="Close"
           ></button>
         </div>
+        <mat-progress-bar
+          *ngIf="loadingService.isTradeLoading | async"
+          mode="indeterminate"
+        ></mat-progress-bar>
         <div class="modal-body">
           <form
             [formGroup]="transactionForm"
-            (ngSubmit)="submitTransaction()"
             class="d-flex justify-content-center"
           >
             <div class="pt-2 pb-2">
@@ -52,6 +55,8 @@
                     placeholder="Stock Symbol"
                     class="form-control"
                     oninput="this.value = this.value.toUpperCase()"
+                    [readonly]="symbolReadOnly"
+                    #symbolName
                   />
                 </div>
                 <p
@@ -62,58 +67,71 @@
                   characters 📢
                 </p>
               </div>
-              <div class="mb-3 row">
-                <label
-                  for="typeahead-config"
-                  class="col-xs-3 col-sm-auto col-form-label"
-                  >Position:</label
-                >
-                <div class="col">
-                  <select class="form-control" formControlName="result">
-                    <option value="Buy">Buy</option>
-                    <option value="Sell">Sell</option>
-                  </select>
-                </div>
-                <p
-                  class="error mt-2 mb-0"
-                  *ngIf="transactionForm.get('result')?.hasError('required')"
-                >
-                  The Position is required and should be Buy or Sell 📢
-                </p>
-              </div>
-              <div class="mb-3 row">
-                <label
-                  for="typeahead-config"
-                  class="col-xs-3 col-sm-auto col-form-label"
-                  >Price:</label
-                >
-                <div class="col">
-                  <input
-                    type="number"
-                    formControlName="price"
-                    placeholder="Trading Price"
-                    class="form-control"
-                  />
-                </div>
-                <p
-                  class="error mt-2 mb-0"
-                  *ngIf="
-                    transactionForm.get('price')?.hasError('max') ||
-                    transactionForm.get('price')?.hasError('min')
-                  "
-                >
-                  The Price is required and should be max 500$ and min to 0.1$
-                  📢
-                </p>
-              </div>
-              <div class="d-flex justify-content-center mb-2">
+              <div class="col d-flex justify-content-center mb-3">
                 <button
-                  class="book btn btn-success"
-                  data-bs-dismiss="modal"
+                  class="select btn btn-primary btn-sm"
                   [disabled]="transactionForm.invalid"
+                  (click)="onSelect(symbolName.value)"
                 >
-                  Add Transaction
+                  Select
                 </button>
+              </div>
+              <div *ngIf="showInputs">
+                <div class="mb-3 row">
+                  <label
+                    for="typeahead-config"
+                    class="col-xs-3 col-sm-auto col-form-label"
+                    >Position:</label
+                  >
+                  <div class="col">
+                    <select class="form-control" formControlName="result">
+                      <option value="Buy">Buy</option>
+                      <option value="Sell">Sell</option>
+                    </select>
+                  </div>
+                  <p
+                    class="error mt-2 mb-0"
+                    *ngIf="transactionForm.get('result')?.hasError('required')"
+                  >
+                    The Position is required and should be Buy or Sell 📢
+                  </p>
+                </div>
+                <div class="mb-3 row">
+                  <label
+                    for="typeahead-config"
+                    class="col-xs-3 col-sm-auto col-form-label"
+                    >Price:</label
+                  >
+                  <div class="col">
+                    <input
+                      type="number"
+                      formControlName="price"
+                      placeholder="Trading Price"
+                      class="form-control"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div
+                  class="transaction__btns btn-group mb-2"
+                  id="submit__trade"
+                >
+                  <button
+                    class="book btn btn-success btn-sm"
+                    data-bs-dismiss="modal"
+                    [disabled]="transactionForm.invalid"
+                    (click)="submitTransaction()"
+                  >
+                    Add Transaction
+                  </button>
+                  <button
+                    class="book btn btn-warning btn-sm"
+                    [disabled]="transactionForm.invalid"
+                    (click)="changeStock()"
+                  >
+                    Change Stock
+                  </button>
+                </div>
               </div>
             </div>
           </form>
