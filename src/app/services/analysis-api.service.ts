@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -17,7 +17,12 @@ export class AnalysisApiService {
     });
     let url = `https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-balance-sheet?symbol=${stockSymbol}&region=US`;
 
-    return this.http.get<any>(url, { headers });
+    return this.http.get<any>(url, { headers }).pipe(
+      catchError((error) => {
+        alert(error);
+        return [];
+      })
+    );
   }
 
   downloadPDF() {

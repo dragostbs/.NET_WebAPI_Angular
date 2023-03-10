@@ -53,13 +53,15 @@ export class AnalysisLiquidityComponent implements OnInit {
   }
 
   displayData() {
-    this.loadingEffect();
+    this.loadingService.setLoadingStatus(true);
     if (this.searchForm.valid) {
       this.service
         .getAnalysis(this.searchForm.value['stockSymbol'])
         .subscribe((data) => {
           if (Object.entries(data).length === 0)
             alert('🌋 The Stock could not be found !!!');
+
+          this.loadingService.setLoadingStatus(false);
 
           try {
             // Destruct Data
