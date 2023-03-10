@@ -181,6 +181,7 @@ export class AnalysisPositionComponent implements OnInit {
               },
             ],
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',
@@ -258,6 +259,7 @@ export class AnalysisPositionComponent implements OnInit {
               textAlign: 'left',
             },
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',

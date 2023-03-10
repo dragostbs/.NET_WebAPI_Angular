@@ -208,6 +208,7 @@ export class AnalysisSolvencyComponent implements OnInit {
               textAlign: 'left',
             },
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',
@@ -275,6 +276,7 @@ export class AnalysisSolvencyComponent implements OnInit {
               },
             ],
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',

@@ -190,6 +190,7 @@ export class AnalysisCashComponent implements OnInit {
               },
             ],
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',
@@ -273,6 +274,7 @@ export class AnalysisCashComponent implements OnInit {
               textAlign: 'left',
             },
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',

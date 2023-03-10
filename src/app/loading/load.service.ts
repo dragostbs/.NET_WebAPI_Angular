@@ -17,39 +17,23 @@ export class LoadService {
     this.isLoading.next(status);
   }
 
-  setTradeLoading(status: boolean) {
+  setTradeLoadingStatus(status: boolean) {
     this.isTradeLoading.next(status);
   }
 
-  startLoading() {
-    this.setLoadingStatus(true);
-  }
+  startLoadingEffect(timeout: number, setLoadingFn: (status: boolean) => void) {
+    setLoadingFn(true);
 
-  startTradeLoading() {
-    this.setTradeLoading(true);
-  }
-
-  stopLoading() {
-    this.setLoadingStatus(false);
-  }
-
-  stopTradeLoading() {
-    this.setTradeLoading(false);
+    setTimeout(() => {
+      setLoadingFn(false);
+    }, timeout);
   }
 
   setLoadingEffect(timeout: number) {
-    this.startLoading();
-
-    setTimeout(() => {
-      this.stopLoading();
-    }, timeout);
+    this.startLoadingEffect(timeout, this.setLoadingStatus.bind(this));
   }
 
   setTradeLoadingEffect(timeout: number) {
-    this.startTradeLoading();
-
-    setTimeout(() => {
-      this.stopTradeLoading();
-    }, timeout);
+    this.startLoadingEffect(timeout, this.setTradeLoadingStatus.bind(this));
   }
 }

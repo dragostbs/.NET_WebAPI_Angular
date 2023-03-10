@@ -201,6 +201,7 @@ export class AnalysisLiquidityComponent implements OnInit {
               textAlign: 'left',
             },
             tooltip: {
+              trigger: 'axis',
               axisPointer: {
                 animation: false,
                 type: 'cross',
