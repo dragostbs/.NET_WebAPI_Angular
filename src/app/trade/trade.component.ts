@@ -86,6 +86,7 @@ export class TradeComponent implements OnInit {
           price: 0,
         });
 
+        this.symbolReadOnly = false;
         this.showInputs = false;
       });
   }

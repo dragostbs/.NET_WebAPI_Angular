@@ -1,4 +1,4 @@
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2 text_size" id="main">
+<main class="main__home col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
@@ -8,16 +8,16 @@
   <div class="d-flex">
     <div class="card">
       <img
-        src="https://wallpapercave.com/dwp2x/wp11329153.jpg"
+        src="https://img.freepik.com/free-vector/forex-trading-infographic-background_52683-40690.jpg?w=2000&t=st=1678793304~exp=1678793904~hmac=fa39eb423816b0d94f4c3b23005eeae14a4eaad4426dbb30851ac2c5c921dd56"
         alt="img"
         class="image-background card-img"
       />
     </div>
   </div>
-  <div class="d-flex justify-content-between mt-3">
+  <div class="technical__fundamental d-flex justify-content-between mt-3">
     <div class="card">
       <div class="description__analysis">
-        <h3 class="title text-center">Fundamental Analysis</h3>
+        <h3 class="home__title text-center">Fundamental Analysis</h3>
         <hr />
         <div class="list__info mt-4 px-md-5">
           <div class="d-flex">
@@ -47,7 +47,7 @@
     </div>
     <div class="card">
       <div class="description__analysis">
-        <h3 class="title text-center">Technical Analysis</h3>
+        <h3 class="home__title text-center">Technical Analysis</h3>
         <hr />
         <ul class="list__info mt-4 px-md-5">
           <div class="d-flex">
@@ -76,7 +76,7 @@
     </div>
   </div>
   <div class="analysis__cards justify-content-between mb-2">
-    <div class="card card__analysis">
+    <a class="card card__description" [routerLink]="'/analysisCash'">
       <div class="card-body">
         <div class="d-flex">
           <div class="me-4">
@@ -108,8 +108,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="card card__analysis">
+    </a>
+    <a class="card card__description" [routerLink]="'/analysisLiquidity'">
       <div class="card-body">
         <div class="d-flex">
           <div class="me-4">
@@ -137,8 +137,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="card card__analysis">
+    </a>
+    <a class="card card__description" [routerLink]="'/analysisSolvency'">
       <div class="card-body">
         <div class="d-flex">
           <div class="me-4">
@@ -170,8 +170,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="card card__analysis">
+    </a>
+    <a class="card card__description" [routerLink]="'/analysisPerformance'">
       <div class="card-body">
         <div class="d-flex">
           <div class="me-4">
@@ -207,8 +207,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="card card__analysis">
+    </a>
+    <a class="card card__description" [routerLink]="'/analysisPosition'">
       <div class="card-body">
         <div class="d-flex">
           <div class="me-4">
@@ -236,8 +236,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="card card__analysis">
+    </a>
+    <a class="card card__description" [routerLink]="'/analysisRisk'">
       <div class="card-body">
         <div class="d-flex">
           <div class="me-4">
@@ -277,7 +277,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </a>
   </div>
 </main>
 <div

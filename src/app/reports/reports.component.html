@@ -1,4 +1,4 @@
-<main class="col-md-9 ms-sm-auto col-lg-10 text_size px-md-5 pt-2" id="main">
+<main class="main__report col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
@@ -21,7 +21,7 @@
   <div class="report card rounded-top" id="analysis">
     <table class="table mb-0">
       <thead class="report__head bg-light">
-        <tr class="rounded-top">
+        <tr class="p__sort rounded-top">
           <th scope="col"><p (click)="sortTable('id')">Id</p></th>
           <th scope="col"><p (click)="sortTable('stock')">Stock</p></th>
           <th scope="col"><p (click)="sortTable('result')">Result</p></th>
@@ -32,17 +32,33 @@
       </thead>
       <tbody>
         <tr *ngFor="let transaction of transactions$ | async">
-          <td>{{ transaction.id }}</td>
-          <td>{{ stockSymbolMap.get(transaction.stockId) }}</td>
+          <td>
+            <div class="report__data">{{ transaction.id }}</div>
+          </td>
+          <td>
+            <div class="report__data">
+              {{ stockSymbolMap.get(transaction.stockId) }}
+            </div>
+          </td>
           <td
             [ngStyle]="{
               color: transaction.result === 'Buy' ? 'green' : 'red'
             }"
           >
-            {{ transaction.result }}
+            <div class="report__data">
+              {{ transaction.result }}
+            </div>
           </td>
-          <td>{{ stockPriceMap.get(transaction.stockId) }}$</td>
-          <td>{{ transaction.date | slice : 0 : 10 }}</td>
+          <td>
+            <div class="report__data">
+              {{ stockPriceMap.get(transaction.stockId) }}$
+            </div>
+          </td>
+          <td>
+            <div class="report__data">
+              {{ transaction.date | slice : 0 : 10 }}
+            </div>
+          </td>
           <td>
             <button
               class="btn btn-sm btn-danger"

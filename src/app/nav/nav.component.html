@@ -1,11 +1,11 @@
 <nav
   ngbNav
   #nav="ngbNav"
-  class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar"
+  class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light"
   style="width: 280px; height: 100vh"
   *ngIf="auth.isLoggedIn()"
 >
-  <a href="/" class="title link-dark text-decoration-none">Financials</a>
+  <a href="/" class="nav__title link-dark text-decoration-none">Financials</a>
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="p-2">
