@@ -51,7 +51,7 @@ export class CarouselComponent implements OnInit {
         legend: {
           top: 'bottom',
           textStyle: {
-            fontSize: '7',
+            fontSize: '5',
           },
         },
         toolbox: {
@@ -133,7 +133,7 @@ export class CarouselComponent implements OnInit {
           top: 'bottom',
           data: ['Regular Volume', '3 Months Volume', '10 Days Volume'],
           textStyle: {
-            fontSize: '7',
+            fontSize: '5',
           },
         },
         tooltip: {

@@ -8,7 +8,7 @@
       class="list-group card border-light list-group-flush"
     >
       <li class="list-group-item py-3">
-        <a href="#1" class="list-group-item-action text-decoration-none">
+        <div class="text-decoration-none">
           <div class="d-flex w-100 align-items-center">
             <p class="small me-5">{{ news.title }}</p>
             <img src="{{ news.image }}" alt="img" class="image" />
@@ -16,7 +16,7 @@
           <div class="col-10 small text-secondary fw-light">
             {{ news.date * 1000 | date }}
           </div>
-        </a>
+        </div>
       </li>
     </ul>
   </div>
