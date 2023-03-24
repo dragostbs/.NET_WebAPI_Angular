@@ -21,7 +21,6 @@ export class AnalysisRiskComponent implements OnInit {
   candlesChart: EChartsOption = {};
 
   risk: Risk = riskData;
-  // candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,

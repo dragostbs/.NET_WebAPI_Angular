@@ -1,11 +1,10 @@
 <nav
   ngbNav
   #nav="ngbNav"
-  class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light"
-  style="width: 280px; height: 100vh"
+  class="sidebar d-flex flex-column flex-shrink-0 flex-nowrap p-3 bg-light"
   *ngIf="auth.isLoggedIn()"
 >
-  <a href="/" class="nav__title link-dark text-decoration-none">Financials</a>
+  <p class="nav__title link-dark text-decoration-none">Financials</p>
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="p-2">

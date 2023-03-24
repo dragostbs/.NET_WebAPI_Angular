@@ -21,7 +21,6 @@ export class AnalysisPositionComponent implements OnInit {
   candlesChart: EChartsOption = {};
 
   position: Position = positionData;
-  // candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,

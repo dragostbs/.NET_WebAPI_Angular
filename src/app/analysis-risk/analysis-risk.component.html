@@ -1,9 +1,9 @@
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
+<main class="main__home px-5 pt-2" id="main">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Analysis - Risk Of Bankruptcy</h1>
-    <span>
+    <span class="span__btn">
       <button
         type="button"
         class="btn btn-sm btn-outline-secondary"
@@ -17,8 +17,8 @@
   </div>
   <div id="analysis">
     <div class="d-flex row">
-      <div class="p__refact d-flex">
-        <div class="card me-3 search__content">
+      <div class="p__refact chart__flex">
+        <div class="card search__content">
           <form
             class="input-group input-group-sm p-2"
             [formGroup]="searchForm"
@@ -131,8 +131,8 @@
         </div>
       </div>
 
-      <div class="d-flex mt-3">
-        <div class="card me-3">
+      <div class="chart__wrapper mt-3">
+        <div class="card">
           <div echarts [options]="lineChart" class="analysis__chart"></div>
         </div>
         <div class="card">
@@ -158,7 +158,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Capacitatea firmei de a se adapta modificarilor conditiilor mediului exterior firmei"
                     >
                     </i>
@@ -175,7 +175,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Capacitatea companiei de a genera profituri suficiente pentru a-si finanta cresterea si operatiunile"
                     >
                     </i>
@@ -192,7 +192,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Cat rezultat net de impozit si dobanzi genereaza activele intreprinderii"
                     >
                     </i>
@@ -209,7 +209,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Exprima masura in care datoriile firmei sunt acoperite din capitalurile proprii"
                     >
                     </i>
@@ -226,7 +226,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Indica masura in care activele totale contribuie la obtinerea veniturilor din activitatea de baza"
                     >
                     </i>
@@ -243,7 +243,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Scorul Z este folosit pentru a prezice sanatatea financiara a unei companii, riscul de a da faliment (Best Z > 1.81)"
                     >
                     </i>

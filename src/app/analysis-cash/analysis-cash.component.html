@@ -1,9 +1,9 @@
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-5 pt-2" id="main">
+<main class="main__home px-5 pt-2" id="main">
   <div
     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
   >
     <h1 class="text-secondary">Analysis - Cash Conversion Cycle</h1>
-    <span>
+    <span class="span__btn">
       <button
         type="button"
         class="btn btn-sm btn-outline-secondary"
@@ -17,8 +17,8 @@
   </div>
   <div id="analysis">
     <div class="d-flex row">
-      <div class="p__refact d-flex">
-        <div class="card me-3 search__content">
+      <div class="p__refact chart__flex">
+        <div class="card search__content">
           <form
             class="input-group input-group-sm p-2"
             [formGroup]="searchForm"
@@ -108,8 +108,8 @@
         </div>
       </div>
 
-      <div class="d-flex mt-3">
-        <div class="card me-3">
+      <div class="chart__wrapper mt-3">
+        <div class="card">
           <div echarts [options]="barChart" class="analysis__chart"></div>
         </div>
         <div class="card">
@@ -135,7 +135,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Termenul mediu de stocare (Best DIO < 40 days)"
                     >
                     </i>
@@ -156,7 +156,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Termenul mediu de incasare a creantelor (Best DSO < 60 days)"
                     >
                     </i>
@@ -177,7 +177,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Termenul mediu de plata a datoriilor comerciale (Best DPO < 45 days)"
                     >
                     </i>
@@ -198,7 +198,7 @@
                   <td class="indicators">
                     <i
                       class="bi bi-info-square"
-                      placement="top"
+                      placement="right"
                       ngbTooltip="Cate zile pe an se invartesc banii in companie (Best CCC < 45 days)"
                     >
                     </i>

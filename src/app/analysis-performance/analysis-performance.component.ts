@@ -21,7 +21,6 @@ export class AnalysisPerformanceComponent implements OnInit {
   candlesChart: EChartsOption = {};
 
   performance: Performance = performanceData;
-  // candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,

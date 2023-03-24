@@ -21,7 +21,6 @@ export class AnalysisSolvencyComponent implements OnInit {
   candlesChart: EChartsOption = {};
 
   solvency: Solvency = solvencyData;
-  // candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,

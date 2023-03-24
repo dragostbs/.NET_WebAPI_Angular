@@ -21,7 +21,6 @@ export class AnalysisLiquidityComponent implements OnInit {
   candlesChart: EChartsOption = {};
 
   liquidity: Liquidity = liquidityData;
-  // candles: CandlesChart = candlesData;
 
   constructor(
     private service: AnalysisApiService,
