@@ -44,9 +44,13 @@ export class TradeComponent implements OnInit {
       if (Object.entries(data).length === 0) {
         alert('🌋 The Stock could not be found !!!');
         this.transactionForm.reset({
+          result: 'Buy',
+          date: new Date().toISOString(),
           symbol: '',
+          price: 0,
         });
         this.showInputs = false;
+        this.symbolReadOnly = false;
       } else {
         let lastValue;
 
